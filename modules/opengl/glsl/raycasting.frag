@@ -37,6 +37,7 @@
 #include "utils/depth.glsl"
 #include "utils/gradients.glsl"
 #include "utils/shading.glsl"
+#include "utils/raycastgeometry.glsl"
 
 
 uniform VolumeParameters volumeParameters_;
@@ -62,6 +63,8 @@ uniform float samplingRate_;
 uniform float isoValue_;
 
 #define ERT_THRESHOLD 0.99 // threshold for early ray termination
+
+
 
 vec4 rayTraversal(vec3 entryPoint, vec3 exitPoint, vec2 texCoords) {
     vec4 result = vec4(0.0);
@@ -92,6 +95,9 @@ vec4 rayTraversal(vec3 entryPoint, vec3 exitPoint, vec2 texCoords) {
         // the direction towards a lower intensity medium (gradient points in the inreasing direction)
         color.rgb = APPLY_LIGHTING(light_, color.rgb, color.rgb, vec3(1.0), worldSpacePosition, -gradient, toCameraDir);
 
+        result = drawPlane(result, samplePos, vec4(0,0,1,.3), vec3(0,0,0.7), vec3(0,1,1), 
+                           rayDirection, tIncr); 
+
         result = APPLY_COMPOSITING(result, color, samplePos, voxel, gradient, camera_, isoValue_, 
                                    t, tDepth, tIncr);
 
@@ -113,6 +119,9 @@ vec4 rayTraversal(vec3 entryPoint, vec3 exitPoint, vec2 texCoords) {
     gl_FragDepth = tDepth;
     return result;
 }
+
+
+
 
 void main() {
     vec2 texCoords = gl_FragCoord.xy * outportParameters_.reciprocalDimensions;

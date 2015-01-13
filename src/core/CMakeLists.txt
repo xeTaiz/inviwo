@@ -191,6 +191,7 @@ set(HEADER_FILES
     ${IVW_INCLUDE_DIR}/inviwo/core/properties/stringproperty.h
     ${IVW_INCLUDE_DIR}/inviwo/core/properties/templateproperty.h
     ${IVW_INCLUDE_DIR}/inviwo/core/properties/transferfunctionproperty.h
+    ${IVW_INCLUDE_DIR}/inviwo/core/properties/volumeindicatorproperty.h
     ${IVW_INCLUDE_DIR}/inviwo/core/rendering/geometryrenderer.h
     ${IVW_INCLUDE_DIR}/inviwo/core/rendering/geometryrendererfactory.h
     ${IVW_INCLUDE_DIR}/inviwo/core/resources/resource.h
@@ -384,6 +385,7 @@ set(SOURCE_FILES
     properties/simpleraycastingproperty.cpp
     properties/stringproperty.cpp
     properties/transferfunctionproperty.cpp
+    properties/volumeindicatorproperty.cpp
     rendering/geometryrendererfactory.cpp
     resources/resourcemanager.cpp
     util/assertion.cpp

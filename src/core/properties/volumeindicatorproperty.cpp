@@ -1,9 +1,9 @@
 /*********************************************************************************
  *
  * Inviwo - Interactive Visualization Workshop
- * Version 0.9
+ * Version 0.6b
  *
- * Copyright (c) 2012-2015 Inviwo Foundation
+ * Copyright (c) 2012-2014 Inviwo Foundation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,65 +25,15 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
+ * Contact: <Author>
+ *
  *********************************************************************************/
 
-#ifndef IVW_SIMPLERAYCASTER_H
-#define IVW_SIMPLERAYCASTER_H
-
-#include <modules/basegl/baseglmoduledefine.h>
-#include <inviwo/core/common/inviwo.h>
-#include <inviwo/core/processors/processor.h>
-#include <inviwo/core/properties/baseoptionproperty.h>
-#include <inviwo/core/properties/transferfunctionproperty.h>
-#include <inviwo/core/properties/simplelightingproperty.h>
-#include <inviwo/core/properties/simpleraycastingproperty.h>
-#include <inviwo/core/properties/cameraproperty.h>
-#include <inviwo/core/properties/compositeproperty.h>
-#include <inviwo/core/properties/eventproperty.h>
 #include <inviwo/core/properties/volumeindicatorproperty.h>
-#include <inviwo/core/ports/imageport.h>
-#include <inviwo/core/ports/volumeport.h>
-
 
 namespace inviwo {
 
-class Shader;
-
-class IVW_MODULE_BASEGL_API VolumeRaycaster : public Processor {
-public:
-    VolumeRaycaster();
-    virtual ~VolumeRaycaster();
-
-    InviwoProcessorInfo();
-
-    virtual void initialize();
-    virtual void deinitialize();
-    virtual void initializeResources();
-
-protected:
-    virtual void process();
-    Shader* shader_;
-
-private:
-    void onVolumeChange();
-    void toggleShading(Event*);
-    
-    VolumeInport volumePort_;
-    ImageInport entryPort_;
-    ImageInport exitPort_;
-    ImageOutport outport_;
-
-    TransferFunctionProperty transferFunction_;
-    OptionPropertyInt channel_;
-
-    SimpleRaycastingProperty raycasting_;
-    CameraProperty camera_;
-    SimpleLightingProperty lighting_;
-
-    EventProperty toggleShading_;
-};
 
 } // namespace
 
-#endif // IVW_SIMPLERAYCASTER_H
