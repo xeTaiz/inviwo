@@ -110,12 +110,13 @@ void ImageExport::processExport(){
                 } catch (DataWriterException const& e) {
                     LogError(e.getMessage());
                 }
+                delete writer;
             } else {
-                LogError("Error: Cound not find a writer for the specified extension and data type");
+                LogError("Error: Could not find a writer for the specified extension and data type");
             }
         }
         else {
-            LogError("Error: Cound not find color layer to write out");
+            LogError("Error: Could not find color layer to write out");
         }
     } else if (imageFile_.get().empty()) {
         LogWarn("Error: Please specify a file to write to");
