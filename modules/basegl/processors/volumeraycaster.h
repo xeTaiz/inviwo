@@ -81,6 +81,8 @@ private:
     CameraProperty camera_;
     SimpleLightingProperty lighting_;
 
+    VolumeIndicatorProperty positionIndicator_;
+
     EventProperty toggleShading_;
 };
 

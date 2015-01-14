@@ -1,9 +1,9 @@
 /*********************************************************************************
  *
  * Inviwo - Interactive Visualization Workshop
- * Version 0.6b
+ * Version 0.9
  *
- * Copyright (c) 2012-2014 Inviwo Foundation
+ * Copyright (c) 2013-2015 Inviwo Foundation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,9 +25,7 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * Contact: <Author>
- *
+ * 
  *********************************************************************************/
 
 #ifndef IVW_VOLUMEINDICATORPROPERTY_H
@@ -35,20 +33,83 @@
 
 #include <inviwo/core/common/inviwocoredefine.h>
 #include <inviwo/core/common/inviwo.h>
+#include <inviwo/core/properties/ordinalproperty.h>
+#include <inviwo/core/properties/boolproperty.h>
+#include <inviwo/core/properties/templateproperty.h>
+#include <inviwo/core/properties/compositeproperty.h>
+#include <inviwo/core/properties/baseoptionproperty.h>
 
 namespace inviwo {
 
 /**
+ * \class PlaneProperty
+ *
+ * \brief A Property that represents a plane
+ *
+ * A Plane is represented by a plane normal and a point that is in the plane.
+ * The property also holds a color for drawing the plane. A bool for turning it on an and off.
+ * And a mode for various ways of rendring the plane.
+ */
+class IVW_CORE_API PlaneProperty : public CompositeProperty { 
+public:
+    InviwoPropertyInfo();
+
+    PlaneProperty(std::string identifier, std::string displayName,
+                            InvalidationLevel invalidationLevel = INVALID_OUTPUT,
+                            PropertySemantics semantics = PropertySemantics::Default);
+
+    PlaneProperty(const PlaneProperty& rhs);
+    PlaneProperty& operator=(const PlaneProperty& that);
+    virtual PlaneProperty* clone() const;
+    virtual ~PlaneProperty();
+    virtual std::string getClassIdentifierForWidget() const;
+
+    BoolProperty enable_;
+    OptionPropertyInt mode_;
+    FloatVec3Property position_;
+    FloatVec3Property normal_;
+    FloatVec4Property color_;
+
+private:
+    void onModeChange();
+};
+
+
+
+
+
+/**
  * \class VolumeIndicatorProperty
  *
- * \brief VERY_BRIEFLY_DESCRIBE_THE_CLASS
+ * \brief A property for highlighting a plane, line of point in 3D
  *
- * DESCRIBE_THE_CLASS
+ * The property is used to represent an indicator in a 3D volume the indicator
+ * can be a set of planes, a set of lines, or some other.
  */
-class IVW_CORE_API VolumeIndicatorProperty { 
+class IVW_CORE_API VolumeIndicatorProperty : public CompositeProperty { 
 public:
-    VolumeIndicatorProperty();
-    virtual ~VolumeIndicatorProperty(){}
+    InviwoPropertyInfo();
+
+    VolumeIndicatorProperty(std::string identifier, std::string displayName,
+                            InvalidationLevel invalidationLevel = INVALID_OUTPUT,
+                            PropertySemantics semantics = PropertySemantics::Default);
+
+    VolumeIndicatorProperty(const VolumeIndicatorProperty& rhs);
+    VolumeIndicatorProperty& operator=(const VolumeIndicatorProperty& that);
+    virtual VolumeIndicatorProperty* clone() const;
+    virtual ~VolumeIndicatorProperty();
+    virtual std::string getClassIdentifierForWidget() const;
+
+    BoolProperty enable_;
+
+    OptionPropertyInt mode_;
+
+    PlaneProperty plane1_;
+    PlaneProperty plane2_;
+    PlaneProperty plane3_;
+
+private:
+    void onModeChange();
 };
 
 } // namespace

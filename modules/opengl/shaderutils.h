@@ -39,6 +39,7 @@
 #include <inviwo/core/properties/simplelightingproperty.h>
 #include <inviwo/core/properties/simpleraycastingproperty.h>
 #include <inviwo/core/properties/cameraproperty.h>
+#include <inviwo/core/properties/volumeindicatorproperty.h>
 
 namespace inviwo {
 
@@ -63,6 +64,13 @@ IVW_MODULE_OPENGL_API void addShaderDefines(Shader* shader,
                                             const SimpleRaycastingProperty& property);
 IVW_MODULE_OPENGL_API void setShaderUniforms(Shader* shader,
                                              const SimpleRaycastingProperty& property);
+
+// VolumeIndicatorProperty
+IVW_MODULE_OPENGL_API void addShaderDefines(Shader* shader,
+                                            const VolumeIndicatorProperty& property);
+IVW_MODULE_OPENGL_API void setShaderUniforms(Shader* shader,
+                                             const VolumeIndicatorProperty& property,
+                                             std::string name);
 
 }  // namspace utilgl
 

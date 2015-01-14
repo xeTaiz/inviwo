@@ -192,7 +192,7 @@ public:
      * Defaults to getClassIdentifier(), should only be overridden
      * if a subclass want to reuse another property's widget. 
      */
-    virtual std::string getClassIdentifierForWidget()const;
+    virtual std::string getClassIdentifierForWidget() const;
 
     virtual void setSemantics(const PropertySemantics& semantics);
     virtual PropertySemantics getSemantics() const;

@@ -59,6 +59,7 @@ VolumeRaycaster::VolumeRaycaster()
     , raycasting_("raycaster", "Raycasting")
     , camera_("camera", "Camera")
     , lighting_("lighting", "Lighting")
+    , positionIndicator_("positionindicator", "Position Indicator")
     , toggleShading_("toggleShading", "Toggle Shading",
         new KeyboardEvent('L'), 
         new Action(this, &VolumeRaycaster::toggleShading)) {
@@ -78,6 +79,7 @@ VolumeRaycaster::VolumeRaycaster()
     addProperty(raycasting_);
     addProperty(camera_);
     addProperty(lighting_);
+    addProperty(positionIndicator_);
     addProperty(toggleShading_);
 }
 
@@ -100,6 +102,7 @@ void VolumeRaycaster::initializeResources() {
     utilgl::addShaderDefines(shader_, raycasting_);
     utilgl::addShaderDefines(shader_, camera_);
     utilgl::addShaderDefines(shader_, lighting_);
+    utilgl::addShaderDefines(shader_, positionIndicator_);
     shader_->build();
 }
 
@@ -146,6 +149,7 @@ void VolumeRaycaster::process() {
     utilgl::setShaderUniforms(shader_, raycasting_);
     utilgl::setShaderUniforms(shader_, camera_, "camera_");
     utilgl::setShaderUniforms(shader_, lighting_, "light_");
+    utilgl::setShaderUniforms(shader_, positionIndicator_, "positionIndicator_");
 
     utilgl::singleDrawImagePlaneRect();
 

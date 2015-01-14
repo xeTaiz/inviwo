@@ -57,6 +57,7 @@ uniform ImageParameters outportParameters_;
 
 uniform LightParameters light_;
 uniform CameraParameters camera_;
+uniform VolumeIndicatorParameters positionIndicator_;
 uniform int channel_;
 
 uniform float samplingRate_;
@@ -95,9 +96,7 @@ vec4 rayTraversal(vec3 entryPoint, vec3 exitPoint, vec2 texCoords) {
         // the direction towards a lower intensity medium (gradient points in the inreasing direction)
         color.rgb = APPLY_LIGHTING(light_, color.rgb, color.rgb, vec3(1.0), worldSpacePosition, -gradient, toCameraDir);
 
-        result = drawPlane(result, samplePos, vec4(0,0,1,.3), vec3(0,0,0.7), vec3(0,1,1), 
-                           rayDirection, tIncr); 
-
+        result = DRAW_PLANES(result, samplePos, rayDirection, tIncr, positionIndicator_);
         result = APPLY_COMPOSITING(result, color, samplePos, voxel, gradient, camera_, isoValue_, 
                                    t, tDepth, tIncr);
 

@@ -37,23 +37,18 @@ uniform VolumeParameters volumeParameters_;
 
 uniform sampler2D transferFunc_;
 
-uniform float sliceNum_;
+uniform mat4 sliceRotation_; // Rotates around slice axis (offset to center point)
+uniform float slice_;
 
-uniform mat4 sliceAxisRotationMatrix_; // Rotates around slice axis (offset to center point)
-uniform vec3 rotationOffset_;          // Translates coordinate back from rotation offset
 uniform float alphaOffset_ = 0.0;
 
 in vec3 texCoord_;
 
 void main() {
-#ifdef COORD_PLANE_PERMUTE
-    vec3 p = vec3(coordPlanePermute(texCoord_.x, texCoord_.y, sliceNum_));
-#else
-    vec3 p = vec3(texCoord_.x, texCoord_.y, sliceNum_);
-#endif
     // Rotate around center and translate back to origin
-    vec3 pRotated = (sliceAxisRotationMatrix_*vec4(p, 1.0)).xyz + rotationOffset_;
-    vec4 voxel = getNormalizedVoxel(volume_, volumeParameters_, pRotated);
+    vec3 samplePos = (sliceRotation_*vec4(texCoord_.x, texCoord_.y, slice_, 1.0)).xyz;
+    vec4 voxel = getNormalizedVoxel(volume_, volumeParameters_, samplePos);
+
 #ifdef TF_MAPPING_ENABLED
     voxel = applyTF(transferFunc_, voxel);
     voxel.a += alphaOffset_;

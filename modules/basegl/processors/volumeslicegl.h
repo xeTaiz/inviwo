@@ -58,9 +58,11 @@ public:
 
     InviwoProcessorInfo();
 
-    void initialize();
-    void deinitialize();
+    virtual void initialize();
+    virtual void deinitialize();
+    virtual void initializeResources();
 
+    // Overridden to be able to turn off interaction events.
     virtual void invokeInteractionEvent(Event*);
 
     bool positionModeEnabled() const { return posPicking_.get(); }
@@ -70,42 +72,24 @@ protected:
 
     void shiftSlice(int);
 
-    void sliceAxisChanged();
+    void modeChange();
     void planeSettingsChanged();
-    void tfMappingEnabledChanged();
     void updateMaxSliceNumber();
-    void posPickingChanged();
 
     void renderPositionIndicator();
     void updateIndicatorMesh();
-    void updateReadOnlyStates();
 
     // updates the selected position, pos is given in normalized viewport coordinates, i.e. [0,1]
     void setVolPosFromScreenPos(vec2 pos);
     vec2 getScreenPosFromVolPos();
 
     void invalidateMesh();
-    int getSliceNumber() const;
-    float getNormalizedSliceNumber() const;
 
-    // getAxisIndex() is used to decouple potential changes in CoordinateEnums from indexing
-    inline int getAxisIndex(int axis) const {
-        // axis should be of type CoordinateEnums::CartesianCoordinateAxis
-        switch (axis) {
-            case inviwo::CoordinateEnums::X:
-                return 0;
-            case inviwo::CoordinateEnums::Y:
-                return 1;
-            case inviwo::CoordinateEnums::Z:
-                return 2;
-            default:
-                return 0;
-        }
-    }
+    void sliceXChange();
+    void sliceYChange();
+    void sliceZChange();
 
 private:
-    void updatePos();
-
     void eventShiftSlice(Event*);
     void eventSetMarker(Event*);
     void eventStepSliceUp(Event*);
@@ -127,8 +111,7 @@ private:
     FloatVec3Property worldPosition_;
 
     FloatVec3Property planeNormal_;
-    FloatProperty planeOffset_;
-    IntProperty* slices_[4];                  // array to access the individual slices via index
+    FloatVec3Property planePosition_;
     OptionPropertyFloat rotationAroundAxis_;  // Clockwise rotation around slice axis
     BoolProperty flipHorizontal_;
     BoolProperty flipVertical_;

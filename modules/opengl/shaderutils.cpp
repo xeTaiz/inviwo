@@ -220,6 +220,42 @@ void setShaderUniforms(Shader* shader, const SimpleRaycastingProperty& property)
     shader->setUniform("isoValue_", property.isoValue_.get());
 }
 
+void addShaderDefines(Shader* shader, const VolumeIndicatorProperty& property) {
+    // compositing defines
+    std::string key = "DRAW_PLANES(result, samplePosition, rayDirection, increment, params)";
+    std::string value = "result";
+
+    if (property.enable_ &&
+        (property.plane1_.enable_ || property.plane2_.enable_ || property.plane3_.enable_)) {
+        std::string planes("");
+        planes += property.plane1_.enable_ ? ", params.plane1" : ""; 
+        planes += property.plane2_.enable_ ? ", params.plane2" : ""; 
+        planes += property.plane3_.enable_ ? ", params.plane3" : "";
+        value = "drawPlanes(result, samplePosition, rayDirection, increment " + planes + ")";
+    }
+    shader->getFragmentShaderObject()->addShaderDefine(key, value);
+}
+
+void setShaderUniforms(Shader* shader, const VolumeIndicatorProperty& property, std::string name) {
+    if (property.enable_) {
+        if (property.plane1_.enable_) {
+            shader->setUniform(name + ".plane1.position", property.plane1_.position_);
+            shader->setUniform(name + ".plane1.normal", property.plane1_.normal_);
+            shader->setUniform(name + ".plane1.color", property.plane1_.color_);
+        }
+        if (property.plane2_.enable_) {
+            shader->setUniform(name + ".plane2.position", property.plane2_.position_);
+            shader->setUniform(name + ".plane2.normal", property.plane2_.normal_);
+            shader->setUniform(name + ".plane2.color", property.plane2_.color_);
+        }
+        if (property.plane3_.enable_) {
+            shader->setUniform(name + ".plane3.position", property.plane3_.position_);
+            shader->setUniform(name + ".plane3.normal", property.plane3_.normal_);
+            shader->setUniform(name + ".plane3.color", property.plane3_.color_);
+        }
+    }
+}
+
 }  // namspace utilgl
 
 }  // namespace

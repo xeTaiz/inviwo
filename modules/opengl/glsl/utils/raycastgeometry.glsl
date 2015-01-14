@@ -28,15 +28,31 @@
  *
  *********************************************************************************/
 
-vec4 drawPlane(in vec4 oldres, in vec3 pos, in vec4 color, in vec3 point, in vec3 plane, 
-               in vec3 dir, in float inc) {
+vec4 drawPlanes(in vec4 oldres, in vec3 pos, in vec3 dir, in float inc, PlaneParameters plane) {
     vec4 result = oldres;
     
-    float e = dot(pos-point, plane);
-    float step = abs(dot(plane, inc*dir));
+    float e = dot(pos-plane.position, plane.normal);
+    float step = abs(dot(plane.normal, inc*dir));
     if ( e <= 0.0 && e > -step ) {
-        result.rgb = result.rgb + (1.0 - result.a) * color.a * color.rgb;
-        result.a = result.a + (1.0 - result.a) * color.a;
+        result.rgb = result.rgb + (1.0 - result.a) * plane.color.a * plane.color.rgb;
+        result.a = result.a + (1.0 - result.a) * plane.color.a;
     }
+    return result;
+}
+
+vec4 drawPlanes(in vec4 oldres, in vec3 pos, in vec3 dir, in float inc, PlaneParameters plane1,
+                 PlaneParameters plane2) {
+    vec4 result = oldres;
+    result = drawPlanes(result, pos, dir, inc, plane1);
+    result = drawPlanes(result, pos, dir, inc, plane2);
+    return result;
+}
+
+vec4 drawPlanes(in vec4 oldres, in vec3 pos, in vec3 dir, in float inc, PlaneParameters plane1,
+                 PlaneParameters plane2, PlaneParameters plane3) {
+    vec4 result = oldres;
+    result = drawPlanes(result, pos, dir, inc, plane1);
+    result = drawPlanes(result, pos, dir, inc, plane2);
+    result = drawPlanes(result, pos, dir, inc, plane3);
     return result;
 }

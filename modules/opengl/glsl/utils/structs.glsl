@@ -113,4 +113,16 @@ struct LightParameters {
     int specularExponent;
 };
 
+struct PlaneParameters {
+    vec3 position;
+    vec3 normal;
+    vec4 color;
+};
+
+struct VolumeIndicatorParameters {
+    PlaneParameters plane1;
+    PlaneParameters plane2;
+    PlaneParameters plane3;
+};
+
 #endif // IVW_STRUCTS_GLSL
