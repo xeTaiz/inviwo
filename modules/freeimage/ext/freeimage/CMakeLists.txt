@@ -253,5 +253,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Darwin|FreeBSD)")
   set_target_properties(freeimage PROPERTIES XCODE_ATTRIBUTE_GCC_WARN_INHIBIT_ALL_WARNINGS YES)
 endif(CMAKE_SYSTEM_NAME MATCHES "(Darwin|FreeBSD)")
 
-
+#--------------------------------------------------------------------
+# Account for missing build flags in FreeImage
+# otherwise FreeImage functionality will replace Qt Image functionality
+#
+# This fixes the "missing menu/toolbar icons" issue (Issue 540)
+if(CMAKE_SYSTEM_NAME MATCHES "(Darwin|FreeBSD|Linux)")
+  set (CMAKE_CXX_FLAGS "-fexceptions -fvisibility=hidden -fPIC")
+  set (CMAKE_C_FLAGS "-fexceptions -fvisibility=hidden -fPIC")
+endif(CMAKE_SYSTEM_NAME MATCHES "(Darwin|FreeBSD|Linux)")
 	
