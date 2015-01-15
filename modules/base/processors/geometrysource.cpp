@@ -36,7 +36,7 @@ ProcessorClassIdentifier(GeometrySource, "org.inviwo.GeometrySource");
 ProcessorDisplayName(GeometrySource,  "Geometry Source");
 ProcessorTags(GeometrySource, Tags::None);
 ProcessorCategory(GeometrySource, "Data Input");
-ProcessorCodeState(GeometrySource, CODE_STATE_EXPERIMENTAL);
+ProcessorCodeState(GeometrySource, CODE_STATE_STABLE);
 
 GeometrySource::GeometrySource() : DataSource<Geometry, GeometryOutport>() {
     DataSource<Geometry, GeometryOutport>::file_.setContentType("geometry");

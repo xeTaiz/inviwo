@@ -85,6 +85,9 @@ void DrawLines::initialize() {
     lineSize_.setMinValue(aliasRange[0]);
     lineSize_.setMaxValue(aliasRange[1]);
 
+    if (aliasRange[0] == aliasRange[1])
+        lineSize_.setVisible(false);
+
     lineShader_ = new Shader("img_color.frag");
     lines_ = new Mesh(GeometryEnums::LINES, GeometryEnums::STRIP);
     lines_->addAttribute(new Position2dBuffer());

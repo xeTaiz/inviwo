@@ -42,7 +42,7 @@ ProcessorClassIdentifier(VolumeExport, "org.inviwo.VolumeExport");
 ProcessorDisplayName(VolumeExport,  "Volume Export");
 ProcessorTags(VolumeExport, Tags::None);
 ProcessorCategory(VolumeExport, "Data Output");
-ProcessorCodeState(VolumeExport, CODE_STATE_EXPERIMENTAL);
+ProcessorCodeState(VolumeExport, CODE_STATE_STABLE);
 
 VolumeExport::VolumeExport()
     : Processor()

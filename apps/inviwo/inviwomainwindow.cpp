@@ -593,21 +593,21 @@ void InviwoMainWindow::disableEvaluation(bool disable) {
 
 void InviwoMainWindow::showAboutBox() {
     std::string aboutText;
-    aboutText.append("<b>Inviwo V" + IVW_VERSION + "</b><br>");
+    aboutText.append("<b>Inviwo v" + IVW_VERSION + "</b><br>");
     aboutText.append("Interactive Visualization Workshop<br>");
-    aboutText.append("&copy; 2012-2014 The Inviwo Foundation<br>");
+    aboutText.append("&copy; 2012-2015 The Inviwo Foundation<br>");
     aboutText.append("<a href='http://www.inviwo.org/'>http://www.inviwo.org/</a>");
     aboutText.append(
         "<p>Inviwo is a rapid prototyping environment for interactive \
                      visualizations.<br>It is licensed under the Simplified BSD license.</p>");
     aboutText.append("<p><b>Core Team:</b><br>");
     aboutText.append(
-        "Erik Sund&eacute;n, Daniel J&ouml;nsson, Martin Falk, Peter Steneteg, Rickard Englund,<br>"
+        "Erik Sund&eacute;n, Daniel J&ouml;nsson, Martin Falk, Peter Steneteg, <br>Rickard Englund,"
         "Sathish Kottravel, Timo Ropinski</p>");
     aboutText.append("<p><b>Former Developers:</b><br>");
     aboutText.append("Alexander Johansson, Andreas Valter, Johan Nor&eacute;n, Emanuel Winblad, "
         "Hans-Christian Helltegen, Viktor Axelsson</p>");
-    QMessageBox::about(this, QString::fromStdString("Inviwo V" + IVW_VERSION),
+    QMessageBox::about(this, QString::fromStdString("Inviwo v" + IVW_VERSION),
                        QString::fromStdString(aboutText));
 }
 

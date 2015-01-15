@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
     LogCentral::init();
     LogCentral::getPtr()->registerLogger(new ConsoleLogger());
 
-    InviwoApplication inviwoApp(argc, argv, "Inviwo "+IVW_VERSION + " - GLFWApp", inviwo::filesystem::findBasePath());
+    InviwoApplication inviwoApp(argc, argv, "Inviwo v"+IVW_VERSION + " - GLFWApp", inviwo::filesystem::findBasePath());
 
     CanvasGLFW::setAlwaysOnTopByDefault(false);
 
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     if (cmdparser->getLoadWorkspaceFromArg())
         workspace = cmdparser->getWorkspacePath();
     else
-        workspace = inviwoApp.getPath(InviwoApplication::PATH_WORKSPACES, "tests/simpleentryexit.inv");
+        workspace = inviwoApp.getPath(InviwoApplication::PATH_WORKSPACES, "boron.inv");
 
     IvwDeserializer xmlDeserializer(workspace);
     inviwoApp.getProcessorNetwork()->deserialize(xmlDeserializer);

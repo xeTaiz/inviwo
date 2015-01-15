@@ -52,7 +52,7 @@
 using namespace inviwo;
 
 int main(int argc, char** argv) {
-    std::string appName = "Inviwo " + IVW_VERSION + " - QtApp";
+    std::string appName = "Inviwo v" + IVW_VERSION + " - QtApp";
 
     QApplication app(argc, argv);
     app.setOrganizationName("Inviwo Foundation");
@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
         workspace = cmdparser->getWorkspacePath();
     else
         workspace =
-            inviwoApp.getPath(InviwoApplication::PATH_WORKSPACES, "tests/simpleraycaster.inv");
+            inviwoApp.getPath(InviwoApplication::PATH_WORKSPACES, "boron.inv");
 
     IvwDeserializer xmlDeserializer(workspace);
     inviwoApp.getProcessorNetwork()->deserialize(xmlDeserializer);

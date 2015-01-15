@@ -31,7 +31,7 @@
 #include <modules/freeimage/freeimagemodule.h>
 #include <modules/freeimage/freeimagereader.h>
 #include <modules/freeimage/freeimagewriter.h>
-#include <modules/freeimage/processors/tonemappingcpuprocessor.h>
+//#include <modules/freeimage/processors/tonemappingcpuprocessor.h>
 
 namespace inviwo {
 
@@ -44,7 +44,7 @@ FreeImageModule::FreeImageModule() : InviwoModule() {
     registerDataWriter(new FreeImageWriter());
 
     //Register processors
-    registerProcessor(ToneMappingCPUProcessor);
+    //registerProcessor(ToneMappingCPUProcessor);
 }
 
 } // namespace
