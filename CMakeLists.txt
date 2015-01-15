@@ -57,7 +57,6 @@ option(IVW_UNIT_TEST_APPLICATION "Build Inviwo Unit tests Application" OFF)
 #--------------------------------------------------------------------
 # Add externals
 add_subdirectory(ext/ticpp)
-add_subdirectory(ext/tinythread) 
 if(IVW_SIGAR)
 add_subdirectory(ext/sigar)
 endif()

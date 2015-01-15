@@ -1,6 +1,0 @@
-# Name: glut
-# Description: A freely licensed and improved alternative to the GLUT library
-# Version: @VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@
-set(GLUT_LIBS @PC_LIBNAME@)
-set(GLUT_LIBS_PRIVATE @PC_LIBS_PRIVATE@)
-set(GLUT_CFLAGS @PC_CFLAGS@)
