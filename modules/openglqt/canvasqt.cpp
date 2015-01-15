@@ -435,35 +435,34 @@ void CanvasQt::touchEvent(QTouchEvent* touch) {
     touch->accept();
     Canvas::touchEvent(&touchEvent);
 
-    // Mouse events will be triggered for touch events by Qt 5.3.1 (even though we specify that the touch event is handled)
-    // http://www.qtcentre.org/archive/index.php/t-52367.html
-    // Therefore comment away this code to avoid duplicate mouse events
-//#ifdef USING_QT5
-//    if(touch->touchPoints().size() == 1 && lastNumFingers_ < 2){
-//        MouseEvent* mouseEvent = NULL;
-//        switch (touchState)
-//        {
-//        case TouchEvent::TOUCH_STATE_STARTED:
-//            mouseEvent = new MouseEvent(pos, MouseEvent::MOUSE_BUTTON_LEFT, MouseEvent::MOUSE_STATE_PRESS, 
-//                EventConverterQt::getModifier(touch), getScreenDimension());
-//            Canvas::mousePressEvent(mouseEvent);
-//            break;
-//        case TouchEvent::TOUCH_STATE_UPDATED:
-//            mouseEvent = new MouseEvent(pos, MouseEvent::MOUSE_BUTTON_LEFT, MouseEvent::MOUSE_STATE_MOVE, 
-//                EventConverterQt::getModifier(touch), getScreenDimension());
-//            Canvas::mouseMoveEvent(mouseEvent);
-//            break;
-//        case TouchEvent::TOUCH_STATE_ENDED:
-//            mouseEvent = new MouseEvent(pos, MouseEvent::MOUSE_BUTTON_LEFT, MouseEvent::MOUSE_STATE_RELEASE, 
-//                EventConverterQt::getModifier(touch), getScreenDimension());
-//            Canvas::mouseReleaseEvent(mouseEvent);
-//            break;
-//        default:
-//            break;
-//        }
-//        delete mouseEvent;
-//    }
-//#endif
+    // Mouse events will be triggered for touch events by Qt4 and Qt >= 5.3.0
+    // https://bugreports.qt.io/browse/QTBUG-40038
+#if defined(USING_QT5) && (QT_VERSION < QT_VERSION_CHECK(5, 3, 0))
+    if(touch->touchPoints().size() == 1 && lastNumFingers_ < 2){
+        MouseEvent* mouseEvent = NULL;
+        switch (touchState)
+        {
+        case TouchEvent::TOUCH_STATE_STARTED:
+            mouseEvent = new MouseEvent(pos, MouseEvent::MOUSE_BUTTON_LEFT, MouseEvent::MOUSE_STATE_PRESS, 
+                EventConverterQt::getModifier(touch), getScreenDimension());
+            Canvas::mousePressEvent(mouseEvent);
+            break;
+        case TouchEvent::TOUCH_STATE_UPDATED:
+            mouseEvent = new MouseEvent(pos, MouseEvent::MOUSE_BUTTON_LEFT, MouseEvent::MOUSE_STATE_MOVE, 
+                EventConverterQt::getModifier(touch), getScreenDimension());
+            Canvas::mouseMoveEvent(mouseEvent);
+            break;
+        case TouchEvent::TOUCH_STATE_ENDED:
+            mouseEvent = new MouseEvent(pos, MouseEvent::MOUSE_BUTTON_LEFT, MouseEvent::MOUSE_STATE_RELEASE, 
+                EventConverterQt::getModifier(touch), getScreenDimension());
+            Canvas::mouseReleaseEvent(mouseEvent);
+            break;
+        default:
+            break;
+        }
+        delete mouseEvent;
+    }
+#endif
 
     lastNumFingers_ = static_cast<int>(touch->touchPoints().size());
 
