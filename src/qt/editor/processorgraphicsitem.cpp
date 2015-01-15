@@ -110,7 +110,8 @@ ProcessorGraphicsItem::ProcessorGraphicsItem(Processor* processor)
     classLabel_->setFont(classFont);
 
     nameLabel_->setText(QString::fromStdString(processor_->getIdentifier()));
-    classLabel_->setText(QString::fromStdString(processor_->getDisplayName()));
+    classLabel_->setText(QString::fromStdString(processor_->getDisplayName() + " " 
+        + processor_->getTags().getString()));
     processor_->ProcessorObservable::addObserver(this);
 
     processorMeta_ = processor->getMetaData<ProcessorMetaData>(ProcessorMetaData::CLASS_IDENTIFIER);
