@@ -112,6 +112,14 @@ void LinkDialogPropertyGraphicsItem::setPropertyItemIndex(int &currIndex) {
         for (size_t i=0; i<subPropertyGraphicsItems_.size(); i++)
             subPropertyGraphicsItems_[i]->setIndex(index_);
     }
+    
+    /*
+    //For debugging the indexing
+    QString label(glm::to_string(index_).c_str());
+    label+= QString::fromStdString(getGraphicsItemData()->getDisplayName());
+    classLabel_->setText(label);
+    */
+    
 }
 
 void LinkDialogPropertyGraphicsItem::updatePositionBasedOnIndex(float animateExpansion) {
@@ -166,7 +174,7 @@ void LinkDialogPropertyGraphicsItem::expand(bool expandSubProperties) {
     isExpanded_ = true;
     if (!expandSubProperties) return;
     for (size_t i=0; i<subPropertyGraphicsItems_.size(); i++) {
-        subPropertyGraphicsItems_[i]->expand(false);
+        subPropertyGraphicsItems_[i]->expand(true);
         subPropertyGraphicsItems_[i]->show();
     }
 }
@@ -176,7 +184,7 @@ void LinkDialogPropertyGraphicsItem::collapse(bool collapseSubProperties) {
     isExpanded_ = false;
     if (!collapseSubProperties) return;
     for (size_t i=0; i<subPropertyGraphicsItems_.size(); i++) {
-        subPropertyGraphicsItems_[i]->collapse(false);
+        subPropertyGraphicsItems_[i]->collapse(true);
         subPropertyGraphicsItems_[i]->hide();
     }
 }
