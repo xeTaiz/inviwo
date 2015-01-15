@@ -3,7 +3,7 @@
     <!-- Don't edit the following code -->
     <ProcessorNetworkVersion content="7" />
     <Processors>
-        <Processor type="org.inviwo.Background" identifier="Background" id="ref0">
+        <Processor type="org.inviwo.Background" identifier="Background" id="ref6">
             <Properties>
                 <Property type="org.inviwo.ButtonProperty" identifier="Switch colors" key="Switch colors" />
                 <Property type="org.inviwo.OptionPropertyInt" identifier="backgroundStyle" key="backgroundStyle" />
@@ -61,13 +61,13 @@
                     <selection content="0" />
                 </MetaDataItem>
                 <MetaDataItem type="org.inviwo.ProcessorWidgetMetaData" key="org.inviwo.ProcessorWidgetMetaData">
-                    <position x="1235" y="320" />
+                    <position x="1227" y="290" />
                     <dimension x="512" y="512" />
                     <visibility content="1" />
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.CubeProxyGeometry" identifier="CubeProxyGeometry" id="ref1">
+        <Processor type="org.inviwo.CubeProxyGeometry" identifier="CubeProxyGeometry" id="ref7">
             <Properties>
                 <Property type="org.inviwo.IntMinMaxProperty" identifier="clipX" displayName="Clip X Slices" key="clipX">
                     <semantics semantics="Default" />
@@ -172,9 +172,9 @@
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.VolumeRaycaster" identifier="VolumeRaycaster" id="ref6">
+        <Processor type="org.inviwo.VolumeRaycaster" identifier="VolumeRaycaster" id="ref0">
             <Properties>
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" id="ref7">
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" id="ref1">
                     <Properties>
                         <Property type="org.inviwo.FloatProperty" identifier="aspectRatio" key="aspectRatio">
                             <minvalue content="0" />
@@ -225,6 +225,39 @@
                         </Property>
                         <Property type="org.inviwo.OptionPropertyInt" identifier="shadingMode" key="shadingMode">
                             <selectedIdentifier content="blinnphong" />
+                        </Property>
+                    </Properties>
+                </Property>
+                <Property type="org.inviwo.VolumeIndicatorProperty" identifier="positionindicator" key="positionindicator">
+                    <Properties>
+                        <Property type="org.inviwo.BoolProperty" identifier="enable" key="enable" />
+                        <Property type="org.inviwo.OptionPropertyInt" identifier="mode" key="mode" />
+                        <Property type="org.inviwo.PlaneProperty" identifier="plane1" key="plane1">
+                            <Properties>
+                                <Property type="org.inviwo.FloatVec4Property" identifier="color" key="color" />
+                                <Property type="org.inviwo.BoolProperty" identifier="enable" key="enable" />
+                                <Property type="org.inviwo.OptionPropertyInt" identifier="mode" key="mode" />
+                                <Property type="org.inviwo.FloatVec3Property" identifier="normal" key="normal" />
+                                <Property type="org.inviwo.FloatVec3Property" identifier="position" key="position" />
+                            </Properties>
+                        </Property>
+                        <Property type="org.inviwo.PlaneProperty" identifier="plane2" key="plane2">
+                            <Properties>
+                                <Property type="org.inviwo.FloatVec4Property" identifier="color" key="color" />
+                                <Property type="org.inviwo.BoolProperty" identifier="enable" key="enable" />
+                                <Property type="org.inviwo.OptionPropertyInt" identifier="mode" key="mode" />
+                                <Property type="org.inviwo.FloatVec3Property" identifier="normal" key="normal" />
+                                <Property type="org.inviwo.FloatVec3Property" identifier="position" key="position" />
+                            </Properties>
+                        </Property>
+                        <Property type="org.inviwo.PlaneProperty" identifier="plane3" key="plane3">
+                            <Properties>
+                                <Property type="org.inviwo.FloatVec4Property" identifier="color" key="color" />
+                                <Property type="org.inviwo.BoolProperty" identifier="enable" key="enable" />
+                                <Property type="org.inviwo.OptionPropertyInt" identifier="mode" key="mode" />
+                                <Property type="org.inviwo.FloatVec3Property" identifier="normal" key="normal" />
+                                <Property type="org.inviwo.FloatVec3Property" identifier="position" key="position" />
+                            </Properties>
                         </Property>
                     </Properties>
                 </Property>
@@ -464,7 +497,7 @@
     <Connections>
         <Connection>
             <OutPort identifier="geometry.outport">
-                <Processor type="org.inviwo.CubeProxyGeometry" identifier="CubeProxyGeometry" reference="ref1" />
+                <Processor type="org.inviwo.CubeProxyGeometry" identifier="CubeProxyGeometry" reference="ref7" />
             </OutPort>
             <InPort identifier="geometry">
                 <Processor type="org.inviwo.EntryExitPoints" identifier="EntryExitPoints" reference="ref4" />
@@ -475,7 +508,7 @@
                 <Processor type="org.inviwo.EntryExitPoints" identifier="EntryExitPoints" reference="ref4" />
             </OutPort>
             <InPort identifier="entry-points">
-                <Processor type="org.inviwo.VolumeRaycaster" identifier="VolumeRaycaster" reference="ref6" />
+                <Processor type="org.inviwo.VolumeRaycaster" identifier="VolumeRaycaster" reference="ref0" />
             </InPort>
         </Connection>
         <Connection>
@@ -483,15 +516,15 @@
                 <Processor type="org.inviwo.EntryExitPoints" identifier="EntryExitPoints" reference="ref4" />
             </OutPort>
             <InPort identifier="exit-points">
-                <Processor type="org.inviwo.VolumeRaycaster" identifier="VolumeRaycaster" reference="ref6" />
+                <Processor type="org.inviwo.VolumeRaycaster" identifier="VolumeRaycaster" reference="ref0" />
             </InPort>
         </Connection>
         <Connection>
             <OutPort identifier="outport">
-                <Processor type="org.inviwo.VolumeRaycaster" identifier="VolumeRaycaster" reference="ref6" />
+                <Processor type="org.inviwo.VolumeRaycaster" identifier="VolumeRaycaster" reference="ref0" />
             </OutPort>
             <InPort identifier="inport">
-                <Processor type="org.inviwo.Background" identifier="Background" reference="ref0" />
+                <Processor type="org.inviwo.Background" identifier="Background" reference="ref6" />
             </InPort>
         </Connection>
         <Connection>
@@ -499,7 +532,7 @@
                 <Processor type="org.inviwo.VolumeSource" identifier="VolumeSource" reference="ref3" />
             </OutPort>
             <InPort identifier="volume.inport">
-                <Processor type="org.inviwo.CubeProxyGeometry" identifier="CubeProxyGeometry" reference="ref1" />
+                <Processor type="org.inviwo.CubeProxyGeometry" identifier="CubeProxyGeometry" reference="ref7" />
             </InPort>
         </Connection>
         <Connection>
@@ -507,12 +540,12 @@
                 <Processor type="org.inviwo.VolumeSource" identifier="VolumeSource" reference="ref3" />
             </OutPort>
             <InPort identifier="volume">
-                <Processor type="org.inviwo.VolumeRaycaster" identifier="VolumeRaycaster" reference="ref6" />
+                <Processor type="org.inviwo.VolumeRaycaster" identifier="VolumeRaycaster" reference="ref0" />
             </InPort>
         </Connection>
         <Connection>
             <OutPort identifier="outport">
-                <Processor type="org.inviwo.Background" identifier="Background" reference="ref0" />
+                <Processor type="org.inviwo.Background" identifier="Background" reference="ref6" />
             </OutPort>
             <InPort identifier="inport">
                 <Processor type="org.inviwo.CanvasGL" identifier="CanvasGL" reference="ref2" />
@@ -522,14 +555,14 @@
     <PropertyLinks>
         <PropertyLink>
             <Properties>
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref1" />
                 <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref5" />
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref7" />
             </Properties>
         </PropertyLink>
         <PropertyLink>
             <Properties>
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref7" />
                 <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref5" />
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref1" />
             </Properties>
         </PropertyLink>
     </PropertyLinks>
