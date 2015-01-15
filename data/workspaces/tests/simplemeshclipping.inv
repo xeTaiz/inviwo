@@ -34,13 +34,13 @@
                     <selection content="0" />
                 </MetaDataItem>
                 <MetaDataItem type="org.inviwo.ProcessorWidgetMetaData" key="org.inviwo.ProcessorWidgetMetaData">
-                    <position x="445" y="460" />
+                    <position x="445" y="456" />
                     <dimension x="256" y="256" />
                     <visibility content="1" />
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.GeometryRenderGL" identifier="GeometryRenderGL" id="ref3">
+        <Processor type="org.inviwo.GeometryRenderGL" identifier="GeometryRenderGL" id="ref1">
             <Properties>
                 <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera">
                     <Properties>
@@ -160,7 +160,7 @@
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.MeshCreator" identifier="MeshCreator" id="ref1">
+        <Processor type="org.inviwo.MeshCreator" identifier="MeshCreator" id="ref3">
             <Properties>
                 <Property type="org.inviwo.FloatVec4Property" identifier="color" key="color" />
                 <Property type="org.inviwo.OptionPropertyInt" identifier="meshType" key="meshType">
@@ -178,13 +178,13 @@
                 <MetaDataItem type="org.inviwo.ProcessorMetaData" key="org.inviwo.ProcessorMetaData">
                     <position x="-650" y="-650" />
                     <visibility content="1" />
-                    <selection content="1" />
+                    <selection content="0" />
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.WorldTransformGeoemtry" identifier="World Transform Geoemtry" id="ref4">
+        <Processor type="org.inviwo.WorldTransformGeometry" identifier="World Transform Geometry" id="ref4">
             <Properties>
-                <Property type="org.inviwo.FloatMat4Property" identifier="matrix_" displayName="Transformation Matrix" key="matrix_">
+                <Property type="org.inviwo.FloatMat4Property" identifier="matrix_" key="matrix_">
                     <value>
                         <row0 x="2" y="0" z="0" w="0" />
                         <row1 x="0" y="2" z="0" w="0" />
@@ -223,31 +223,31 @@
                 <Processor type="org.inviwo.MeshClipping" identifier="MeshClipping" reference="ref2" />
             </OutPort>
             <InPort identifier="geometry.inport">
-                <Processor type="org.inviwo.GeometryRenderGL" identifier="GeometryRenderGL" reference="ref3" />
-            </InPort>
-        </Connection>
-        <Connection>
-            <OutPort identifier="outport">
-                <Processor type="org.inviwo.MeshCreator" identifier="MeshCreator" reference="ref1" />
-            </OutPort>
-            <InPort identifier="inport_">
-                <Processor type="org.inviwo.WorldTransformGeoemtry" identifier="World Transform Geoemtry" reference="ref4" />
-            </InPort>
-        </Connection>
-        <Connection>
-            <OutPort identifier="outport_">
-                <Processor type="org.inviwo.WorldTransformGeoemtry" identifier="World Transform Geoemtry" reference="ref4" />
-            </OutPort>
-            <InPort identifier="geometry.input">
-                <Processor type="org.inviwo.MeshClipping" identifier="MeshClipping" reference="ref2" />
+                <Processor type="org.inviwo.GeometryRenderGL" identifier="GeometryRenderGL" reference="ref1" />
             </InPort>
         </Connection>
         <Connection>
             <OutPort identifier="image.outport">
-                <Processor type="org.inviwo.GeometryRenderGL" identifier="GeometryRenderGL" reference="ref3" />
+                <Processor type="org.inviwo.GeometryRenderGL" identifier="GeometryRenderGL" reference="ref1" />
             </OutPort>
             <InPort identifier="inport">
                 <Processor type="org.inviwo.CanvasGL" identifier="CanvasGL" reference="ref0" />
+            </InPort>
+        </Connection>
+        <Connection>
+            <OutPort identifier="outport">
+                <Processor type="org.inviwo.MeshCreator" identifier="MeshCreator" reference="ref3" />
+            </OutPort>
+            <InPort identifier="inport_">
+                <Processor type="org.inviwo.WorldTransformGeometry" identifier="World Transform Geometry" reference="ref4" />
+            </InPort>
+        </Connection>
+        <Connection>
+            <OutPort identifier="outport_">
+                <Processor type="org.inviwo.WorldTransformGeometry" identifier="World Transform Geometry" reference="ref4" />
+            </OutPort>
+            <InPort identifier="geometry.input">
+                <Processor type="org.inviwo.MeshClipping" identifier="MeshClipping" reference="ref2" />
             </InPort>
         </Connection>
     </Connections>
