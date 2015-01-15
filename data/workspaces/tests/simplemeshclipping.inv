@@ -34,7 +34,7 @@
                     <selection content="0" />
                 </MetaDataItem>
                 <MetaDataItem type="org.inviwo.ProcessorWidgetMetaData" key="org.inviwo.ProcessorWidgetMetaData">
-                    <position x="445" y="464" />
+                    <position x="445" y="460" />
                     <dimension x="256" y="256" />
                     <visibility content="1" />
                 </MetaDataItem>
@@ -74,7 +74,12 @@
                     <Properties>
                         <Property type="org.inviwo.OptionPropertyInt" identifier="cullFace" key="cullFace" />
                         <Property type="org.inviwo.OptionPropertyInt" identifier="polygonMode" key="polygonMode" />
-                        <Property type="org.inviwo.FloatProperty" identifier="renderPointSize" key="renderPointSize" />
+                        <Property type="org.inviwo.FloatProperty" identifier="renderLineWidth" key="renderLineWidth">
+                            <visible content="0" />
+                        </Property>
+                        <Property type="org.inviwo.FloatProperty" identifier="renderPointSize" key="renderPointSize">
+                            <visible content="0" />
+                        </Property>
                     </Properties>
                 </Property>
                 <Property type="org.inviwo.SimpleLightingProperty" identifier="lighting" key="lighting">
@@ -134,7 +139,7 @@
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.MeshClipping" identifier="MeshClipping" id="ref1">
+        <Processor type="org.inviwo.MeshClipping" identifier="MeshClipping" id="ref2">
             <Properties>
                 <Property type="org.inviwo.BoolProperty" identifier="clippingEnabled" key="clippingEnabled">
                     <value content="1" />
@@ -155,20 +160,25 @@
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.MeshCreator" identifier="MeshCreator" id="ref2">
+        <Processor type="org.inviwo.MeshCreator" identifier="MeshCreator" id="ref1">
             <Properties>
+                <Property type="org.inviwo.FloatVec4Property" identifier="color" key="color" />
                 <Property type="org.inviwo.OptionPropertyInt" identifier="meshType" key="meshType">
                     <selectedIdentifier content="cube" />
                 </Property>
-                <Property type="org.inviwo.IntProperty" identifier="resX" key="resX" />
-                <Property type="org.inviwo.IntProperty" identifier="resY" key="resY" />
+                <Property type="org.inviwo.FloatVec3Property" identifier="normal" key="normal" />
+                <Property type="org.inviwo.FloatVec3Property" identifier="position1" key="position1" />
+                <Property type="org.inviwo.FloatVec3Property" identifier="position2" key="position2">
+                    <value x="1" y="1" z="1" />
+                </Property>
+                <Property type="org.inviwo.IntVec2Property" identifier="res" key="res" />
                 <Property type="org.inviwo.FloatProperty" identifier="scale" key="scale" />
             </Properties>
             <MetaDataMap>
                 <MetaDataItem type="org.inviwo.ProcessorMetaData" key="org.inviwo.ProcessorMetaData">
                     <position x="-650" y="-650" />
                     <visibility content="1" />
-                    <selection content="0" />
+                    <selection content="1" />
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
@@ -210,7 +220,7 @@
     <Connections>
         <Connection>
             <OutPort identifier="geometry.output">
-                <Processor type="org.inviwo.MeshClipping" identifier="MeshClipping" reference="ref1" />
+                <Processor type="org.inviwo.MeshClipping" identifier="MeshClipping" reference="ref2" />
             </OutPort>
             <InPort identifier="geometry.inport">
                 <Processor type="org.inviwo.GeometryRenderGL" identifier="GeometryRenderGL" reference="ref3" />
@@ -218,7 +228,7 @@
         </Connection>
         <Connection>
             <OutPort identifier="outport">
-                <Processor type="org.inviwo.MeshCreator" identifier="MeshCreator" reference="ref2" />
+                <Processor type="org.inviwo.MeshCreator" identifier="MeshCreator" reference="ref1" />
             </OutPort>
             <InPort identifier="inport_">
                 <Processor type="org.inviwo.WorldTransformGeoemtry" identifier="World Transform Geoemtry" reference="ref4" />
@@ -229,7 +239,7 @@
                 <Processor type="org.inviwo.WorldTransformGeoemtry" identifier="World Transform Geoemtry" reference="ref4" />
             </OutPort>
             <InPort identifier="geometry.input">
-                <Processor type="org.inviwo.MeshClipping" identifier="MeshClipping" reference="ref1" />
+                <Processor type="org.inviwo.MeshClipping" identifier="MeshClipping" reference="ref2" />
             </InPort>
         </Connection>
         <Connection>
