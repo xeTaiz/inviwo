@@ -603,7 +603,7 @@ void InviwoMainWindow::showAboutBox() {
     aboutText.append("<p><b>Core Team:</b><br>");
     aboutText.append(
         "Erik Sund&eacute;n, Daniel J&ouml;nsson, Martin Falk, Peter Steneteg, <br>Rickard Englund,"
-        "Sathish Kottravel, Timo Ropinski</p>");
+        " Sathish Kottravel, Timo Ropinski</p>");
     aboutText.append("<p><b>Former Developers:</b><br>");
     aboutText.append("Alexander Johansson, Andreas Valter, Johan Nor&eacute;n, Emanuel Winblad, "
         "Hans-Christian Helltegen, Viktor Axelsson</p>");

@@ -59,7 +59,7 @@ vec4 propagateLight(in vec3 coord, in vec3 coordPerm) {
     //Calculate previous permuted coordinate
 #ifdef POINT_LIGHT
     vec4 permLightDir = permutedLightMatrix_ * vec4(normalize(coordPerm - lightPos_), 1.0);
-    vec3 previousPermutedCoord = vec3(coord.xy - permLightDir.xy * lightVolumeParameters_.reciprocalDimensions.z/max(1e-4,abs(permLightDir.z),
+    vec3 previousPermutedCoord = vec3(coord.xy - permLightDir.xy * lightVolumeParameters_.reciprocalDimensions.z/max(1e-4,abs(permLightDir.z)),
                                       coord.z - lightVolumeParameters_.reciprocalDimensions.z);
 #else
     vec3 previousPermutedCoord = vec3(coord.xy - permutedLightDirection_.xy * lightVolumeParameters_.reciprocalDimensions.z/max(1e-4,abs(permutedLightDirection_.z)),

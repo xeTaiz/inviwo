@@ -39,7 +39,7 @@ SimpleLightingProperty::SimpleLightingProperty(std::string identifier, std::stri
                                                PropertySemantics semantics)
     : CompositeProperty(identifier, displayName, invalidationLevel, semantics)
     , shadingMode_("shadingMode", "Shading", INVALID_RESOURCES)
-    , ambientColor_("lightColorAmbient", "Ambient color", vec3(0.0f))
+    , ambientColor_("lightColorAmbient", "Ambient color", vec3(1.0f))
     , diffuseColor_("lightColorDiffuse", "Diffuse color", vec3(1.f))
     , specularColor_("lightColorSpecular", "Specular color", vec3(1.f))
     , specularExponent_("materialShininess", "Shininess", 110, 1, 180)
