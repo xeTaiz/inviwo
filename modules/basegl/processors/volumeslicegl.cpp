@@ -41,6 +41,7 @@
 #include <inviwo/core/interaction/events/keyboardevent.h>
 #include <inviwo/core/interaction/events/mouseevent.h>
 #include <inviwo/core/interaction/events/gestureevent.h>
+#include <limits>
 
 namespace inviwo {
 
@@ -66,8 +67,9 @@ VolumeSliceGL::VolumeSliceGL()
     , planeNormal_("planeNormal", "Plane Normal", vec3(1.f, 0.f, 0.f), vec3(-1.f, -1.f, -1.f),
                    vec3(1.f, 1.f, 1.f), vec3(0.01f, 0.01f, 0.01f))
     , planePosition_("planePosition", "Plane Position", vec3(0.5f), vec3(0.0f), vec3(1.0f))
-    
-    , rotationAroundAxis_("rotation", "Rotation (ccw)")
+    , imageScale_("imageScale", "Scale", 1.0f, 0.1f, 10.0f)
+    , rotationAroundAxis_("rotation", "Rotation (ccw)", VALID)
+    , imageRotation_("imageRotation", "Angle", 0, 0, glm::radians(360.f))
     , flipHorizontal_("flipHorizontal", "Flip Horizontal View", false)
     , flipVertical_("flipVertical", "Flip Vertical View", false)
     
@@ -75,7 +77,7 @@ VolumeSliceGL::VolumeSliceGL()
     , posPicking_("posPicking", "Enable Picking", false)
     , showIndicator_("showIndicator", "Show Position Indicator", true)
     , indicatorColor_("indicatorColor", "Indicator Color", vec4(1.0f, 0.8f, 0.1f, 0.8f), vec4(0.0f),
-                      vec4(1.0f))
+                      vec4(1.0f), vec4(0.01f), INVALID_OUTPUT, PropertySemantics::Color)
     , tfMappingEnabled_("tfMappingEnabled", "Enable Transfer Function", true, INVALID_RESOURCES)
     , transferFunction_("transferFunction", "Transfer function", TransferFunction(), &inport_)
     , tfAlphaOffset_("alphaOffset", "Alpha Offset", 0.0f, 0.0f, 1.0f, 0.01f)
@@ -105,6 +107,7 @@ VolumeSliceGL::VolumeSliceGL()
     , meshCrossHair_(NULL)
     , meshBox_(NULL)
     , meshDirty_(true)
+    , inverseSliceRotation_(1.0f)
     , volumeDimensions_(8u) {
     addPort(inport_);
     addPort(outport_);
@@ -128,22 +131,21 @@ VolumeSliceGL::VolumeSliceGL()
     sliceZ_.onChange(this, &VolumeSliceGL::sliceZChange);
 
     addProperty(planeNormal_);
-    planeNormal_.onChange(this, &VolumeSliceGL::planeSettingsChanged);
     addProperty(planePosition_);
+    
+    planeNormal_.onChange(this, &VolumeSliceGL::planeSettingsChanged);
+    
+
 
     // Transformations
-    rotationAroundAxis_.addOption("0", "0 deg", 0.f);
-    rotationAroundAxis_.addOption("90", "90 deg", glm::radians(90.f));
-    rotationAroundAxis_.addOption("180", "180 deg", glm::radians(180.f));
-    rotationAroundAxis_.addOption("270", "270 deg", glm::radians(270.f));
+    rotationAroundAxis_.addOption("0", "0 deg", 0);
+    rotationAroundAxis_.addOption("90", "90 deg", 1);
+    rotationAroundAxis_.addOption("180", "180 deg", 2);
+    rotationAroundAxis_.addOption("270", "270 deg", 3);
+    rotationAroundAxis_.addOption("free", "Free rotation", 4);
     rotationAroundAxis_.set(0.f);
     rotationAroundAxis_.setCurrentStateAsDefault();
-    rotationAroundAxis_.onChange(this, &VolumeSliceGL::planeSettingsChanged);
-    trafoGroup_.addProperty(rotationAroundAxis_);
-    flipHorizontal_.onChange(this, &VolumeSliceGL::planeSettingsChanged);
-    trafoGroup_.addProperty(flipHorizontal_);
-    flipVertical_.onChange(this, &VolumeSliceGL::planeSettingsChanged);
-    trafoGroup_.addProperty(flipVertical_);
+    
     volumeWrapping_.addOption("0", "Use incoming wrapping", 0);
     volumeWrapping_.addOption("1", "Clamp", GL_CLAMP);
     volumeWrapping_.addOption("2", "Clamp to invisible border", GL_CLAMP_TO_BORDER);
@@ -152,17 +154,34 @@ VolumeSliceGL::VolumeSliceGL()
     volumeWrapping_.addOption("5", "Repeat", GL_REPEAT);
     volumeWrapping_.set(0);
     volumeWrapping_.setCurrentStateAsDefault();
+
+    imageRotation_.setVisible(false);
+
+    trafoGroup_.addProperty(rotationAroundAxis_);
+    trafoGroup_.addProperty(imageRotation_);
+    trafoGroup_.addProperty(imageScale_);
+    trafoGroup_.addProperty(flipHorizontal_);
+    trafoGroup_.addProperty(flipVertical_);
     trafoGroup_.addProperty(volumeWrapping_);
+
+    rotationAroundAxis_.onChange(this ,&VolumeSliceGL::rotationModeChange);
+    imageRotation_.onChange(this, &VolumeSliceGL::planeSettingsChanged);
+    imageScale_.onChange(this, &VolumeSliceGL::planeSettingsChanged);    
+    flipHorizontal_.onChange(this, &VolumeSliceGL::planeSettingsChanged);
+    flipVertical_.onChange(this, &VolumeSliceGL::planeSettingsChanged);
+
     addProperty(trafoGroup_);
 
     // Position Selection
-    posPicking_.onChange(this, &VolumeSliceGL::modeChange);
     pickGroup_.addProperty(posPicking_);
-    showIndicator_.setReadOnly(posPicking_.get());
     pickGroup_.addProperty(showIndicator_);
-    indicatorColor_.setSemantics(PropertySemantics::Color);
-    indicatorColor_.onChange(this, &VolumeSliceGL::invalidateMesh);
     pickGroup_.addProperty(indicatorColor_);
+
+    posPicking_.onChange(this, &VolumeSliceGL::modeChange);
+    indicatorColor_.onChange(this, &VolumeSliceGL::invalidateMesh);
+    showIndicator_.setReadOnly(posPicking_.get());
+    indicatorColor_.setSemantics(PropertySemantics::Color);
+
     addProperty(pickGroup_);
 
     // Transfer Function
@@ -192,17 +211,14 @@ VolumeSliceGL::VolumeSliceGL()
     gestureShiftSlice_.setVisible(false);
     gestureShiftSlice_.setCurrentStateAsDefault();
     addProperty(gestureShiftSlice_);
-
-    modeChange();
 }
 
 VolumeSliceGL::~VolumeSliceGL() {}
 
 void VolumeSliceGL::initialize() {
     Processor::initialize();
-    shader_ = new Shader("img_texturequad.vert", "volumeslice.frag", false);
-    indicatorShader_ = new Shader("standard.frag", true);
-    planeSettingsChanged();
+    shader_ = new Shader("standard.vert", "volumeslice.frag", false);
+    indicatorShader_ = new Shader("standard.vert", "standard.frag", true);
     updateMaxSliceNumber();
     initializeResources();
 }
@@ -218,6 +234,7 @@ void VolumeSliceGL::initializeResources() {
         tfAlphaOffset_.setVisible(false);
     }
     shader_->build();
+    planeSettingsChanged();
 }
 
 void VolumeSliceGL::deinitialize() {
@@ -233,10 +250,112 @@ void VolumeSliceGL::invokeInteractionEvent(Event* event) {
     Processor::invokeInteractionEvent(event);
 }
 
+void VolumeSliceGL::modeChange() {
+    disableInvalidation();
+
+    sliceX_.setReadOnly(true);
+    sliceY_.setReadOnly(true);
+    sliceZ_.setReadOnly(true);
+    planePosition_.setReadOnly(true);
+    planeNormal_.setReadOnly(true);
+
+    switch (sliceAlongAxis_.get()) {
+        case CoordinateEnums::X:
+            sliceX_.setReadOnly(false);
+            sliceXChange();
+            break;
+        case CoordinateEnums::Y:
+            sliceY_.setReadOnly(false);
+            sliceYChange();
+            break;
+        case CoordinateEnums::Z:
+            sliceZ_.setReadOnly(false);
+            sliceZChange();
+            break;
+        case 3: // General plane
+        default:
+            planePosition_.setReadOnly(false);
+            planeNormal_.setReadOnly(false);
+            break;
+    }
+
+    showIndicator_.setReadOnly(!posPicking_.get());
+
+    enableInvalidation();
+    planeSettingsChanged();
+}
+
+void VolumeSliceGL::planeSettingsChanged() {
+    if(!inport_.hasData()) return;
+
+    // Goal: define a transformation that maps the view 2D texture coordinates into 
+    // 3D texture coordinates at at some plane in the volume.
+
+    mat4 flipMatX(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1);
+    mat4 flipMatY(1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1);
+    vec3 normal = glm::normalize(planeNormal_.get());
+    mat4 rotation = glm::translate(vec3(0.5f))
+        * glm::toMat4(glm::rotation(vec3(0.0f, 0.0f, 1.0f), normal))
+        * glm::rotate(imageRotation_.get(), vec3(0, 0, 1))
+        * glm::scale(vec3(imageScale_, imageScale_,1.0f))
+        * glm::translate(vec3(-0.5f));
+
+    if (flipHorizontal_) rotation *= flipMatX;
+    if (flipVertical_) rotation *= flipMatY;
+
+    // Save the inverse rotation.
+    inverseSliceRotation_ = glm::inverse(rotation);
+
+
+    // Make sure we keep the aspect of the input data.
+    mat4 texToWorld(inport_.getData()->getCoordinateTransformer().getTextureToWorldMatrix());
+    mat4 boxrotation = glm::toMat4(glm::rotation(vec3(0.0f, 0.0f, 1.0f), normal))
+        * glm::rotate(imageRotation_.get(), vec3(0, 0, 1));
+
+    vec2 xrange(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
+    vec2 yrange(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
+    for (float i = 0.0f; i <= 1.0f; ++i) {
+        for (float j = 0.0f; j <= 1.0f; ++j) {
+            for (float k = 0.0f; k <= 1.0f; ++k) {
+                const vec4 corner = boxrotation*texToWorld*vec4(i, j, k, 1.0f);
+                xrange[0] = std::min(xrange[0], corner.x);
+                xrange[1] = std::max(xrange[1], corner.x);
+                yrange[0] = std::min(yrange[0], corner.y);
+                yrange[1] = std::max(yrange[1], corner.y);
+            }
+        }
+    }
+
+    float ratioSource = abs((xrange[1] - xrange[0]) / (yrange[1] - yrange[0]));
+    float ratioTarget = (float)outport_.getDimension().x / (float)outport_.getDimension().y;
+    glm::mat4 scale;
+    if (ratioTarget < ratioSource) {
+        scale = glm::scale(glm::vec3(1.0f, ratioTarget / ratioSource, 1.0f));
+    } else {
+        scale = glm::scale(glm::vec3(ratioSource / ratioTarget, 1.0f, 1.0f));
+    }
+
+    // Set all the uniforms 
+    if (shader_) {
+        shader_->activate();
+        shader_->setUniform("sliceRotation_", rotation);
+        shader_->setUniform("dataToClip_", scale);
+        shader_->deactivate();
+
+        indicatorShader_->activate();
+        indicatorShader_->setUniform("dataToClip_", scale);
+        indicatorShader_->deactivate();
+    }
+
+    invalidateMesh();
+    return;
+}
+
 void VolumeSliceGL::process() {
     if (volumeDimensions_ != inport_.getData()->getDimension()) {
         volumeDimensions_ = inport_.getData()->getDimension();
         updateMaxSliceNumber();
+        modeChange();
     }
     
     TextureUnit transFuncUnit, volUnit;
@@ -266,7 +385,7 @@ void VolumeSliceGL::process() {
 
     utilgl::setShaderUniforms(shader_, inport_, "volumeParameters_");
     shader_->setUniform("volume_", volUnit.getUnitNumber());
-    shader_->setUniform("slice_", glm::dot(glm::normalize(planeNormal_.get()), planePosition_.get()));
+    shader_->setUniform("slice_", (inverseSliceRotation_ * vec4(planePosition_.get(),1.0f)).z);
     
     utilgl::singleDrawImagePlaneRect();
     shader_->deactivate();
@@ -289,9 +408,9 @@ void VolumeSliceGL::renderPositionIndicator() {
         vec4 pos(static_cast<float>(sliceX_.get()), static_cast<float>(sliceY_.get()),
             static_cast<float>(sliceZ_.get()), 1.0f);
 
-        mat4 trans = inport_.getData()->getCoordinateTransformer().getIndexToWorldMatrix();
+        mat4 trans = inport_.getData()->getCoordinateTransformer().getTextureToWorldMatrix();
 
-        worldPosition_.set(vec3(trans*pos));
+        worldPosition_.set(vec3(trans*vec4(planePosition_.get(),1.0f)));
 
         updateIndicatorMesh();
     }
@@ -398,53 +517,46 @@ void VolumeSliceGL::updateIndicatorMesh() {
 void VolumeSliceGL::invalidateMesh() { meshDirty_ = true; }
 
 void VolumeSliceGL::shiftSlice(int shift) {
-//     int newSlice = getSliceNumber() + shift;
-//     IntProperty* prop = slices_[getAxisIndex(sliceAlongAxis_.get())];
-//     if ((newSlice >= prop->getMinValue()) && (newSlice <= prop->getMaxValue())) {
-//         prop->set(newSlice);
-//     }
+        vec3 newPos = planePosition_.get() + static_cast<float>(shift)/100.0f * glm::normalize(planeNormal_.get()); 
+        glm::clamp(newPos,vec3(-1.0f),vec3(1.0f));
+        planePosition_.set(newPos);
 }
 
 void VolumeSliceGL::setVolPosFromScreenPos(vec2 pos) {
-//     if (!posPicking_.get()) return;  // position mode not enabled
-// 
-//     if ((pos.x < 0.0f) || (pos.x > 1.0f) || (pos.y < 0.0f) || (pos.y > 1.0f)) {
-//         // invalid position
-//         return;
-//     }
-// 
-//     // Rotation
-//     float rotationAngle = rotationAroundAxis_.get();
-//     mat2 m(cos(rotationAngle), -sin(rotationAngle), sin(rotationAngle), cos(rotationAngle));
-// 
-//     if (flipHorizontal_.get()) pos.x = 1.0f - pos.x;
-//     if (flipVertical_.get()) pos.y = 1.0f - pos.y;
-//     pos = m * (pos - 0.5f) + 0.5f;
-// 
-//     ivec3 curPos(-1);
-//     int slice = getSliceNumber();
-//     switch (sliceAlongAxis_.get()) {
-//         case CoordinateEnums::X:  // y-z plane
-//             curPos.x = slice;
-//             curPos.y = static_cast<float>(pos.x * volumeDimensions_.y + 0.5f);
-//             curPos.z = static_cast<float>(pos.y * volumeDimensions_.z + 0.5f);
-//             break;
-//         case CoordinateEnums::Y:  // x-z plane
-//             curPos.x = static_cast<float>(pos.y * volumeDimensions_.x + 0.5f);
-//             curPos.y = slice;
-//             curPos.z = static_cast<float>(pos.x * volumeDimensions_.z + 0.5f);
-//             break;
-//         case CoordinateEnums::Z:  // x-y plane
-//             curPos.x = static_cast<float>(pos.x * volumeDimensions_.x + 0.5f);
-//             curPos.y = static_cast<float>(pos.y * volumeDimensions_.y + 0.5f);
-//             curPos.z = slice;
-//             break;
-//     }
-//     disableInvalidation();
-//     sliceX_.set(curPos.x);
-//     sliceY_.set(curPos.y);
-//     sliceZ_.set(curPos.z);
-//     enableInvalidation();
+    if (!posPicking_.get()) return;  // position mode not enabled
+
+    if ((pos.x < 0.0f) || (pos.x > 1.0f) || (pos.y < 0.0f) || (pos.y > 1.0f)) {
+        // invalid position
+        return;
+    }
+
+    // Rotation
+    float rotationAngle = rotationAroundAxis_.get();
+    mat2 m(cos(rotationAngle), -sin(rotationAngle), sin(rotationAngle), cos(rotationAngle));
+
+    if (flipHorizontal_.get()) pos.x = 1.0f - pos.x;
+    if (flipVertical_.get()) pos.y = 1.0f - pos.y;
+    pos = m * (pos - 0.5f) + 0.5f;
+
+    vec3 curPos(planePosition_.get());
+    switch (sliceAlongAxis_.get()) {
+        case CoordinateEnums::X:  // y-z plane
+            curPos.y = static_cast<float>(pos.x);
+            curPos.z = static_cast<float>(pos.y);
+            break;
+        case CoordinateEnums::Y:  // x-z plane
+            curPos.x = static_cast<float>(pos.y);
+            curPos.z = static_cast<float>(pos.x);
+            break;
+        case CoordinateEnums::Z:  // x-y plane
+            curPos.x = static_cast<float>(pos.x);
+            curPos.y = static_cast<float>(pos.y);
+            break;
+    }
+    invalidateMesh();
+    disableInvalidation();
+    planePosition_.set(curPos);
+    enableInvalidation();
 }
 
 vec2 VolumeSliceGL::getScreenPosFromVolPos() {
@@ -473,64 +585,7 @@ vec2 VolumeSliceGL::getScreenPosFromVolPos() {
     return posF;
 }
 
-void VolumeSliceGL::modeChange() {
-    disableInvalidation();
 
-    sliceX_.setReadOnly(true);
-    sliceY_.setReadOnly(true);
-    sliceZ_.setReadOnly(true);
-    planePosition_.setReadOnly(true);
-    planeNormal_.setReadOnly(true);
-
-    switch (sliceAlongAxis_.get()) {
-        case CoordinateEnums::X:
-            sliceX_.setReadOnly(false);
-            break;
-        case CoordinateEnums::Y:
-            sliceY_.setReadOnly(false);
-            break;
-        case CoordinateEnums::Z:
-            sliceZ_.setReadOnly(false);
-            break;
-        case 3: // General plane
-        default:
-            planePosition_.setReadOnly(false);
-            planeNormal_.setReadOnly(false);
-            break;
-    }
-
-    showIndicator_.setReadOnly(!posPicking_.get());
-
-    enableInvalidation();
-
-    planeSettingsChanged();
-}
-
-void VolumeSliceGL::planeSettingsChanged() {
-    // Goal: define a transformation that maps 2D texture coordinates into 
-    // 3D texture coordinates at at some plane.
-
-    mat4 flipMatX(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1);
-    mat4 flipMatY(1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1);
-    vec3 normal = glm::normalize(planeNormal_.get());
-    mat4 rotation = glm::translate(vec3(0.5f)) 
-                    * glm::toMat4(glm::rotation(vec3(0.0f, 0.0f, 1.0f), normal))
-                    * glm::rotate(rotationAroundAxis_.get(), vec3(0,0,1))
-                    * glm::translate(vec3(-0.5f));
-
-
-    if (flipHorizontal_) rotation *= flipMatX;
-    if (flipVertical_) rotation *= flipMatY;
-         
-    if(shader_) {
-        shader_->activate();
-        shader_->setUniform("sliceRotation_", rotation);
-        shader_->deactivate();
-    }
-
-    invalidateMesh();
-    return;
-}
 
 void VolumeSliceGL::updateMaxSliceNumber() {
     if (!inport_.hasData()) {
@@ -582,23 +637,49 @@ void VolumeSliceGL::eventGestureShiftSlice(Event* event){
 }
 
 void VolumeSliceGL::sliceXChange() {
-    planeNormal_.set(vec3(1.0f, 0.0f, 0.0f));
+    planeNormal_.set(vec3(-1.0f, 0.0f, 0.0f));
     planePosition_.set(vec3(
-        static_cast<float>(sliceX_.get()) / static_cast<float>(sliceX_.getMaxValue()), 0.0f, 0.0f));
+        static_cast<float>(sliceX_.get()-1) / static_cast<float>(sliceX_.getMaxValue()-1), 0.0f, 0.0f));
 }
 
 void VolumeSliceGL::sliceYChange() {
-    planeNormal_.set(vec3(0.0f, 1.0f, 0.0f));
+    planeNormal_.set(vec3(0.0f, -1.0f, 0.0f));
     planePosition_.set(vec3(
-        0.0f, static_cast<float>(sliceY_.get()) / static_cast<float>(sliceY_.getMaxValue()), 0.0f));
+        0.0f, static_cast<float>(sliceY_.get()-1) / static_cast<float>(sliceY_.getMaxValue()-1), 0.0f));
 
 }
 
 void VolumeSliceGL::sliceZChange() {
-    planeNormal_.set(vec3(0.0f, 0.0f, 1.0f));
+    planeNormal_.set(vec3(0.0f, 0.0f, -1.0f));
     planePosition_.set(vec3(
-        0.0f, 0.0f, static_cast<float>(sliceZ_.get()) / static_cast<float>(sliceZ_.getMaxValue())));
+        0.0f, 0.0f, static_cast<float>(sliceZ_.get()-1) / static_cast<float>(sliceZ_.getMaxValue()-1)));
 
+}
+
+void VolumeSliceGL::rotationModeChange() {
+    switch (rotationAroundAxis_.get()) {
+        case 0:
+            imageRotation_.setVisible(false);
+            imageRotation_.set(glm::radians(0.f));
+            break;
+        case 1:
+            imageRotation_.setVisible(false);
+            imageRotation_.set(glm::radians(90.f));
+            break;
+        case 2:
+            imageRotation_.setVisible(false);
+            imageRotation_.set(glm::radians(180.f));
+            break;
+        case 3:
+            imageRotation_.setVisible(false);
+            imageRotation_.set(glm::radians(270.f));
+            break;
+        case 4:
+        default:
+            imageRotation_.setVisible(true);
+            break;
+        
+    }
 }
 
 }  // inviwo namespace

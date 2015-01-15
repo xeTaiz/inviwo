@@ -88,6 +88,7 @@ protected:
     void sliceXChange();
     void sliceYChange();
     void sliceZChange();
+    void rotationModeChange();
 
 private:
     void eventShiftSlice(Event*);
@@ -112,7 +113,9 @@ private:
 
     FloatVec3Property planeNormal_;
     FloatVec3Property planePosition_;
-    OptionPropertyFloat rotationAroundAxis_;  // Clockwise rotation around slice axis
+    FloatProperty imageScale_;
+    OptionPropertyInt rotationAroundAxis_;  // Clockwise rotation around slice axis
+    FloatProperty imageRotation_;
     BoolProperty flipHorizontal_;
     BoolProperty flipVertical_;
     OptionPropertyInt volumeWrapping_; 
@@ -142,7 +145,9 @@ private:
     Mesh* meshBox_;  // second mesh needed since Mesh does not support multiple connectivity types
     bool meshDirty_;
 
+    mat4 inverseSliceRotation_; // Used to calculate the slice "z position" from the plain point. 
     uvec3 volumeDimensions_;
+
 };
 }
 
