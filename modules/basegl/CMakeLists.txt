@@ -12,6 +12,7 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/findedges.h
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/firstivwprocessor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/geometrypicking.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/processors/heightfieldprocessor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/imagecompositeprocessorgl.h
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/imageglprocessor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/imagelayoutgl.h
@@ -41,6 +42,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/findedges.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/firstivwprocessor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/geometrypicking.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/processors/heightfieldprocessor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/imagecompositeprocessorgl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/imageglprocessor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/imagelayoutgl.cpp
@@ -65,6 +67,8 @@ ivw_group("Source Files" ${SOURCE_FILES})
 set(SHADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/background.frag
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/capnearclipping.frag
+	${CMAKE_CURRENT_SOURCE_DIR}/glsl/heightfield.frag
+    ${CMAKE_CURRENT_SOURCE_DIR}/glsl/heightfield.vert
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/img_findedges.frag
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/img_gamma.frag
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/img_graysc.frag

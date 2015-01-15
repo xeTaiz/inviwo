@@ -34,6 +34,7 @@
 #include <modules/base/processors/directionallightsourceprocessor.h>
 #include <modules/base/processors/distancetransformram.h>
 #include <modules/base/processors/geometrysource.h>
+#include <modules/base/processors/heightfieldmapper.h>
 #include <modules/base/processors/imageexport.h>
 #include <modules/base/processors/imagesource.h>
 #include <modules/base/processors/imagesourceseries.h>
@@ -70,6 +71,7 @@ BaseModule::BaseModule() : InviwoModule() {
     registerProcessor(DirectionalLightSourceProcessor);
     registerProcessor(DistanceTransformRAM);
     registerProcessor(GeometrySource);
+	registerProcessor(HeightFieldMapper);
     registerProcessor(ImageExport);
     registerProcessor(ImageSource);
     registerProcessor(ImageSourceSeries);

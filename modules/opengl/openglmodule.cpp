@@ -37,8 +37,6 @@
 #include <modules/opengl/buffer/elementbufferglconverter.h>
 #include <modules/opengl/canvasprocessorgl.h>
 #include <modules/opengl/geometry/geometryrenderprocessorgl.h>
-#include <modules/opengl/heightfield/heightfieldmapper.h>
-#include <modules/opengl/heightfield/heightfieldprocessor.h>
 #include <modules/opengl/glwrap/shadermanager.h>
 #include <modules/opengl/image/layerglconverter.h>
 #include <modules/opengl/openglmodule.h>
@@ -81,8 +79,6 @@ OpenGLModule::OpenGLModule() :
 
     registerProcessor(CanvasProcessorGL);
     registerProcessor(GeometryRenderProcessorGL);
-    registerProcessor(HeightFieldMapper);
-    registerProcessor(HeightFieldProcessor);
     registerCapabilities(new OpenGLCapabilities());
     contextMode_ = OpenGLCapabilities::getPreferredProfile();
 }

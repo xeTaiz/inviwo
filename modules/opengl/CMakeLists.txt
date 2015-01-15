@@ -30,8 +30,6 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/glwrap/texture3d.h
     ${CMAKE_CURRENT_SOURCE_DIR}/glwrap/texturecallback.h
     ${CMAKE_CURRENT_SOURCE_DIR}/glwrap/textureunit.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/heightfield/heightfieldmapper.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/heightfield/heightfieldprocessor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/compositeprocessorgl.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/imagegl.h
     ${CMAKE_CURRENT_SOURCE_DIR}/image/imageprocessorgl.h
@@ -76,8 +74,6 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/glwrap/texture2darray.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/glwrap/texture3d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/glwrap/textureunit.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/heightfield/heightfieldmapper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/heightfield/heightfieldprocessor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/compositeprocessorgl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/imagegl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/image/imageprocessorgl.cpp
@@ -101,8 +97,6 @@ set(SHADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/composite.frag
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/geometryrendering.frag
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/geometryrendering.vert
-    ${CMAKE_CURRENT_SOURCE_DIR}/glsl/heightfield.frag
-    ${CMAKE_CURRENT_SOURCE_DIR}/glsl/heightfield.vert
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/img_color.frag
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/img_copy.frag
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/img_identity.vert

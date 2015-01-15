@@ -31,7 +31,7 @@
 #ifndef IVW_HEIGHTFIELDPROCESSOR_H
 #define IVW_HEIGHTFIELDPROCESSOR_H
 
-#include <modules/opengl/openglmoduledefine.h>
+#include <modules/basegl/baseglmoduledefine.h>
 #include <inviwo/core/common/inviwo.h>
 #include <inviwo/core/ports/dataoutport.h>
 #include <inviwo/core/ports/imageport.h>
@@ -81,7 +81,7 @@ namespace HeightFieldShading {
  * \brief Maps a heightfield onto a geometry and renders it to an image.
  *
  */
-class IVW_MODULE_OPENGL_API HeightFieldProcessor : public GeometryRenderProcessorGL {
+class IVW_MODULE_BASEGL_API HeightFieldProcessor : public GeometryRenderProcessorGL {
 public:
     HeightFieldProcessor();
     ~HeightFieldProcessor();

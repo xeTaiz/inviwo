@@ -31,7 +31,7 @@
 #ifndef IVW_HEIGHTFIELDMAPPER_H
 #define IVW_HEIGHTFIELDMAPPER_H
 
-#include <modules/opengl/openglmoduledefine.h>
+#include <modules/base/basemoduledefine.h>
 #include <inviwo/core/common/inviwo.h>
 #include <inviwo/core/processors/processor.h>
 #include <inviwo/core/ports/imageport.h>
@@ -39,7 +39,6 @@
 #include <inviwo/core/properties/baseoptionproperty.h>
 #include <inviwo/core/properties/ordinalproperty.h>
 #include <inviwo/core/properties/minmaxproperty.h>
-#include <modules/opengl/inviwoopengl.h>
 
 
 namespace inviwo {
@@ -89,7 +88,7 @@ namespace HeightFieldScaling {
  * are mapped to either an user-defined range or are scaled to fit in a given maximum 
  * height based on the sea level.
  */
-class IVW_MODULE_OPENGL_API HeightFieldMapper : public Processor {
+class IVW_MODULE_BASE_API HeightFieldMapper : public Processor {
 public:
     HeightFieldMapper();
     ~HeightFieldMapper();
