@@ -72,6 +72,8 @@ public:
 
     std::vector<PyModule*> getAllPythonModules(){ return registeredModules_; }
 
+
+    void importModule(const std::string &moduleName);
 protected:
     void initPythonCInterface();
     void initDefaultInterfaces();

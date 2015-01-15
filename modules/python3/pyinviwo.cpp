@@ -137,11 +137,13 @@ void PyInviwo::initPythonCInterface() {
 
     isInit_ = true;
     LogInfo("Python version: " + toString(Py_GetVersion()));
-    
     wchar_t programName[] = L"PyInviwo";
     Py_SetProgramName(programName);
-    
+#ifdef WIN32
+    Py_NoSiteFlag = 1;
+#endif
     Py_InitializeEx(false);
+
     if (!Py_IsInitialized()) {
         LogError("Python is not Initialized");
         return;
@@ -150,15 +152,34 @@ void PyInviwo::initPythonCInterface() {
     PyEval_InitThreads();
     mainDict_ = PyDict_New();
     modulesDict_ = PyImport_GetModuleDict();
-    if (PyDict_GetItemString(mainDict_, "__builtins__") == NULL) {
-        PyObject* pMod = PyImport_ImportModule("builtins");
-        if (NULL != pMod) PyDict_SetItemString(mainDict_, "__builtins__", pMod);
-    }
+    importModule("builtins");
+    importModule("sys");
+    importModule("os");
+    importModule("glob");
+
+
     addModulePath(InviwoApplication::getPtr()->getBasePath() + "/modules/python3/scripts");
 
     initDefaultInterfaces();
 
     initOutputRedirector();
+}
+
+void PyInviwo::importModule(const std::string &moduleName){
+    const static std::string __key__ = "__";
+    char * key = new char[moduleName.size() + 5];
+    sprintf(key,"__%s__", moduleName.c_str());
+    if (PyDict_GetItemString(mainDict_, key) == NULL) {
+        PyObject* pMod = PyImport_ImportModule(moduleName.c_str());
+        if (NULL != pMod){
+            PyDict_SetItemString(mainDict_, key, pMod);
+            LogInfo("Imported python module: " << moduleName);
+        }
+        else{
+            LogWarn("Failed to import python module: " << moduleName);
+        }
+    }
+    delete [] key;
 }
 
 void PyInviwo::initDefaultInterfaces() {
