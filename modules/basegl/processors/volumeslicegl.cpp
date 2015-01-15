@@ -523,10 +523,10 @@ void VolumeSliceGL::shiftSlice(int shift) {
 void VolumeSliceGL::setVolPosFromScreenPos(vec2 pos) {
     if (!posPicking_.get()) return;  // position mode not enabled
 
-    pos =  (glm::translate(vec3(0.5f, 0.5f, 0.0f)) 
+    pos = vec2(glm::translate(vec3(0.5f, 0.5f, 0.0f))
         * glm::inverse(scaleMat_) 
         * glm::translate(vec3(-0.5f, -0.5f, 0.0f)) 
-        * vec4(pos, 0.0f, 1.0f)).xy;
+        * vec4(pos, 0.0f, 1.0f));
 
     if ((pos.x < 0.0f) || (pos.x > 1.0f) || (pos.y < 0.0f) || (pos.y > 1.0f)) {
         // invalid position
@@ -540,12 +540,12 @@ void VolumeSliceGL::setVolPosFromScreenPos(vec2 pos) {
 
     invalidateMesh();
     disableInvalidation();
-    planePosition_.set(newpos.xyz);
+    planePosition_.set(vec3(newpos));
     enableInvalidation();
 }
 
 vec2 VolumeSliceGL::getScreenPosFromVolPos() {
-    vec2 pos((inverseSliceRotation_ * vec4(planePosition_.get(),1.0f)).xy);
+    vec2 pos(inverseSliceRotation_ * vec4(planePosition_.get(),1.0f));
     return pos;
 }
 
