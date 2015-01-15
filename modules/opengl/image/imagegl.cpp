@@ -108,19 +108,38 @@ void ImageGL::reAttachAllLayers(bool overRideImageType) {
     frameBufferObject_->deactivate();
 }
 
-void ImageGL::activateBuffer() {
+void ImageGL::activateBuffer(bool overRideImageType) {
     frameBufferObject_->activate();
-    frameBufferObject_->defineDrawBuffers();
+
+    const std::vector<GLenum>& drawBuffers = frameBufferObject_->getDrawBuffers();
+    if (!drawBuffers.empty()){
+         GLsizei numBuffersToDrawTo = static_cast<GLsizei>(drawBuffers.size());
+
+         // Don't draw picking if type is none picking
+         if(!overRideImageType && !typeContainsPicking(this->getOwner()->getImageType())) 
+             numBuffersToDrawTo--;
+
+         glDrawBuffers(numBuffersToDrawTo, &drawBuffers[0]);
+         LGL_ERROR;
+
+         // Disable depth writing if image has depth read only, and no override
+         glDepthMask(overRideImageType || typeContainsDepth(this->getOwner()->getImageType()) ? GL_TRUE : GL_FALSE);
+    }
+
     uvec2 dim = getDimension();
     glViewport(0, 0, dim.x, dim.y);
 }
 
-void ImageGL::deactivateBuffer() { frameBufferObject_->deactivate(); }
+void ImageGL::deactivateBuffer() { 
+    frameBufferObject_->deactivate();
+
+    // Depth writing might have been disabled, enable it again just in case
+    glDepthMask(GL_TRUE);
+}
 
 bool ImageGL::copyAndResizeRepresentation(DataRepresentation* targetRep) const {
     const ImageGL* source = this;
     ImageGL* target = dynamic_cast<ImageGL*>(targetRep);
-    target->reAttachAllLayers(true);
     
     TextureUnit colorUnit, depthUnit, pickingUnit;
     source->getColorLayerGL()->bindTexture(colorUnit.getEnum());
@@ -131,7 +150,7 @@ bool ImageGL::copyAndResizeRepresentation(DataRepresentation* targetRep) const {
         source->getPickingLayerGL()->bindTexture(pickingUnit.getEnum());
     }
     // Render to FBO, with correct scaling
-    target->activateBuffer();
+    target->activateBuffer(true);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     float ratioSource = (float)source->getDimension().x / (float)source->getDimension().y;
     float ratioTarget = (float)target->getDimension().x / (float)target->getDimension().y;
@@ -151,7 +170,7 @@ bool ImageGL::copyAndResizeRepresentation(DataRepresentation* targetRep) const {
         shader_->setUniform("picking_", pickingUnit.getUnitNumber());
     }
     shader_->setUniform("dataToClip_", scale);
-    glDepthMask(GL_TRUE);
+
     LGL_ERROR;
     //target->frameBufferObject_->checkStatus();
     target->renderImagePlaneRect();
@@ -159,14 +178,13 @@ bool ImageGL::copyAndResizeRepresentation(DataRepresentation* targetRep) const {
     shader_->deactivate();
     target->deactivateBuffer();
     LGL_ERROR;
-    
-    target->reAttachAllLayers(false);
+
     return true;
 }
 
 bool ImageGL::updateFrom(const ImageGL* source) {
     ImageGL* target = this;
-    target->reAttachAllLayers(true);
+
     // Primarily Copy by FBO blitting, all from source FBO to target FBO
     const FrameBufferObject* srcFBO = source->getFBO();
     FrameBufferObject* tgtFBO = target->getFBO();
@@ -226,9 +244,6 @@ bool ImageGL::updateFrom(const ImageGL* source) {
 
         if (sTex && tTex) tTex->loadFromPBO(sTex);
     }
-
-
-    target->reAttachAllLayers(false);
     
     LGL_ERROR;
     return true;
@@ -297,8 +312,6 @@ void ImageGL::updateExistingLayers() const {
 }
 
 void ImageGL::update(bool editable) {
-    //bool reAttachTargets = (!isValid() || colorLayersGL_.empty());
-
     colorLayersGL_.clear();
     depthLayerGL_ = NULL;
     pickingLayerGL_ = NULL;
@@ -340,7 +353,11 @@ void ImageGL::update(bool editable) {
     }
 
     // Attach all targets
-    /*if (reAttachTargets)*/ reAttachAllLayers(false);
+    reAttachAllLayers(true);
+
+    // Disable depth writing if image has depth read only
+    if(!typeContainsDepth(this->getOwner()->getImageType()))
+        glDepthMask(GL_FALSE);
 }
 
 void ImageGL::renderImagePlaneRect() const {

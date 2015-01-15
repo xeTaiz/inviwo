@@ -55,7 +55,7 @@ public:
 
     void reAttachAllLayers(bool overRideImageType = false);
 
-    void activateBuffer();
+    void activateBuffer(bool overRideImageType = false);
     void deactivateBuffer();
 
     virtual bool copyAndResizeRepresentation(DataRepresentation*) const;
