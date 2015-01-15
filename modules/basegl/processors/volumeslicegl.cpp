@@ -108,7 +108,9 @@ VolumeSliceGL::VolumeSliceGL()
     , meshBox_(NULL)
     , meshDirty_(true)
     , inverseSliceRotation_(1.0f)
-    , volumeDimensions_(8u) {
+    , volumeDimensions_(8u)
+    , ratioSource_(1.0f)
+    , scaleMat_(1.0f) {
     addPort(inport_);
     addPort(outport_);
 
@@ -325,26 +327,13 @@ void VolumeSliceGL::planeSettingsChanged() {
             }
         }
     }
-
-    float ratioSource = abs((xrange[1] - xrange[0]) / (yrange[1] - yrange[0]));
-    float ratioTarget = (float)outport_.getDimension().x / (float)outport_.getDimension().y;
-    glm::mat4 scale;
-    if (ratioTarget < ratioSource) {
-        scale = glm::scale(glm::vec3(1.0f, ratioTarget / ratioSource, 1.0f));
-    } else {
-        scale = glm::scale(glm::vec3(ratioSource / ratioTarget, 1.0f, 1.0f));
-    }
+    ratioSource_ = abs((xrange[1] - xrange[0]) / (yrange[1] - yrange[0]));
 
     // Set all the uniforms 
     if (shader_) {
         shader_->activate();
-        shader_->setUniform("sliceRotation_", rotation);
-        shader_->setUniform("dataToClip_", scale);
+        shader_->setUniform("sliceRotation_", rotation);     
         shader_->deactivate();
-
-        indicatorShader_->activate();
-        indicatorShader_->setUniform("dataToClip_", scale);
-        indicatorShader_->deactivate();
     }
 
     invalidateMesh();
@@ -387,6 +376,14 @@ void VolumeSliceGL::process() {
     shader_->setUniform("volume_", volUnit.getUnitNumber());
     shader_->setUniform("slice_", (inverseSliceRotation_ * vec4(planePosition_.get(),1.0f)).z);
     
+    float ratioTarget = (float)outport_.getDimension().x / (float)outport_.getDimension().y;
+    if (ratioTarget < ratioSource_) {
+        scaleMat_ = glm::scale(glm::vec3(1.0f, ratioTarget / ratioSource_, 1.0f));
+    } else {
+        scaleMat_ = glm::scale(glm::vec3(ratioSource_ / ratioTarget, 1.0f, 1.0f));
+    }
+    shader_->setUniform("dataToClip_", scaleMat_);
+
     utilgl::singleDrawImagePlaneRect();
     shader_->deactivate();
 
@@ -428,8 +425,9 @@ void VolumeSliceGL::renderPositionIndicator() {
     width = std::max(width, s_sizes[0]);
     width = std::min(width, s_sizes[1]);
     glLineWidth(width);
-    
+
     indicatorShader_->activate();
+    indicatorShader_->setUniform("dataToClip_", scaleMat_);
 
     glDepthFunc(GL_ALWAYS);
     renderer.render();
@@ -518,74 +516,38 @@ void VolumeSliceGL::invalidateMesh() { meshDirty_ = true; }
 
 void VolumeSliceGL::shiftSlice(int shift) {
         vec3 newPos = planePosition_.get() + static_cast<float>(shift)/100.0f * glm::normalize(planeNormal_.get()); 
-        glm::clamp(newPos,vec3(-1.0f),vec3(1.0f));
+        newPos = glm::clamp(newPos,vec3(0.0f),vec3(1.0f));
         planePosition_.set(newPos);
 }
 
 void VolumeSliceGL::setVolPosFromScreenPos(vec2 pos) {
     if (!posPicking_.get()) return;  // position mode not enabled
 
+    pos =  (glm::translate(vec3(0.5f, 0.5f, 0.0f)) 
+        * glm::inverse(scaleMat_) 
+        * glm::translate(vec3(-0.5f, -0.5f, 0.0f)) 
+        * vec4(pos, 0.0f, 1.0f)).xy;
+
     if ((pos.x < 0.0f) || (pos.x > 1.0f) || (pos.y < 0.0f) || (pos.y > 1.0f)) {
         // invalid position
         return;
     }
 
-    // Rotation
-    float rotationAngle = rotationAroundAxis_.get();
-    mat2 m(cos(rotationAngle), -sin(rotationAngle), sin(rotationAngle), cos(rotationAngle));
+    vec4 newpos(inverseSliceRotation_ * vec4(planePosition_.get(),1.0f));
+    newpos.x = pos.x;
+    newpos.y = pos.y;
+    newpos = glm::inverse(inverseSliceRotation_) * newpos;
 
-    if (flipHorizontal_.get()) pos.x = 1.0f - pos.x;
-    if (flipVertical_.get()) pos.y = 1.0f - pos.y;
-    pos = m * (pos - 0.5f) + 0.5f;
-
-    vec3 curPos(planePosition_.get());
-    switch (sliceAlongAxis_.get()) {
-        case CoordinateEnums::X:  // y-z plane
-            curPos.y = static_cast<float>(pos.x);
-            curPos.z = static_cast<float>(pos.y);
-            break;
-        case CoordinateEnums::Y:  // x-z plane
-            curPos.x = static_cast<float>(pos.y);
-            curPos.z = static_cast<float>(pos.x);
-            break;
-        case CoordinateEnums::Z:  // x-y plane
-            curPos.x = static_cast<float>(pos.x);
-            curPos.y = static_cast<float>(pos.y);
-            break;
-    }
     invalidateMesh();
     disableInvalidation();
-    planePosition_.set(curPos);
+    planePosition_.set(newpos.xyz);
     enableInvalidation();
 }
 
 vec2 VolumeSliceGL::getScreenPosFromVolPos() {
-    ivec3 pos(sliceX_.get(), sliceY_.get(), sliceZ_.get());
-    vec2 posF(-1.0f);
-    switch (sliceAlongAxis_.get()) {
-        case CoordinateEnums::X:  // y-z plane
-            posF.x = (pos.y + 0.5f) / volumeDimensions_.y;
-            posF.y = (pos.z + 0.5f) / volumeDimensions_.z;
-            break;
-        case CoordinateEnums::Y:  // x-z plane
-            posF.x = (pos.z + 0.5f) / volumeDimensions_.z;
-            posF.y = (pos.x + 0.5f) / volumeDimensions_.x;
-            break;
-        case CoordinateEnums::Z:  // x-y plane
-            posF.x = (pos.x + 0.5f) / volumeDimensions_.x;
-            posF.y = (pos.y + 0.5f) / volumeDimensions_.y;
-            break;
-    }
-
-    float rotationAngle = -rotationAroundAxis_.get();
-    mat2 m(cos(rotationAngle), -sin(rotationAngle), sin(rotationAngle), cos(rotationAngle));
-    posF = m * (posF - 0.5f) + 0.5f;
-    if (flipHorizontal_.get()) posF.x = 1.0f - posF.x;
-    if (flipVertical_.get()) posF.y = 1.0f - posF.y;
-    return posF;
+    vec2 pos((inverseSliceRotation_ * vec4(planePosition_.get(),1.0f)).xy);
+    return pos;
 }
-
-
 
 void VolumeSliceGL::updateMaxSliceNumber() {
     if (!inport_.hasData()) {

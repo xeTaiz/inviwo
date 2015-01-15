@@ -147,6 +147,8 @@ private:
 
     mat4 inverseSliceRotation_; // Used to calculate the slice "z position" from the plain point. 
     uvec3 volumeDimensions_;
+    float ratioSource_; // Save the x/y ratio of the current plane.
+    mat4 scaleMat_;
 
 };
 }
