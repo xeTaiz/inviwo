@@ -600,22 +600,24 @@ void VolumeSliceGL::eventGestureShiftSlice(Event* event){
 
 void VolumeSliceGL::sliceXChange() {
     planeNormal_.set(vec3(-1.0f, 0.0f, 0.0f));
-    planePosition_.set(vec3(
-        static_cast<float>(sliceX_.get()-1) / static_cast<float>(sliceX_.getMaxValue()-1), 0.0f, 0.0f));
+    planePosition_.set(
+        vec3(static_cast<float>(sliceX_.get() - 1) / static_cast<float>(sliceX_.getMaxValue() - 1),
+        planePosition_.get().y, planePosition_.get().z));
 }
 
 void VolumeSliceGL::sliceYChange() {
     planeNormal_.set(vec3(0.0f, -1.0f, 0.0f));
-    planePosition_.set(vec3(
-        0.0f, static_cast<float>(sliceY_.get()-1) / static_cast<float>(sliceY_.getMaxValue()-1), 0.0f));
-
+    planePosition_.set(
+        vec3(planePosition_.get().x,
+        static_cast<float>(sliceY_.get() - 1) / static_cast<float>(sliceY_.getMaxValue() - 1),
+        planePosition_.get().z));
 }
 
 void VolumeSliceGL::sliceZChange() {
     planeNormal_.set(vec3(0.0f, 0.0f, -1.0f));
     planePosition_.set(vec3(
-        0.0f, 0.0f, static_cast<float>(sliceZ_.get()-1) / static_cast<float>(sliceZ_.getMaxValue()-1)));
-
+        planePosition_.get().x, planePosition_.get().y,
+        static_cast<float>(sliceZ_.get() - 1) / static_cast<float>(sliceZ_.getMaxValue() - 1)));
 }
 
 void VolumeSliceGL::rotationModeChange() {
