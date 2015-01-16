@@ -120,7 +120,8 @@ int main(int argc, char** argv) {
             path, cmdparser->getSnapshotName());
     }
 
-    mainWin.showFullScreen();
+    mainWin.resize(sharedCanvas->getScreenDimensions().x, sharedCanvas->getScreenDimensions().y);
+    mainWin.show();
 
     if (cmdparser->getQuitApplicationAfterStartup()) {
         inviwoApp.closeInviwoApplication();
