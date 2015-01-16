@@ -37,6 +37,7 @@
 #include <modules/opengl/textureutils.h>
 #include <modules/opengl/volumeutils.h>
 #include <inviwo/core/datastructures/geometry/mesh.h>
+#include <inviwo/core/datastructures/geometry/plane.h>
 #include <inviwo/core/datastructures/buffer/bufferramprecision.h>
 #include <inviwo/core/interaction/events/keyboardevent.h>
 #include <inviwo/core/interaction/events/mouseevent.h>
@@ -135,6 +136,7 @@ VolumeSliceGL::VolumeSliceGL()
     addProperty(planeNormal_);
     addProperty(planePosition_);
     
+    planePosition_.onChange(this, &VolumeSliceGL::invalidateMesh);
     planeNormal_.onChange(this, &VolumeSliceGL::planeSettingsChanged);
     
 
@@ -290,16 +292,61 @@ void VolumeSliceGL::modeChange() {
 void VolumeSliceGL::planeSettingsChanged() {
     if(!inport_.hasData()) return;
 
+    vec3 normal = glm::normalize(planeNormal_.get());
+    // Make sure we keep the aspect of the input data.
+    mat4 texToWorld(inport_.getData()->getCoordinateTransformer().getTextureToWorldMatrix());
+
+    mat4 boxrotation = 
+        glm::toMat4(glm::rotation(vec3(0.0f, 0.0f, 1.0f), normal))
+        * glm::rotate(imageRotation_.get(), normal);
+             
+    Plane plane(planePosition_.get(), glm::normalize(planeNormal_.get()));
+
+    std::vector<IntersectionResult> points;
+    points.reserve(12);
+
+    points.push_back(plane.getSegmentIntersection(vec3(0.0f, 0.0f, 0.0f), vec3(1.0f, 0.0f, 0.0f)));
+    points.push_back(plane.getSegmentIntersection(vec3(1.0f, 0.0f, 0.0f), vec3(1.0f, 1.0f, 0.0f)));
+    points.push_back(plane.getSegmentIntersection(vec3(1.0f, 1.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f)));
+    points.push_back(plane.getSegmentIntersection(vec3(0.0f, 1.0f, 0.0f), vec3(0.0f, 0.0f, 0.0f)));
+                                                                                                 
+    points.push_back(plane.getSegmentIntersection(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 0.0f, 1.0f)));
+    points.push_back(plane.getSegmentIntersection(vec3(1.0f, 0.0f, 0.0f), vec3(1.0f, 0.0f, 1.0f)));
+    points.push_back(plane.getSegmentIntersection(vec3(1.0f, 1.0f, 0.0f), vec3(1.0f, 1.0f, 1.0f)));
+    points.push_back(plane.getSegmentIntersection(vec3(0.0f, 1.0f, 0.0f), vec3(0.0f, 1.0f, 1.0f)));
+                                                                                                 
+    points.push_back(plane.getSegmentIntersection(vec3(0.0f, 0.0f, 1.0f), vec3(1.0f, 0.0f, 1.0f)));
+    points.push_back(plane.getSegmentIntersection(vec3(1.0f, 0.0f, 1.0f), vec3(1.0f, 1.0f, 1.0f)));
+    points.push_back(plane.getSegmentIntersection(vec3(1.0f, 1.0f, 1.0f), vec3(0.0f, 1.0f, 1.0f)));
+    points.push_back(plane.getSegmentIntersection(vec3(0.0f, 1.0f, 1.0f), vec3(0.0f, 0.0f, 1.0f)));
+
+    vec2 xrange(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
+    vec2 yrange(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
+    for (std::vector<IntersectionResult>::iterator it = points.begin(); it!=points.end(); ++it) {
+        if (it->intersects_) {
+
+            vec4 corner = vec4(it->intersection_,1.0f);
+            corner = boxrotation*texToWorld*corner;
+
+            xrange[0] = std::min(xrange[0], corner.x);
+            xrange[1] = std::max(xrange[1], corner.x);
+            yrange[0] = std::min(yrange[0], corner.y);
+            yrange[1] = std::max(yrange[1], corner.y);
+        }
+    }
+
+    ratioSource_ = abs((xrange[1] - xrange[0]) / (yrange[1] - yrange[0]));
+
     // Goal: define a transformation that maps the view 2D texture coordinates into 
     // 3D texture coordinates at at some plane in the volume.
 
     mat4 flipMatX(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1);
     mat4 flipMatY(1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1);
-    vec3 normal = glm::normalize(planeNormal_.get());
+
     mat4 rotation = glm::translate(vec3(0.5f))
         * glm::toMat4(glm::rotation(vec3(0.0f, 0.0f, 1.0f), normal))
-        * glm::rotate(imageRotation_.get(), vec3(0, 0, 1))
-        * glm::scale(vec3(imageScale_, imageScale_,1.0f))
+        * glm::rotate(imageRotation_.get(), vec3(0.0f, 0.0f, 1.0f))
+        * glm::scale(vec3(imageScale_*std::sqrt(ratioSource_), imageScale_/ std::sqrt(ratioSource_), 1.0f))
         * glm::translate(vec3(-0.5f));
 
     if (flipHorizontal_) rotation *= flipMatX;
@@ -307,27 +354,6 @@ void VolumeSliceGL::planeSettingsChanged() {
 
     // Save the inverse rotation.
     inverseSliceRotation_ = glm::inverse(rotation);
-
-
-    // Make sure we keep the aspect of the input data.
-    mat4 texToWorld(inport_.getData()->getCoordinateTransformer().getTextureToWorldMatrix());
-    mat4 boxrotation = glm::toMat4(glm::rotation(vec3(0.0f, 0.0f, 1.0f), normal))
-        * glm::rotate(imageRotation_.get(), vec3(0, 0, 1));
-
-    vec2 xrange(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
-    vec2 yrange(std::numeric_limits<float>::max(), std::numeric_limits<float>::min());
-    for (float i = 0.0f; i <= 1.0f; ++i) {
-        for (float j = 0.0f; j <= 1.0f; ++j) {
-            for (float k = 0.0f; k <= 1.0f; ++k) {
-                const vec4 corner = boxrotation*texToWorld*vec4(i, j, k, 1.0f);
-                xrange[0] = std::min(xrange[0], corner.x);
-                xrange[1] = std::max(xrange[1], corner.x);
-                yrange[0] = std::min(yrange[0], corner.y);
-                yrange[1] = std::max(yrange[1], corner.y);
-            }
-        }
-    }
-    ratioSource_ = abs((xrange[1] - xrange[0]) / (yrange[1] - yrange[0]));
 
     // Set all the uniforms 
     if (shader_) {

@@ -36,6 +36,8 @@
 
 namespace inviwo {
 
+struct IntersectionResult;
+
 class IVW_CORE_API Plane {
 
 public:
@@ -55,6 +57,8 @@ public:
      */
     vec3 getIntersection(const vec3& p1, const vec3& p2) const;
 
+    IntersectionResult getSegmentIntersection(const vec3& start, const vec3& stop) const;
+
     vec3 projectPoint(const vec3&) const;
 
     bool isInside(const vec3&) const;
@@ -69,6 +73,14 @@ private:
     vec3 normal_;
 
 };
+
+struct IntersectionResult {
+    IntersectionResult(bool intersects, vec3 intersection);
+    IntersectionResult(bool intersects);
+    vec3 intersection_;
+    bool intersects_;
+};
+
 
 /** 
  * Computes ray-plane intersection point and 

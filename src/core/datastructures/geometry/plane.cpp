@@ -85,6 +85,31 @@ void Plane::setNormal(const vec3& n) {
     this->normal_ = n;
 }
 
+IntersectionResult Plane::getSegmentIntersection(const vec3& start, const vec3& stop) const {
+    float numerator = glm::dot(point_ - start, normal_);
+    
+    // If line is in plane return start point.
+    if (glm::abs(numerator) < 1e-6) {
+        return IntersectionResult(true, start);
+    }
+    
+    // Line not in plane 
+    vec3 d = stop - start;
+    float denom = glm::dot(normal_, d);
+    if (fabs(denom) > 1e-6) {
+        float numerator = glm::dot(point_ - start, normal_);
+
+        float tHit = numerator / denom;
+
+        if (tHit >= 0.0f && tHit <= 1.0f) {
+            return IntersectionResult(true, start + tHit * d);
+        }
+    }  
+
+    // no intersection
+    return IntersectionResult(false);
+}
+
 IVW_CORE_API bool rayPlaneIntersection(const vec3& origin, const vec3& dir, const vec3& pointInPlane, const vec3& planeNormal, float& tHit)
 {
     // Ray-plane intersection ( http://www.scratchapixel.com/lessons/3d-basic-lessons/lesson-7-intersecting-simple-shapes/ray-plane-and-ray-disk-intersection/ )
@@ -95,5 +120,11 @@ IVW_CORE_API bool rayPlaneIntersection(const vec3& origin, const vec3& dir, cons
     }
     return false;
 }
+
+IntersectionResult::IntersectionResult(bool intersects, vec3 intersection)
+    : intersects_(intersects), intersection_(intersection) {}
+
+IntersectionResult::IntersectionResult(bool intersects)
+    : intersects_(intersects), intersection_(0.0f) {}
 
 } // namespace
