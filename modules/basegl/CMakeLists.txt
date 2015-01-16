@@ -25,7 +25,6 @@ set(HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/lightingraycaster.h
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/lightvolumegl.h
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/multichannelraycaster.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/processors/multiplanar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/redgreenprocessor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/volumeraycaster.h
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/volumeslicegl.h
@@ -55,7 +54,6 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/lightingraycaster.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/lightvolumegl.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/multichannelraycaster.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/processors/multiplanar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/redgreenprocessor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/volumeraycaster.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/processors/volumeslicegl.cpp
@@ -76,7 +74,6 @@ set(SHADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/img_mix.frag
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/img_invert.frag
 	${CMAKE_CURRENT_SOURCE_DIR}/glsl/multichannelraycaster.frag
-    ${CMAKE_CURRENT_SOURCE_DIR}/glsl/multiplanar.frag
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/volumeslice.frag
     ${CMAKE_CURRENT_SOURCE_DIR}/glsl/lighting/lightingraycasting.frag
 	${CMAKE_CURRENT_SOURCE_DIR}/glsl/lighting/lightpropagation.frag
