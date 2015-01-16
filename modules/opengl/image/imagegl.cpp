@@ -121,9 +121,14 @@ void ImageGL::activateBuffer(bool overRideImageType) {
 
          glDrawBuffers(numBuffersToDrawTo, &drawBuffers[0]);
          LGL_ERROR;
+    }
 
-         // Disable depth writing if image has depth read only, and no override
-         glDepthMask(overRideImageType || typeContainsDepth(this->getOwner()->getImageType()) ? GL_TRUE : GL_FALSE);
+    if (!overRideImageType && !typeContainsDepth(this->getOwner()->getImageType())){
+        glDisable(GL_DEPTH_TEST);
+        glDepthMask(GL_FALSE);
+    }else{
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(GL_TRUE);
     }
 
     uvec2 dim = getDimension();
@@ -134,6 +139,7 @@ void ImageGL::deactivateBuffer() {
     frameBufferObject_->deactivate();
 
     // Depth writing might have been disabled, enable it again just in case
+    glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
 }
 
@@ -151,6 +157,7 @@ bool ImageGL::copyAndResizeRepresentation(DataRepresentation* targetRep) const {
     }
     // Render to FBO, with correct scaling
     target->activateBuffer(true);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     float ratioSource = (float)source->getDimension().x / (float)source->getDimension().y;
     float ratioTarget = (float)target->getDimension().x / (float)target->getDimension().y;
@@ -354,10 +361,6 @@ void ImageGL::update(bool editable) {
 
     // Attach all targets
     reAttachAllLayers(true);
-
-    // Disable depth writing if image has depth read only
-    if(!typeContainsDepth(this->getOwner()->getImageType()))
-        glDepthMask(GL_FALSE);
 }
 
 void ImageGL::renderImagePlaneRect() const {
