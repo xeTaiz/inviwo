@@ -46,7 +46,7 @@ void CameraTrackball::onAllTrackballChanged(const Trackball* trackball) {
 
 void CameraTrackball::onLookFromChanged(const Trackball* trackball) {
     // Don't allow zooming such that the lookAt point is further away then the far plane.
-    float maxDistance = cameraProp_->getFarPlaneDist() - 5.f;
+    float maxDistance = cameraProp_->getFarPlaneDist() - (cameraProp_->getFarPlaneDist()*0.3f);
     float dist = glm::distance(cameraProp_->getLookTo(), cameraProp_->getLookFrom());
     if (maxDistance < dist)
         cameraProp_->setLookFrom(
