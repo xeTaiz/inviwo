@@ -295,20 +295,19 @@ BufferObjectArray* enableImagePlaneRect() {
 void disableImagePlaneRect(BufferObjectArray* rectArray) {
     rectArray->unbind();
     glDepthFunc(GL_LESS);
+    delete rectArray;
 }
 
 void singleDrawImagePlaneRect() {
     BufferObjectArray* rectArray = enableImagePlaneRect();
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     disableImagePlaneRect(rectArray);
-    delete rectArray;
 }
 
 void multiDrawImagePlaneRect(int instances) {
     BufferObjectArray* rectArray = enableImagePlaneRect();
     glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, instances);
     disableImagePlaneRect(rectArray);
-    delete rectArray;
 }
 
 void bindTexture(const TransferFunctionProperty& tfp, const TextureUnit& texUnit) {
