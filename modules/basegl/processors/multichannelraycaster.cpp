@@ -122,7 +122,7 @@ void MultichannelRaycaster::initializeResources() {
 
         std::stringstream ss2;
         for (int i = 0; i < channels; ++i) {
-            ss2 << "color = APPLY_CLASSIFICATION(transferFuncs_[" << i << "], voxel[" << i << "])"         
+            ss2 << "color = APPLY_CLASSIFICATION(transferFuncC" << i+1 << "_, voxel[" << i << "])"         
                 << "color.rgb = APPLY_LIGHTING(light_, color.rgb, color.rgb, vec3(1.0), "
                 << "worldSpacePosition, normalize(-gradients[" << i <<"]), toCameraDir);"
                 << "result = APPLY_COMPOSITING(result, color, samplePos, voxel, "
@@ -155,8 +155,11 @@ void MultichannelRaycaster::process() {
     utilgl::activateAndClearTarget(outport_);
     shader_->activate();
     
-    utilgl::setShaderUniforms(shader_, outport_, "outportParameters_");    
-    shader_->setUniform("transferFuncs_", tfUnitNumbers, channels);
+    utilgl::setShaderUniforms(shader_, outport_, "outportParameters_");
+
+    for (int channel = 0; channel < channels; channel++)
+        shader_->setUniform("transferFuncC" + toString<int>(channel+1) + "_", tfUnitNumbers[channel]);
+
     shader_->setUniform("entryColorTex_", entryColorUnit.getUnitNumber());
     shader_->setUniform("entryDepthTex_", entryDepthUnit.getUnitNumber());
     utilgl::setShaderUniforms(shader_, entryPort_, "entryParameters_");

@@ -60,8 +60,10 @@ uniform CameraParameters camera_;
 uniform float samplingRate_;
 uniform float isoValue_;
 
-// NUMBER_OF_CHANNELS is defined in initializeResources
-uniform sampler2D transferFuncs_[NUMBER_OF_CHANNELS];
+uniform sampler2D transferFuncC1_;
+uniform sampler2D transferFuncC2_;
+uniform sampler2D transferFuncC3_;
+uniform sampler2D transferFuncC4_;
 
 #define ERT_THRESHOLD 0.99 // threshold for early ray termination
 
