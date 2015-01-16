@@ -64,7 +64,7 @@ private:
 //ProcessorClassIdentifier(VolumeBasisTransformer, "org.inviwo.BasisTransformer");
 //ProcessorDisplayName(VolumeBasisTransformer, "Basis Transformer");
 template <typename InportType, typename OutportType> 
-const Tags BasisTransform<InportType, OutportType>::TAGS = Tags::None;
+const Tags BasisTransform<InportType, OutportType>::TAGS = Tags::CPU;
 template <typename InportType, typename OutportType> 
 const std::string BasisTransform<InportType, OutportType>::CATEGORY = "Coordinate Transforms";
 template <typename InportType, typename OutportType> 

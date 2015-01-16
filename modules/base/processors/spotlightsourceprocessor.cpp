@@ -36,7 +36,7 @@ namespace inviwo {
 
 ProcessorClassIdentifier(SpotLightSourceProcessor, "org.inviwo.Spot light source");
 ProcessorDisplayName(SpotLightSourceProcessor,  "Spot light source");
-ProcessorTags(SpotLightSourceProcessor, Tags::None);
+ProcessorTags(SpotLightSourceProcessor, Tags::CPU);
 ProcessorCategory(SpotLightSourceProcessor, "Light source");
 ProcessorCodeState(SpotLightSourceProcessor, CODE_STATE_EXPERIMENTAL);
 

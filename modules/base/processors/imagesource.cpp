@@ -40,7 +40,7 @@ namespace inviwo {
 
 ProcessorClassIdentifier(ImageSource, "org.inviwo.ImageSource");
 ProcessorDisplayName(ImageSource, "Image Source");
-ProcessorTags(ImageSource, Tags::None);
+ProcessorTags(ImageSource, Tags::CPU);
 ProcessorCategory(ImageSource, "Data Input");
 ProcessorCodeState(ImageSource, CODE_STATE_STABLE);
 

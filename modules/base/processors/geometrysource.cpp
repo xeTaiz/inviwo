@@ -34,7 +34,7 @@ namespace inviwo {
 
 ProcessorClassIdentifier(GeometrySource, "org.inviwo.GeometrySource");
 ProcessorDisplayName(GeometrySource,  "Geometry Source");
-ProcessorTags(GeometrySource, Tags::None);
+ProcessorTags(GeometrySource, Tags::CPU);
 ProcessorCategory(GeometrySource, "Data Input");
 ProcessorCodeState(GeometrySource, CODE_STATE_STABLE);
 

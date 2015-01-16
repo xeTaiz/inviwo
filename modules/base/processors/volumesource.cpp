@@ -44,7 +44,7 @@ namespace inviwo {
 
 ProcessorClassIdentifier(VolumeSource, "org.inviwo.VolumeSource");
 ProcessorDisplayName(VolumeSource,  "Volume Source");
-ProcessorTags(VolumeSource, Tags::None);
+ProcessorTags(VolumeSource, Tags::CPU);
 ProcessorCategory(VolumeSource, "Data Input");
 ProcessorCodeState(VolumeSource, CODE_STATE_STABLE);
 

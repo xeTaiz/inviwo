@@ -36,7 +36,7 @@ namespace inviwo {
 
 ProcessorClassIdentifier(DiffuseLightSourceProcessor, "org.inviwo.Diffuse light source");
 ProcessorDisplayName(DiffuseLightSourceProcessor,  "Diffuse light source");
-ProcessorTags(DiffuseLightSourceProcessor, Tags::None);
+ProcessorTags(DiffuseLightSourceProcessor, Tags::CPU);
 ProcessorCategory(DiffuseLightSourceProcessor, "Light source");
 ProcessorCodeState(DiffuseLightSourceProcessor, CODE_STATE_EXPERIMENTAL);
 
