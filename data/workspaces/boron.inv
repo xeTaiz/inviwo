@@ -49,7 +49,7 @@
                     </Properties>
                 </Property>
                 <Property type="org.inviwo.DirectoryProperty" identifier="layerDir" key="layerDir">
-                    <directory content="tests/../../images" />
+                    <directory content="../images" />
                 </Property>
                 <Property type="org.inviwo.ButtonProperty" identifier="saveLayer" key="saveLayer" />
                 <Property type="org.inviwo.OptionPropertyInt" identifier="visibleLayer" key="visibleLayer" />
