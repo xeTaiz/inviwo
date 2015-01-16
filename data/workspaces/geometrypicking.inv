@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
 <InviwoTreeData version="1.0">
     <!-- Don't edit the following code -->
-    <ProcessorNetworkVersion content="7" />
+    <ProcessorNetworkVersion content="8" />
     <Processors>
-        <Processor type="org.inviwo.Background" identifier="Background" id="ref14">
+        <Processor type="org.inviwo.Background" identifier="Background" id="ref5">
             <Properties>
                 <Property type="org.inviwo.ButtonProperty" identifier="Switch colors" key="Switch colors" />
                 <Property type="org.inviwo.OptionPropertyInt" identifier="backgroundStyle" key="backgroundStyle" />
@@ -25,7 +25,7 @@
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.CanvasGL" identifier="Canvas" id="ref15">
+        <Processor type="org.inviwo.CanvasGL" identifier="Canvas" id="ref11">
             <Properties>
                 <Property type="org.inviwo.CompositeProperty" identifier="inputSize" key="inputSize">
                     <Properties>
@@ -37,7 +37,7 @@
                             <readonly content="1" />
                             <value x="512" y="512" />
                         </Property>
-                        <Property type="org.inviwo.IntVec2Property" identifier="dimensions" key="dimensions">
+                        <Property type="org.inviwo.IntVec2Property" identifier="dimensions" key="dimension">
                             <value x="512" y="512" />
                         </Property>
                         <Property type="org.inviwo.BoolProperty" identifier="enableCustomInputDimensions" key="enableCustomInputDimensions" />
@@ -59,13 +59,13 @@
                     <selection content="0" />
                 </MetaDataItem>
                 <MetaDataItem type="org.inviwo.ProcessorWidgetMetaData" key="org.inviwo.ProcessorWidgetMetaData">
-                    <position x="341" y="402" />
-                    <dimension x="512" y="512" />
+                    <position x="333" y="372" />
+                    <dimensions x="512" y="512" />
                     <visibility content="1" />
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.MeshCreator" identifier="Color Sphere" id="ref9">
+        <Processor type="org.inviwo.MeshCreator" identifier="Color Sphere" id="ref15">
             <Properties>
                 <Property type="org.inviwo.FloatVec4Property" identifier="color" key="color" />
                 <Property type="org.inviwo.OptionPropertyInt" identifier="meshType" key="meshType">
@@ -148,13 +148,13 @@
                 <MetaDataItem type="org.inviwo.ProcessorMetaData" key="org.inviwo.ProcessorMetaData">
                     <position x="-600" y="-625" />
                     <visibility content="1" />
-                    <selection content="1" />
+                    <selection content="0" />
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking NUC" id="ref4">
+        <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking NUC" id="ref12">
             <Properties>
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" id="ref5">
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" id="ref13">
                     <Properties>
                         <Property type="org.inviwo.FloatProperty" identifier="aspectRatio" key="aspectRatio">
                             <minvalue content="0" />
@@ -215,9 +215,9 @@
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking S" id="ref12">
+        <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking S" id="ref0">
             <Properties>
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" id="ref13">
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" id="ref1">
                     <Properties>
                         <Property type="org.inviwo.FloatProperty" identifier="aspectRatio" key="aspectRatio">
                             <minvalue content="0" />
@@ -341,7 +341,7 @@
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.TextOverlayGL" identifier="Green Overlay" id="ref0">
+        <Processor type="org.inviwo.TextOverlayGL" identifier="Green Overlay" id="ref4">
             <Properties>
                 <Property type="org.inviwo.OptionPropertyInt" identifier="Font size" key="Font size" />
                 <Property type="org.inviwo.FloatVec2Property" identifier="Position" key="Position">
@@ -387,7 +387,7 @@
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.TextOverlayGL" identifier="Orange Overlay" id="ref1">
+        <Processor type="org.inviwo.TextOverlayGL" identifier="Orange Overlay" id="ref14">
             <Properties>
                 <Property type="org.inviwo.OptionPropertyInt" identifier="Font size" key="Font size" />
                 <Property type="org.inviwo.FloatVec2Property" identifier="Position" key="Position" />
@@ -429,7 +429,7 @@
                 </MetaDataItem>
             </MetaDataMap>
         </Processor>
-        <Processor type="org.inviwo.MeshCreator" identifier="Uniform Cube" id="ref11">
+        <Processor type="org.inviwo.MeshCreator" identifier="Uniform Cube" id="ref9">
             <Properties>
                 <Property type="org.inviwo.FloatVec4Property" identifier="color" key="color" />
                 <Property type="org.inviwo.OptionPropertyInt" identifier="meshType" key="meshType">
@@ -455,7 +455,7 @@
     <Connections>
         <Connection>
             <OutPort identifier="outport">
-                <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking NUC" reference="ref4" />
+                <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking NUC" reference="ref12" />
             </OutPort>
             <InPort identifier="imageInport">
                 <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking CS" reference="ref6" />
@@ -474,23 +474,23 @@
                 <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking UC" reference="ref2" />
             </OutPort>
             <InPort identifier="imageInport">
-                <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking S" reference="ref12" />
+                <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking S" reference="ref0" />
             </InPort>
         </Connection>
         <Connection>
             <OutPort identifier="outport">
-                <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking S" reference="ref12" />
+                <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking S" reference="ref0" />
             </OutPort>
             <InPort identifier="inport">
-                <Processor type="org.inviwo.TextOverlayGL" identifier="Orange Overlay" reference="ref1" />
+                <Processor type="org.inviwo.TextOverlayGL" identifier="Orange Overlay" reference="ref14" />
             </InPort>
         </Connection>
         <Connection>
             <OutPort identifier="outport">
-                <Processor type="org.inviwo.TextOverlayGL" identifier="Orange Overlay" reference="ref1" />
+                <Processor type="org.inviwo.TextOverlayGL" identifier="Orange Overlay" reference="ref14" />
             </OutPort>
             <InPort identifier="inport">
-                <Processor type="org.inviwo.TextOverlayGL" identifier="Green Overlay" reference="ref0" />
+                <Processor type="org.inviwo.TextOverlayGL" identifier="Green Overlay" reference="ref4" />
             </InPort>
         </Connection>
         <Connection>
@@ -498,7 +498,7 @@
                 <Processor type="org.inviwo.MeshCreator" identifier="Sphere" reference="ref10" />
             </OutPort>
             <InPort identifier="geometryInport">
-                <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking S" reference="ref12" />
+                <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking S" reference="ref0" />
             </InPort>
         </Connection>
         <Connection>
@@ -506,12 +506,12 @@
                 <Processor type="org.inviwo.MeshCreator" identifier="Non-uniform Cube" reference="ref8" />
             </OutPort>
             <InPort identifier="geometryInport">
-                <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking NUC" reference="ref4" />
+                <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking NUC" reference="ref12" />
             </InPort>
         </Connection>
         <Connection>
             <OutPort identifier="outport">
-                <Processor type="org.inviwo.MeshCreator" identifier="Color Sphere" reference="ref9" />
+                <Processor type="org.inviwo.MeshCreator" identifier="Color Sphere" reference="ref15" />
             </OutPort>
             <InPort identifier="geometryInport">
                 <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking CS" reference="ref6" />
@@ -519,7 +519,7 @@
         </Connection>
         <Connection>
             <OutPort identifier="outport">
-                <Processor type="org.inviwo.MeshCreator" identifier="Uniform Cube" reference="ref11" />
+                <Processor type="org.inviwo.MeshCreator" identifier="Uniform Cube" reference="ref9" />
             </OutPort>
             <InPort identifier="geometryInport">
                 <Processor type="org.inviwo.GeometryPicking" identifier="Geometry Picking UC" reference="ref2" />
@@ -527,56 +527,56 @@
         </Connection>
         <Connection>
             <OutPort identifier="outport">
-                <Processor type="org.inviwo.TextOverlayGL" identifier="Green Overlay" reference="ref0" />
+                <Processor type="org.inviwo.TextOverlayGL" identifier="Green Overlay" reference="ref4" />
             </OutPort>
             <InPort identifier="inport">
-                <Processor type="org.inviwo.Background" identifier="Background" reference="ref14" />
+                <Processor type="org.inviwo.Background" identifier="Background" reference="ref5" />
             </InPort>
         </Connection>
         <Connection>
             <OutPort identifier="outport">
-                <Processor type="org.inviwo.Background" identifier="Background" reference="ref14" />
+                <Processor type="org.inviwo.Background" identifier="Background" reference="ref5" />
             </OutPort>
             <InPort identifier="inport">
-                <Processor type="org.inviwo.CanvasGL" identifier="Canvas" reference="ref15" />
+                <Processor type="org.inviwo.CanvasGL" identifier="Canvas" reference="ref11" />
             </InPort>
         </Connection>
     </Connections>
     <PropertyLinks>
         <PropertyLink>
             <Properties>
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref1" />
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref3" />
+            </Properties>
+        </PropertyLink>
+        <PropertyLink>
+            <Properties>
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref3" />
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref1" />
+            </Properties>
+        </PropertyLink>
+        <PropertyLink>
+            <Properties>
                 <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref3" />
                 <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref7" />
             </Properties>
         </PropertyLink>
         <PropertyLink>
             <Properties>
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref7" />
                 <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref3" />
+            </Properties>
+        </PropertyLink>
+        <PropertyLink>
+            <Properties>
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref7" />
                 <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref13" />
             </Properties>
         </PropertyLink>
         <PropertyLink>
             <Properties>
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref5" />
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref7" />
-            </Properties>
-        </PropertyLink>
-        <PropertyLink>
-            <Properties>
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref7" />
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref3" />
-            </Properties>
-        </PropertyLink>
-        <PropertyLink>
-            <Properties>
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref7" />
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref5" />
-            </Properties>
-        </PropertyLink>
-        <PropertyLink>
-            <Properties>
                 <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref13" />
-                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref3" />
+                <Property type="org.inviwo.CameraProperty" identifier="camera" key="camera" reference="ref7" />
             </Properties>
         </PropertyLink>
     </PropertyLinks>

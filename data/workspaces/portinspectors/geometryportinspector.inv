@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <InviwoTreeData version="1.0">
     <!-- Don't edit the following code -->
-    <ProcessorNetworkVersion content="7" />
+    <ProcessorNetworkVersion content="8" />
     <Processors>
         <Processor type="org.inviwo.Background" identifier="Background" id="ref0">
             <Properties>
@@ -41,7 +41,7 @@
                             <readonly content="1" />
                             <value x="128" y="128" />
                         </Property>
-                        <Property type="org.inviwo.IntVec2Property" identifier="dimensions" key="dimensions">
+                        <Property type="org.inviwo.IntVec2Property" identifier="dimensions" key="dimension">
                             <value x="128" y="128" />
                         </Property>
                         <Property type="org.inviwo.BoolProperty" identifier="enableCustomInputDimensions" key="enableCustomInputDimensions" />
@@ -64,7 +64,7 @@
                 </MetaDataItem>
                 <MetaDataItem type="org.inviwo.ProcessorWidgetMetaData" key="org.inviwo.ProcessorWidgetMetaData">
                     <position x="32" y="116" />
-                    <dimension x="128" y="128" />
+                    <dimensions x="128" y="128" />
                     <visibility content="1" />
                 </MetaDataItem>
             </MetaDataMap>
