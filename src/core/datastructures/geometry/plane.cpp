@@ -122,9 +122,9 @@ IVW_CORE_API bool rayPlaneIntersection(const vec3& origin, const vec3& dir, cons
 }
 
 IntersectionResult::IntersectionResult(bool intersects, vec3 intersection)
-    : intersects_(intersects), intersection_(intersection) {}
+    : intersection_(intersection), intersects_(intersects) {}
 
 IntersectionResult::IntersectionResult(bool intersects)
-    : intersects_(intersects), intersection_(0.0f) {}
+    : intersection_(0.0f), intersects_(intersects) {}
 
 } // namespace

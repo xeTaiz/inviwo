@@ -335,7 +335,7 @@ void VolumeSliceGL::planeSettingsChanged() {
         }
     }
 
-    ratioSource_ = abs((xrange[1] - xrange[0]) / (yrange[1] - yrange[0]));
+    ratioSource_ = glm::abs((xrange[1] - xrange[0]) / (yrange[1] - yrange[0]));
 
     // Goal: define a transformation that maps the view 2D texture coordinates into 
     // 3D texture coordinates at at some plane in the volume.
