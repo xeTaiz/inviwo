@@ -57,7 +57,7 @@ public:
 class IVW_QTWIDGETS_API PropertyListEvent : public QEvent {
     Q_GADGET
 public:
-    enum Action { ADD = 0, REMOVE = 1, CACHE = 2 };
+    enum Action { ADD = 0, REMOVE = 1};
 
     PropertyListEvent(Action action, Processor* processor)
         : QEvent(PROPERY_LIST_EVENT), action_(action), processorId_(""), processor_(processor) {}
@@ -91,7 +91,6 @@ public:
     void addProcessorProperties(Processor* processor);
     void removeProcessorProperties(Processor* processor);
     void removeAndDeleteProcessorProperties(Processor* processor);
-    void cacheProcessorPropertiesItem(Processor* processor);
 
     // Override QWidget
     virtual bool event(QEvent* e);

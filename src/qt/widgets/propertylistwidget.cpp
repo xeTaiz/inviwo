@@ -155,13 +155,6 @@ void PropertyListWidget::removeAndDeleteProcessorProperties(Processor* processor
     }
 }
 
-void PropertyListWidget::cacheProcessorPropertiesItem(Processor* processor) {
-    WidgetMap::iterator it = widgetMap_.find(processor);
-    if (it == widgetMap_.end()) {
-        createPropertiesForProcessor(processor);
-    }
-}
-
 CollapsibleGroupBoxWidgetQt* PropertyListWidget::getPropertiesForProcessor(Processor* processor) {
     // check if processor widget has been already generated
     CollapsibleGroupBoxWidgetQt* res;
@@ -248,10 +241,6 @@ bool PropertyListWidget::event(QEvent* e) {
             }
             case PropertyListEvent::REMOVE: {
                 removeProcessorProperties(p);
-                break;
-            }
-            case PropertyListEvent::CACHE: {
-                cacheProcessorPropertiesItem(p);
                 break;
             }
         }

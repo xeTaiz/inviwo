@@ -149,8 +149,6 @@ public:
     
 
 public slots:
-    void cacheProcessorProperty(Processor*);
-
     void contextMenuRenameProcessor(EditorGraphicsItem*);
     void contextMenuShowInspector(EditorGraphicsItem*);
     void contextMenuDeleteProcessor(EditorGraphicsItem*);
@@ -259,8 +257,6 @@ private:
     static const int GRID_SPACING;
     std::string filename_;
     bool modified_;
-    int cacheProcessorPropertyDoneEventId_;
-    int markModifedFlaseEventId_;
 };
 
 
@@ -300,17 +296,6 @@ public:
 
 private:
     static QEvent::Type PORT_INSPECTOR_EVENT;
-};
-
-class IVW_QTEDITOR_API CacheDelay : public QObject {
-    Q_OBJECT
-public:
-    CacheDelay(std::string processorId, PropertyListWidget* propertyListWidget);
-public slots:
-    void postEvent();
-private:
-    std::string processorId_;
-    PropertyListWidget* propertyListWidget_;
 };
 
 class SignalMapperObject : public QObject {

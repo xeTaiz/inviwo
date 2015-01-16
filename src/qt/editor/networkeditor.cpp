@@ -85,12 +85,8 @@ NetworkEditor::NetworkEditor()
     , connectionCurve_(NULL)
     , linkCurve_(NULL)
     , filename_("")
-    , modified_(false)
-    , cacheProcessorPropertyDoneEventId_(-1)
-    , markModifedFlaseEventId_(-1) {
+    , modified_(false) {
     InviwoApplication::getPtr()->getProcessorNetwork()->addObserver(this);
-    cacheProcessorPropertyDoneEventId_ = QEvent::registerEventType();
-    markModifedFlaseEventId_ = QEvent::registerEventType();
 
     // The defalt bsp tends to crash...  
     setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -438,16 +434,6 @@ void NetworkEditor::setModified(const bool modified) {
              ++it)
             static_cast<NetworkEditorObserver*>(*it)->onModifiedStatusChanged(modified);
     }
-}
-
-void NetworkEditor::cacheProcessorProperty(Processor* p) {
-    std::vector<Processor*> processors =
-        InviwoApplication::getPtr()->getProcessorNetwork()->getProcessors();
-    bool preModifiedStatus = modified_;
-    if (std::find(processors.begin(), processors.end(), p) != processors.end()) {
-        propertyListWidget_->cacheProcessorPropertiesItem(p);
-    }
-    setModified(preModifiedStatus);
 }
 
 ////////////////////////////////////////////////////////
@@ -1295,25 +1281,13 @@ bool NetworkEditor::loadNetwork(std::istream& stream, const std::string& path) {
 
     InviwoApplication::getPtr()->getProcessorNetwork()->unlock();
 
-    QCoreApplication::postEvent(this, new QEvent(QEvent::Type(cacheProcessorPropertyDoneEventId_)),
-                                Qt::LowEventPriority);
-
     setModified(false);
     filename_ = path;
     return true;
 }
 
 bool NetworkEditor::event(QEvent* e) {
-    if (e->type() == cacheProcessorPropertyDoneEventId_) {
-        QCoreApplication::postEvent(this, new QEvent(QEvent::Type(markModifedFlaseEventId_)),
-                                    Qt::LowEventPriority);
-        e->accept();
-        return true;
-    } else if (e->type() == markModifedFlaseEventId_) {
-        e->accept();
-        setModified(false);
-        return true;
-    }else if (e->type() == PortInspectorEvent::type()) {
+   if (e->type() == PortInspectorEvent::type()) {
         e->accept();
         PortInspectorEvent* pie = static_cast<PortInspectorEvent*>(e);
         removePortInspector(pie->port_);
@@ -1532,15 +1506,6 @@ void NetworkEditor::onProcessorNetworkDidAddProcessor(Processor* processor) {
 
     addProcessorRepresentations(processor, QPointF(meta->getPosition().x, meta->getPosition().y),
                                 meta->isVisible(), meta->isSelected());
-
-    // Workaround: Do not cache if invisible. The renderPortInspectorImage will remove widgets,
-    // before the event has add time to add them...
-    if (!meta->isSelected() && meta->isVisible()) {
-        // Create a delay object whoes only job it is to post an cache event, and then delete
-        // itself.
-        CacheDelay* delay = new CacheDelay(processor->getIdentifier(), propertyListWidget_);
-        QTimer::singleShot(2000, delay, SLOT(postEvent()));
-    }
 }
 
 void NetworkEditor::onProcessorNetworkWillRemoveProcessor(Processor* processor) {
@@ -1600,15 +1565,5 @@ void PortInspectorObserver::onProcessorWidgetHide(ProcessorWidget* widget) {
     delete this;
 }
 QEvent::Type PortInspectorEvent::PORT_INSPECTOR_EVENT = QEvent::None;
-
-void CacheDelay::postEvent() {
-    QCoreApplication::postEvent(propertyListWidget_,
-                                new PropertyListEvent(PropertyListEvent::CACHE, processorId_),
-                                10 * Qt::LowEventPriority);
-    delete this;
-}
-
-CacheDelay::CacheDelay(std::string processorId, PropertyListWidget* propertyListWidget)
-    : processorId_(processorId), propertyListWidget_(propertyListWidget) {}
 
 }  // namespace
