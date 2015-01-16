@@ -62,7 +62,7 @@ void CompositeProcessorGL::compositePortsToOutport(ImageOutport& outport, ImageI
         utilgl::bindTextures(outport, outportColorUnit.getEnum(), outportDepthUnit.getEnum(),
                      outportPickingUnit.getEnum());
         shader_->activate();
-        vec2 dim = static_cast<vec2>(outport.getDimension());
+        vec2 dim = static_cast<vec2>(outport.getDimensions());
         shader_->setUniform("screenDim_", dim);
         shader_->setUniform("screenDimRCP_", vec2(1.0f,1.0f)/dim);
         shader_->setUniform("texColor0_", inportColorUnit.getUnitNumber());

@@ -92,7 +92,7 @@ void HeightFieldMapper::process() {
     // check the number of channels
     const DataFormatBase* format = srcImg->getDataFormat();
     int numInputChannels = format->getComponents();
-    glm::uvec2 dim = srcImg->getDimension();
+    glm::uvec2 dim = srcImg->getDimensions();
 
     Image *outImg = NULL;
 
@@ -103,7 +103,7 @@ void HeightFieldMapper::process() {
         outport_.setData(img);
         outImg = img;
     }
-    else if (outImg->getDimension() != dim) {
+    else if (outImg->getDimensions() != dim) {
         // adjust dimensions of output image
         outImg->resize(dim);
     }

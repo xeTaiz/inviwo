@@ -73,7 +73,7 @@ public:
     virtual ~ImageEditorProperty();
 
     void addLabel(vec2 start, vec2 end, std::string name = "");
-    void setDimension(ivec2 imgSize);
+    void setDimensions(ivec2 imgSize);
     const std::vector<ImageLabel>& getLabels() const;
     void clearLabels();
     virtual void serialize(IvwSerializer& s) const;

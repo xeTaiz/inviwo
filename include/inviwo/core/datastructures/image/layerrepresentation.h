@@ -54,10 +54,10 @@ public:
     virtual void resize(uvec2 dimensions);
     virtual bool copyAndResizeLayer(DataRepresentation*) const = 0;
 
-    uvec2 getDimension() const;
-    // Removes old data and reallocate for new dimension.
+    uvec2 getDimensions() const;
+    // Removes old data and reallocate for new dimensions.
     // Needs to be overloaded by child classes.
-    virtual void setDimension(uvec2 dimensions);
+    virtual void setDimensions(uvec2 dimensions);
 
     LayerType getLayerType() const;
 

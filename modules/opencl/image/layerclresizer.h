@@ -50,7 +50,7 @@ public:
      * Resize layer to given dimension.
      *
      * \param src (const cl::Image2D &) Layer to get data from
-     * \param dst (const cl::Image2D &) Layer containing resized src layer. Note that this should same dimension as resizeToDimension
+     * \param dst (const cl::Image2D &) Layer containing resized src layer. Note that this should same dimensions as resizeToDimension
      * \param resizeToDimension (const ivec2 &) Size to resize to
      * \return (void)
      */

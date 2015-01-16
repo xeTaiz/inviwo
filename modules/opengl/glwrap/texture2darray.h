@@ -57,7 +57,7 @@ public:
 
     void uploadAndResize(const void* data, const uvec3& dim);
 
-    const uvec3& getDimension() const { return dimensions_; }
+    const uvec3& getDimensions() const { return dimensions_; }
 
 protected:
     void default2DArrayTextureParameterFunction(Texture*);

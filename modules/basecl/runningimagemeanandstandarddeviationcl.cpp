@@ -50,11 +50,11 @@ bool RunningImageMeanAndStandardDeviationCL::computeMeanAndStandardDeviation(con
     if (kernel_ == NULL) {
         return false;
     }
-    if (glm::any(glm::notEqual(newSamples->getDimension(), standardDeviation_[0].getDimension()))) {
-        standardDeviation_[0].resize(newSamples->getDimension());
-        standardDeviation_[1].resize(newSamples->getDimension());
-        mean_[0].resize(newSamples->getDimension());
-        mean_[1].resize(newSamples->getDimension());
+    if (glm::any(glm::notEqual(newSamples->getDimensions(), standardDeviation_[0].getDimensions()))) {
+        standardDeviation_[0].resize(newSamples->getDimensions());
+        standardDeviation_[1].resize(newSamples->getDimensions());
+        mean_[0].resize(newSamples->getDimensions());
+        mean_[1].resize(newSamples->getDimensions());
     }
 
     //IVW_OPENCL_PROFILING(profilingEvent, "")
@@ -79,14 +79,14 @@ bool RunningImageMeanAndStandardDeviationCL::computeMeanAndStandardDeviation(con
             glSync.addToAquireGLObjectList(nextStandardDeviation);
 
             glSync.aquireAllObjects();
-            computeMeanAndStandardDeviation(newSamples->getDimension(), samples, iteration, prevMeanCL, nextMeanCL, prevStandardDeviation, nextStandardDeviation, workGroupSize_, waitForEvents, event);
+            computeMeanAndStandardDeviation(newSamples->getDimensions(), samples, iteration, prevMeanCL, nextMeanCL, prevStandardDeviation, nextStandardDeviation, workGroupSize_, waitForEvents, event);
         } else {
             LayerCL* prevMeanCL = mean_[prevStdId].getEditableRepresentation<LayerCL>();
             LayerCL* nextMeanCL = mean_[nextStdId].getEditableRepresentation<LayerCL>();
             const LayerCL* samples = newSamples->getRepresentation<LayerCL>();
             LayerCL* prevStandardDeviation = standardDeviation_[prevStdId].getEditableRepresentation<LayerCL>();
             LayerCL* nextStandardDeviation = standardDeviation_[nextStdId].getEditableRepresentation<LayerCL>();
-            computeMeanAndStandardDeviation(newSamples->getDimension(), samples, iteration, prevMeanCL, nextMeanCL, prevStandardDeviation, nextStandardDeviation, workGroupSize_, waitForEvents, event);
+            computeMeanAndStandardDeviation(newSamples->getDimensions(), samples, iteration, prevMeanCL, nextMeanCL, prevStandardDeviation, nextStandardDeviation, workGroupSize_, waitForEvents, event);
         }
     } catch (cl::Error& err) {
         LogError(getCLErrorString(err));

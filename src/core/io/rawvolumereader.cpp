@@ -42,7 +42,7 @@ RawVolumeReader::RawVolumeReader()
     : DataReaderType<Volume>()
     , rawFile_("")
     , littleEndian_(true)
-    , dimension_(uvec3(0, 0, 0))
+    , dimensions_(uvec3(0, 0, 0))
     , format_(NULL)
     , parametersSet_(false) {
     addExtension(FileExtension("raw", "Raw binary file"));
@@ -52,7 +52,7 @@ RawVolumeReader::RawVolumeReader(const RawVolumeReader& rhs)
     : DataReaderType<Volume>(rhs)
     , rawFile_(rhs.rawFile_)
     , littleEndian_(true)
-    , dimension_(rhs.dimension_)
+    , dimensions_(rhs.dimensions_)
     , format_(rhs.format_)
     , parametersSet_(false) {}
 
@@ -60,7 +60,7 @@ RawVolumeReader& RawVolumeReader::operator=(const RawVolumeReader& that) {
     if (this != &that) {
         rawFile_ = that.rawFile_;
         littleEndian_ = that.littleEndian_;
-        dimension_ = that.dimension_;
+        dimensions_ = that.dimensions_;
         format_ = that.format_;
         DataReaderType<Volume>::operator=(that);
     }
@@ -75,7 +75,7 @@ RawVolumeReader* RawVolumeReader::clone() const {
 void RawVolumeReader::setParameters(const DataFormatBase* format, ivec3 dimensions, bool littleEndian) {
     parametersSet_ = true;
     format_ = format;
-    dimension_ = dimensions;
+    dimensions_ = dimensions;
     littleEndian_ = littleEndian;
 }
 
@@ -98,7 +98,7 @@ Volume* RawVolumeReader::readMetaData(std::string filePath) {
     if (!parametersSet_) {
         DataReaderDialog* readerDialog = dynamic_cast<DataReaderDialog*>(DialogFactory::getPtr()->getDialog("RawVolumeReader"));
         ivwAssert(readerDialog!=0, "No data reader dialog found.");
-        format_ = readerDialog->getFormat(rawFile_, &dimension_, &littleEndian_);
+        format_ = readerDialog->getFormat(rawFile_, &dimensions_, &littleEndian_);
     }
 
     if (format_) {
@@ -108,9 +108,9 @@ Volume* RawVolumeReader::readMetaData(std::string filePath) {
         glm::mat4 wtm(1.0f);
 
         if (spacing != vec3(0.0f)) {
-            basis[0][0] = dimension_.x * spacing.x;
-            basis[1][1] = dimension_.y * spacing.y;
-            basis[2][2] = dimension_.z * spacing.z;
+            basis[0][0] = dimensions_.x * spacing.x;
+            basis[1][1] = dimensions_.y * spacing.y;
+            basis[2][2] = dimensions_.z * spacing.z;
         }
 
         // If not specified, center the data around origo.
@@ -123,12 +123,12 @@ Volume* RawVolumeReader::readMetaData(std::string filePath) {
         volume->setBasis(basis);
         volume->setOffset(offset);
         volume->setWorldMatrix(wtm);
-        volume->setDimension(dimension_);
+        volume->setDimensions(dimensions_);
         volume->setDataFormat(format_);
-        VolumeDisk* vd = new VolumeDisk(filePath, dimension_, format_);
+        VolumeDisk* vd = new VolumeDisk(filePath, dimensions_, format_);
         vd->setDataReader(this);
         volume->addRepresentation(vd);
-        std::string size = formatBytesToString(dimension_.x*dimension_.y*dimension_.z*(format_->getBytesStored()));
+        std::string size = formatBytesToString(dimensions_.x*dimensions_.y*dimensions_.z*(format_->getBytesStored()));
         LogInfo("Loaded volume: " << filePath << " size: " << size);
         return volume;
     } else
@@ -139,7 +139,7 @@ void RawVolumeReader::readDataInto(void* destination) const {
     std::fstream fin(rawFile_.c_str(), std::ios::in | std::ios::binary);
 
     if (fin.good()) {
-        std::size_t size = dimension_.x*dimension_.y*dimension_.z*(format_->getBytesStored());
+        std::size_t size = dimensions_.x*dimensions_.y*dimensions_.z*(format_->getBytesStored());
         fin.read(static_cast<char*>(destination), size);
 
         if (!littleEndian_ && format_->getBytesStored() > 1) {
@@ -163,7 +163,7 @@ void RawVolumeReader::readDataInto(void* destination) const {
 }
 
 void* RawVolumeReader::readData() const {
-    std::size_t size = dimension_.x*dimension_.y*dimension_.z*(format_->getBytesStored());
+    std::size_t size = dimensions_.x*dimensions_.y*dimensions_.z*(format_->getBytesStored());
     char* data = new char[size];
 
     if (data)

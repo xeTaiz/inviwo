@@ -40,7 +40,7 @@ Layer::Layer(uvec2 dimensions, const DataFormatBase* format, LayerType type)
 
 Layer::Layer(LayerRepresentation* in)
     : Data(in->getDataFormat())
-    , StructuredGridEntity<2>(in->getDimension())
+    , StructuredGridEntity<2>(in->getDimensions())
     , layerType_(in->getLayerType()) {
     clearRepresentations();
     addRepresentation(in);
@@ -70,7 +70,7 @@ Layer::~Layer() {
 }
 
 void Layer::resize(uvec2 dimensions) {
-    setDimension(dimensions);
+    setDimensions(dimensions);
 
     if (lastValidRepresentation_) {
         // Resize last valid representation and remove the other ones
@@ -100,17 +100,17 @@ void Layer::resize(uvec2 dimensions) {
 }
 
 
-uvec2 Layer::getDimension() const {
+uvec2 Layer::getDimensions() const {
     if (hasRepresentations() && lastValidRepresentation_){
-        uvec2 dim = static_cast<LayerRepresentation*>(lastValidRepresentation_)->getDimension();
+        uvec2 dim = static_cast<LayerRepresentation*>(lastValidRepresentation_)->getDimensions();
         if (dim != uvec2(0))
             return dim;
     }
 
-    return StructuredGridEntity<2>::getDimension();
+    return StructuredGridEntity<2>::getDimensions();
 }
-void  Layer::setDimension(const uvec2& dim) {
-    StructuredGridEntity<2>::setDimension(dim);
+void  Layer::setDimensions(const uvec2& dim) {
+    StructuredGridEntity<2>::setDimensions(dim);
 }
 
 void Layer::resizeRepresentations(Layer* targetLayer, uvec2 targetDim) {
@@ -162,7 +162,7 @@ LayerType Layer::getLayerType() const {
 }
 
 DataRepresentation* Layer::createDefaultRepresentation() {
-    return createLayerRAM((uvec2)getDimension(), getLayerType(), getDataFormat());
+    return createLayerRAM((uvec2)getDimensions(), getLayerType(), getDataFormat());
 }
 
 

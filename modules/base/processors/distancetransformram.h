@@ -98,8 +98,8 @@ void DistanceTransformRAM::computeDistanceTransform() {
     const VolumeRAM *srcVol = volumePort_.getData()->getRepresentation<VolumeRAM>();
     VolumeRAM *vol = outport_.getData()->getEditableRepresentation<VolumeRAM>();
 
-    uvec3 dataDim = vol->getDimension();
-    if (dataDim != srcVol->getDimension())
+    uvec3 dataDim = vol->getDimensions();
+    if (dataDim != srcVol->getDimensions())
         return;
 
     T lowVal = static_cast<T>(0);

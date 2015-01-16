@@ -111,7 +111,7 @@ const std::vector<Inport*>& ImageLayoutGL::getInports(Event* e) const {
             std::vector<Inport*> inports = multiinport_.getInports();
             size_t minNum = std::min(inports.size(), viewCoords_.size());
             ivec2 activePos = layoutHandler_->getActivePosition();
-            uvec2 dim = outport_.getConstData()->getDimension();
+            uvec2 dim = outport_.getConstData()->getDimensions();
             activePos.y = static_cast<int>(dim.y) - activePos.y;
             for (size_t i = 0; i < minNum; ++i) {
                 if (static_cast<int>(viewCoords_[i].x) <= activePos.x &&
@@ -146,7 +146,7 @@ void ImageLayoutGL::multiInportChanged() {
 void ImageLayoutGL::process() {
     TextureUnit::setZeroUnit();
     std::vector<const Image*> images = multiinport_.getData();
-    vec2 dim = outport_.getData()->getDimension();
+    vec2 dim = outport_.getData()->getDimensions();
 
     // updateViewports();
     TextureUnit colorUnit, depthUnit, pickingUnit;
@@ -176,7 +176,7 @@ void ImageLayoutGL::process() {
 
 void ImageLayoutGL::updateViewports(bool force) {
     uvec2 dim(256u, 256u);
-    if (outport_.isConnected()) dim = outport_.getData()->getDimension();
+    if (outport_.isConnected()) dim = outport_.getData()->getDimensions();
 
     if (!force && (currentDim_ == dim) && (currentLayout_ == layout_.get()) &&
         (resizeEnabled_ == resizeContent_.get()))

@@ -43,7 +43,7 @@ ProcessorWidgetQt::~ProcessorWidgetQt() {}
 
 void ProcessorWidgetQt::initialize() {
     ProcessorWidget::initialize();
-    ivec2 dim = ProcessorWidget::getDimension();
+    ivec2 dim = ProcessorWidget::getDimensions();
     ivec2 pos = ProcessorWidget::getPosition();
     
     QWidget::resize(dim.x, dim.y);
@@ -89,13 +89,13 @@ void ProcessorWidgetQt::move(ivec2 pos) {
     ProcessorWidgetQt::setPosition(pos);
 }
 
-void ProcessorWidgetQt::setDimension(ivec2 dimensions) {
-    // ProcessorWidget::setDimension(dimensions);  Will be called by the Resize event.
+void ProcessorWidgetQt::setDimensions(ivec2 dimensions) {
+    // ProcessorWidget::setDimensions(dimensions);  Will be called by the Resize event.
     QWidget::resize(dimensions.x, dimensions.y);
 }
 
 void ProcessorWidgetQt::resizeEvent(QResizeEvent* event) {
-    ProcessorWidget::setDimension(ivec2(event->size().width(), event->size().height()));
+    ProcessorWidget::setDimensions(ivec2(event->size().width(), event->size().height()));
     QWidget::resizeEvent(event);
 }
 

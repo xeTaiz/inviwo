@@ -70,7 +70,7 @@ void PixelToBufferProcessor::inportChanged() {
     if (!inport_.hasData()) {
         return;
     }
-    fromPixel_.setMaxValue(ivec2(inport_.getDimension())-1);
+    fromPixel_.setMaxValue(ivec2(inport_.getDimensions())-1);
     channel_.setMaxValue(inport_.getData()->getDataFormat()->components()-1);
 }
 

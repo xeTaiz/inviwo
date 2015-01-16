@@ -85,14 +85,14 @@ Layer* FreeImageReader::readMetaData(std::string filePath) {
 void FreeImageReader::readDataInto(void* destination) const {
     LayerDisk* layerDisk = dynamic_cast<LayerDisk*>(owner_);
     if(layerDisk){
-        uvec2 dimension = layerDisk->getDimension();
+        uvec2 dimensions = layerDisk->getDimensions();
         DataFormatEnums::Id formatId = DataFormatEnums::NOT_SPECIALIZED;
 
-        if (dimension != uvec2(0))
-            FreeImageUtils::loadImageToDataAndRescale(destination, layerDisk->getSourceFile(), dimension, formatId);
+        if (dimensions != uvec2(0))
+            FreeImageUtils::loadImageToDataAndRescale(destination, layerDisk->getSourceFile(), dimensions, formatId);
         else{
-            FreeImageUtils::loadImageToData(destination, layerDisk->getSourceFile(), dimension, formatId);
-            layerDisk->setDimension(dimension);
+            FreeImageUtils::loadImageToData(destination, layerDisk->getSourceFile(), dimensions, formatId);
+            layerDisk->setDimensions(dimensions);
         }
 
         layerDisk->updateDataFormat(DataFormatBase::get(formatId));
@@ -104,14 +104,14 @@ void* FreeImageReader::readData() const {
 
     LayerDisk* layerDisk = dynamic_cast<LayerDisk*>(owner_);
     if(layerDisk){
-        uvec2 dimension = layerDisk->getDimension();
+        uvec2 dimensions = layerDisk->getDimensions();
         DataFormatEnums::Id formatId = DataFormatEnums::NOT_SPECIALIZED;
 
-        if (dimension != uvec2(0))
-            data = FreeImageUtils::loadImageToDataAndRescale(NULL, layerDisk->getSourceFile(), dimension, formatId);
+        if (dimensions != uvec2(0))
+            data = FreeImageUtils::loadImageToDataAndRescale(NULL, layerDisk->getSourceFile(), dimensions, formatId);
         else{
-            data = FreeImageUtils::loadImageToData(NULL, layerDisk->getSourceFile(), dimension, formatId);
-            layerDisk->setDimension(dimension);
+            data = FreeImageUtils::loadImageToData(NULL, layerDisk->getSourceFile(), dimensions, formatId);
+            layerDisk->setDimensions(dimensions);
         }
 
         layerDisk->updateDataFormat(DataFormatBase::get(formatId));

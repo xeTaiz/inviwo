@@ -42,7 +42,7 @@ Volume::Volume(const Volume& rhs)
 
 Volume::Volume(VolumeRepresentation* in)
     : Data(in->getDataFormat())
-    , StructuredGridEntity<3>(in->getDimension())
+    , StructuredGridEntity<3>(in->getDimensions())
     , dataMap_(in->getDataFormat()) {
     addRepresentation(in);
     in->setOwner(this);
@@ -66,8 +66,8 @@ std::string Volume::getDataInfo() const {
         << "<tr><td style='color:#bbb;padding-right:8px;'>Type</td><td><nobr>Volume</nobr></td></tr>\n"
         << "<tr><td style='color:#bbb;padding-right:8px;'>Format</td><td><nobr>" << getDataFormat()->getString() << "</nobr></td></tr>\n"
         
-        << "<tr><td style='color:#bbb;padding-right:8px;'>Dimension</td><td><nobr>" << "(" << getDimension().x << ", "
-        << getDimension().y << ", " << getDimension().z << ")" << "</nobr></td></tr>\n"
+        << "<tr><td style='color:#bbb;padding-right:8px;'>Dimension</td><td><nobr>" << "(" << getDimensions().x << ", "
+        << getDimensions().y << ", " << getDimensions().z << ")" << "</nobr></td></tr>\n"
         
         << "<tr><td style='color:#bbb;padding-right:8px;'>DataRange</td><td><nobr>" 
         << dataMap_.dataRange.x << ", " << dataMap_.dataRange.y << "</nobr></td></tr>\n"
@@ -103,8 +103,8 @@ std::string Volume::getDataInfo() const {
     return ss.str();
 }
 
-uvec3 Volume::getDimension() const { return StructuredGridEntity<3>::getDimension(); }
-void Volume::setDimension(const uvec3& dim) { StructuredGridEntity<3>::setDimension(dim); }
+uvec3 Volume::getDimensions() const { return StructuredGridEntity<3>::getDimensions(); }
+void Volume::setDimensions(const uvec3& dim) { StructuredGridEntity<3>::setDimensions(dim); }
 
 void Volume::setOffset(const vec3& offset) {
     SpatialEntity<3>::setOffset(Vector<3, float>(offset));
@@ -125,7 +125,7 @@ void Volume::setWorldMatrix(const mat4& mat) {
 }
 
 DataRepresentation* Volume::createDefaultRepresentation() {
-    VolumeDisk* volDisk = new VolumeDisk(getDimension(), getDataFormat());
+    VolumeDisk* volDisk = new VolumeDisk(getDimensions(), getDataFormat());
     volDisk->setOwner(this);
     return volDisk;
 }
@@ -137,7 +137,7 @@ float Volume::getWorldSpaceGradientSpacing() const {
     // Shorten each basis to the distance from one voxel to the next
     mat3 voxelSpaceBasis;
     for (int dim = 0; dim < 3; ++dim) {
-        voxelSpaceBasis[dim] = textureToWorld[dim]/static_cast<float>(getDimension()[dim]);
+        voxelSpaceBasis[dim] = textureToWorld[dim]/static_cast<float>(getDimensions()[dim]);
     }
     
     // Find the distance three of the sides of a voxel

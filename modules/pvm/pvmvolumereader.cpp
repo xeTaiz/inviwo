@@ -64,7 +64,7 @@ Volume* PVMVolumeReader::readMetaData(const std::string filePath) {
         return NULL;
 
     // Print information
-    uvec3 dim = volume->getDimension();
+    uvec3 dim = volume->getDimensions();
     size_t bytes = dim.x * dim.y * dim.z * (volume->getDataFormat()->getBytesAllocated());
     std::string size = formatBytesToString(bytes);
     LogInfo("Loaded volume: " << filePath << " size: " << size);
@@ -198,7 +198,7 @@ Volume* PVMVolumeReader::readPVMData(std::string filePath){
 
     volume->setBasis(basis);
     volume->setOffset(-0.5f*(basis[0] + basis[1] + basis[2]));
-    volume->setDimension(dim);
+    volume->setDimensions(dim);
 
     volume->dataMap_.initWithFormat(format);
 

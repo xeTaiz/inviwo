@@ -58,8 +58,8 @@ public:
     virtual void show();
     virtual void hide();
     
-    virtual glm::ivec2 getDimension();
-    virtual void setDimension(ivec2);
+    virtual glm::ivec2 getDimensions();
+    virtual void setDimensions(ivec2);
     virtual glm::ivec2 getPosition();
     virtual void setPosition(ivec2);
     

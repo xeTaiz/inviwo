@@ -41,7 +41,7 @@ VolumeRAM2GLConverter::~VolumeRAM2GLConverter() {}
 
 DataRepresentation* VolumeRAM2GLConverter::createFrom(const DataRepresentation* source) {
     const VolumeRAM* volumeRAM = static_cast<const VolumeRAM*>(source);
-    VolumeGL* volume = new VolumeGL(volumeRAM->getDimension(), volumeRAM->getDataFormat(), false);
+    VolumeGL* volume = new VolumeGL(volumeRAM->getDimensions(), volumeRAM->getDataFormat(), false);
     volume->getTexture()->initialize(volumeRAM->getData());
     return volume;
 }
@@ -50,8 +50,8 @@ void VolumeRAM2GLConverter::update(const DataRepresentation* source, DataReprese
     const VolumeRAM* volumeSrc = static_cast<const VolumeRAM*>(source);
     VolumeGL* volumeDst = static_cast<VolumeGL*>(destination);
 
-    if (volumeSrc->getDimension() != volumeDst->getDimension()) {
-        volumeDst->setDimension(volumeSrc->getDimension());
+    if (volumeSrc->getDimensions() != volumeDst->getDimensions()) {
+        volumeDst->setDimensions(volumeSrc->getDimensions());
     }
 
     volumeDst->getTexture()->upload(volumeSrc->getData());
@@ -65,7 +65,7 @@ VolumeGL2RAMConverter::~VolumeGL2RAMConverter() {}
 
 DataRepresentation* VolumeGL2RAMConverter::createFrom(const DataRepresentation* source) {
     const VolumeGL* volumeGL = static_cast<const VolumeGL*>(source);
-    VolumeRAM* volume = createVolumeRAM(volumeGL->getDimension(), volumeGL->getDataFormat());
+    VolumeRAM* volume = createVolumeRAM(volumeGL->getDimensions(), volumeGL->getDataFormat());
 
     if (volume) {
         volumeGL->getTexture()->download(volume->getData());
@@ -81,8 +81,8 @@ void VolumeGL2RAMConverter::update(const DataRepresentation* source, DataReprese
     const VolumeGL* volumeSrc = static_cast<const VolumeGL*>(source);
     VolumeRAM* volumeDst = static_cast<VolumeRAM*>(destination);
 
-    if (volumeSrc->getDimension() != volumeDst->getDimension()) {
-        volumeDst->setDimension(volumeSrc->getDimension());
+    if (volumeSrc->getDimensions() != volumeDst->getDimensions()) {
+        volumeDst->setDimensions(volumeSrc->getDimensions());
     }
 
     volumeSrc->getTexture()->download(volumeDst->getData());

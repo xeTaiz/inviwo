@@ -152,14 +152,14 @@ void VolumeRAM::calculateHistogram(int sampleRate, std::size_t maxNumberOfBins) 
 }
 
 void VolumeRAM::setValuesFromVolume(const VolumeRAM* src, const uvec3& dstOffset){
-    setValuesFromVolume(src, dstOffset, src->getDimension(), uvec3(0));
+    setValuesFromVolume(src, dstOffset, src->getDimensions(), uvec3(0));
 }
 
 size_t VolumeRAM::getNumberOfBytes() const{
     return getDataFormat()->getBytesAllocated()*dimensions_.x*dimensions_.y*dimensions_.z;
 }
 
-VolumeRAM* createVolumeRAM(const uvec3& dimension, const DataFormatBase* format, void* dataPtr) {
+VolumeRAM* createVolumeRAM(const uvec3& dimensions, const DataFormatBase* format, void* dataPtr) {
     // TODO: Add more formats
     VolumeRAM* result = 0;
 
@@ -169,7 +169,7 @@ VolumeRAM* createVolumeRAM(const uvec3& dimension, const DataFormatBase* format,
             break;
 #define DataFormatIdMacro(i)                                                          \
     case DataFormatEnums::i:                                                          \
-        return new VolumeRAMCustomPrecision<Data##i::type, Data##i::bits>(static_cast<Data##i::type*>(dataPtr), dimension); \
+        return new VolumeRAMCustomPrecision<Data##i::type, Data##i::bits>(static_cast<Data##i::type*>(dataPtr), dimensions); \
         break;
 #include <inviwo/core/util/formatsdefinefunc.h>
 

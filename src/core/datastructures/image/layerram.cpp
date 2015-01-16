@@ -35,8 +35,8 @@
 
 namespace inviwo {
 
-LayerRAM::LayerRAM(uvec2 dimension, LayerType type, const DataFormatBase* format)
-    : LayerRepresentation(dimension, type, format), data_(NULL) {
+LayerRAM::LayerRAM(uvec2 dimensions, LayerType type, const DataFormatBase* format)
+    : LayerRepresentation(dimensions, type, format), data_(NULL) {
 }
 
 LayerRAM::LayerRAM(const LayerRAM& rhs)
@@ -57,7 +57,7 @@ bool LayerRAM::copyAndResizeLayer(DataRepresentation* targetLayerRam) const {
     return Canvas::generalLayerWriter_->writeDataToRepresentation(this, targetLayerRam);
 }
 
-void LayerRAM::setDimension(uvec2 dimensions) {
+void LayerRAM::setDimensions(uvec2 dimensions) {
     resize(dimensions);
 }
 
@@ -74,13 +74,13 @@ void LayerRAM::setData(void* data) {
     data_ = data;
 }
 
-LayerRAM* createLayerRAM(const uvec2& dimension, LayerType type, const DataFormatBase* format) {
+LayerRAM* createLayerRAM(const uvec2& dimensions, LayerType type, const DataFormatBase* format) {
     switch (format->getId())
     {
         case DataFormatEnums::NOT_SPECIALIZED:
             LogErrorCustom("createLayerRAM", "Invalid format");
             return NULL;
-#define DataFormatIdMacro(i) case DataFormatEnums::i: return new LayerRAMCustomPrecision<Data##i::type, Data##i::bits>(dimension, type); break;
+#define DataFormatIdMacro(i) case DataFormatEnums::i: return new LayerRAMCustomPrecision<Data##i::type, Data##i::bits>(dimensions, type); break;
 #include <inviwo/core/util/formatsdefinefunc.h>
 
         default:

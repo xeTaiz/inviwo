@@ -41,7 +41,7 @@ IvfVolumeReader::IvfVolumeReader()
     , rawFile_("")
     , filePos_(0)
     , littleEndian_(true)
-    , dimension_(uvec3(0))
+    , dimensions_(uvec3(0))
     , format_(NULL) {
     addExtension(FileExtension("ivf", "Inviwo ivf file format"));
 }
@@ -51,7 +51,7 @@ IvfVolumeReader::IvfVolumeReader(const IvfVolumeReader& rhs)
     , rawFile_(rhs.rawFile_)
     , filePos_(0)
     , littleEndian_(rhs.littleEndian_)
-    , dimension_(rhs.dimension_)
+    , dimensions_(rhs.dimensions_)
     , format_(rhs.format_) {
 }
 
@@ -60,7 +60,7 @@ IvfVolumeReader& IvfVolumeReader::operator=(const IvfVolumeReader& that) {
         rawFile_ = that.rawFile_;
         filePos_ = that.filePos_;
         littleEndian_ = that.littleEndian_;
-        dimension_ = that.dimension_;
+        dimensions_ = that.dimensions_;
         format_ = that.format_;
         DataReaderType<Volume>::operator=(that);
     }
@@ -98,8 +98,8 @@ Volume* IvfVolumeReader::readMetaData(std::string filePath)  {
     mat4 worldTransform;
     d.deserialize("WorldTransform", worldTransform);
     volume->setWorldMatrix(worldTransform);
-    d.deserialize("Dimension", dimension_);
-    volume->setDimension(dimension_);
+    d.deserialize("Dimension", dimensions_);
+    volume->setDimensions(dimensions_);
 
     d.deserialize("DataRange", volume->dataMap_.dataRange);
     d.deserialize("ValueRange", volume->dataMap_.valueRange);
@@ -107,7 +107,7 @@ Volume* IvfVolumeReader::readMetaData(std::string filePath)  {
 
     volume->getMetaDataMap()->deserialize(d);
     littleEndian_ = volume->getMetaData<BoolMetaData>("LittleEndian", littleEndian_);
-    VolumeDisk* vd = new VolumeDisk(filePath, dimension_, format_);
+    VolumeDisk* vd = new VolumeDisk(filePath, dimensions_, format_);
     vd->setDataReader(this);
     volume->addRepresentation(vd);
     return volume;
@@ -117,7 +117,7 @@ void IvfVolumeReader::readDataInto(void* destination) const {
     std::fstream fin(rawFile_.c_str(), std::ios::in | std::ios::binary);
 
     if (fin.good()) {
-        std::size_t size = dimension_.x*dimension_.y*dimension_.z*(format_->getBytesAllocated());
+        std::size_t size = dimensions_.x*dimensions_.y*dimensions_.z*(format_->getBytesAllocated());
         fin.seekg(filePos_);
         fin.read((char*)destination, size);
 
@@ -142,7 +142,7 @@ void IvfVolumeReader::readDataInto(void* destination) const {
 }
 
 void* IvfVolumeReader::readData() const {
-    std::size_t size = dimension_.x * dimension_.y * dimension_.z * (format_->getBytesAllocated());
+    std::size_t size = dimensions_.x * dimensions_.y * dimensions_.z * (format_->getBytesAllocated());
     char* data = new char[size];
 
     if (data) {

@@ -247,11 +247,11 @@ void TextOverlayGL::process() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    float sx = 2.f / outport_.getData()->getDimension().x;
-    float sy = 2.f / outport_.getData()->getDimension().y;
+    float sx = 2.f / outport_.getData()->getDimensions().x;
+    float sy = 2.f / outport_.getData()->getDimensions().y;
     font_size_ = fontSize_.getSelectedValue();
-    xpos_ = fontPos_.get().x * outport_.getData()->getDimension().x;
-    ypos_ = fontPos_.get().y * outport_.getData()->getDimension().y + float(font_size_);
+    xpos_ = fontPos_.get().x * outport_.getData()->getDimensions().x;
+    ypos_ = fontPos_.get().y * outport_.getData()->getDimensions().y + float(font_size_);
     textShader_->activate();
     textShader_->setUniform("tex", texUnit.getUnitNumber());
     textShader_->setUniform("color", color_.get());

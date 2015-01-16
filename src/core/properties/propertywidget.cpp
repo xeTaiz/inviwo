@@ -75,8 +75,8 @@ void PropertyEditorWidget::showEditor() { metaData_->setVisibile(true); }
 
 void PropertyEditorWidget::hideEditor() { metaData_->setVisibile(false); }
 
-void PropertyEditorWidget::setEditorDimension(const ivec2 &dimension) {
-    metaData_->setDimension(dimension);
+void PropertyEditorWidget::setEditorDimensions(const ivec2 &dimensions) {
+    metaData_->setDimensions(dimensions);
 }
 
 void PropertyEditorWidget::moveEditor(const ivec2 &pos) { metaData_->setWidgetPosition(pos); }
@@ -88,7 +88,7 @@ bool PropertyEditorWidget::getEditorVisibilityMetaData() const { return metaData
 
 ivec2 PropertyEditorWidget::getEditorPositionMetaData() const { return metaData_->getWidgetPosition(); }
 
-ivec2 PropertyEditorWidget::getEditorDimensionMetaData() const { return metaData_->getDimension(); }
+ivec2 PropertyEditorWidget::getEditorDimensionMetaData() const { return metaData_->getDimensions(); }
 
 PropertyEditorWidgetDockStatus PropertyEditorWidget::getEditorDockStatus() const {
     return metaData_->getDocStatus();

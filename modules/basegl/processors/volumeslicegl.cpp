@@ -341,8 +341,8 @@ void VolumeSliceGL::planeSettingsChanged() {
 }
 
 void VolumeSliceGL::process() {
-    if (volumeDimensions_ != inport_.getData()->getDimension()) {
-        volumeDimensions_ = inport_.getData()->getDimension();
+    if (volumeDimensions_ != inport_.getData()->getDimensions()) {
+        volumeDimensions_ = inport_.getData()->getDimensions();
         updateMaxSliceNumber();
         modeChange();
     }
@@ -376,7 +376,7 @@ void VolumeSliceGL::process() {
     shader_->setUniform("volume_", volUnit.getUnitNumber());
     shader_->setUniform("slice_", (inverseSliceRotation_ * vec4(planePosition_.get(),1.0f)).z);
     
-    float ratioTarget = (float)outport_.getDimension().x / (float)outport_.getDimension().y;
+    float ratioTarget = (float)outport_.getDimensions().x / (float)outport_.getDimensions().y;
     if (ratioTarget < ratioSource_) {
         scaleMat_ = glm::scale(glm::vec3(1.0f, ratioTarget / ratioSource_, 1.0f));
     } else {
@@ -450,7 +450,7 @@ void VolumeSliceGL::updateIndicatorMesh() {
     meshBox_ = new Mesh;
     meshBox_->setModelMatrix(mat4(1.0f));
 
-    uvec2 canvasSize(outport_.getDimension());
+    uvec2 canvasSize(outport_.getDimensions());
     const vec2 indicatorSize = vec2(4.0f / canvasSize.x, 4.0f / canvasSize.y);
     vec4 color(indicatorColor_.get());
 
@@ -554,7 +554,7 @@ void VolumeSliceGL::updateMaxSliceNumber() {
         return;
     }
     disableInvalidation();
-    uvec3 dims = inport_.getData()->getDimension();
+    uvec3 dims = inport_.getData()->getDimensions();
     if (dims.x != sliceX_.getMaxValue()) {
         sliceX_.setMaxValue(static_cast<int>(dims.x));
         sliceX_.set(static_cast<int>(dims.x) / 2);

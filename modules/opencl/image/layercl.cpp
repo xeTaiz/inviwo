@@ -107,11 +107,11 @@ bool LayerCL::copyAndResizeLayer(DataRepresentation* target) const {
 
     if (!targetCL) return false;
 
-    LayerCLResizer::resize(*clImage_, (targetCL->get()), targetCL->getDimension());
+    LayerCLResizer::resize(*clImage_, (targetCL->get()), targetCL->getDimensions());
     return true;
 }
 
-void LayerCL::setDimension(uvec2 dimensions) {
+void LayerCL::setDimensions(uvec2 dimensions) {
     delete clImage_;
     clImage_ = new cl::Image2D(OpenCL::getPtr()->getContext(), CL_MEM_READ_WRITE, getFormat(), dimensions.x, dimensions.y);
 }

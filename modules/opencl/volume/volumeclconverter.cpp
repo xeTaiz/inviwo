@@ -41,9 +41,9 @@ VolumeRAM2CLConverter::VolumeRAM2CLConverter()
 DataRepresentation* VolumeRAM2CLConverter::createFrom(const DataRepresentation* source) {
     DataRepresentation* destination = 0;
     const VolumeRAM* volumeRAM = static_cast<const VolumeRAM*>(source);
-    uvec3 dimension = volumeRAM->getDimension();
+    uvec3 dimensions = volumeRAM->getDimensions();
     const void* data = volumeRAM->getData();
-    destination = new VolumeCL(dimension, volumeRAM->getDataFormat(), data);
+    destination = new VolumeCL(dimensions, volumeRAM->getDataFormat(), data);
     return destination;
 }
 
@@ -51,8 +51,8 @@ void VolumeRAM2CLConverter::update(const DataRepresentation* source, DataReprese
     const VolumeRAM* volumeSrc = static_cast<const VolumeRAM*>(source);
     VolumeCL* volumeDst = static_cast<VolumeCL*>(destination);
 
-    if (volumeSrc->getDimension() != volumeDst->getDimension()) {
-        volumeDst->setDimension(volumeSrc->getDimension());
+    if (volumeSrc->getDimensions() != volumeDst->getDimensions()) {
+        volumeDst->setDimensions(volumeSrc->getDimensions());
     }
 
     volumeDst->upload(volumeSrc->getData());
@@ -66,8 +66,8 @@ VolumeCL2RAMConverter::VolumeCL2RAMConverter()
 DataRepresentation* VolumeCL2RAMConverter::createFrom(const DataRepresentation* source) {
     DataRepresentation* destination = 0;
     const VolumeCL* volumeCL = static_cast<const VolumeCL*>(source);
-    uvec3 dimension = volumeCL->getDimension();
-    destination = createVolumeRAM(dimension, volumeCL->getDataFormat());
+    uvec3 dimensions = volumeCL->getDimensions();
+    destination = createVolumeRAM(dimensions, volumeCL->getDataFormat());
 
     if (destination) {
         VolumeRAM* volumeRAM = static_cast<VolumeRAM*>(destination);
@@ -83,8 +83,8 @@ void VolumeCL2RAMConverter::update(const DataRepresentation* source, DataReprese
     const VolumeCL* volumeSrc = static_cast<const VolumeCL*>(source);
     VolumeRAM* volumeDst = static_cast<VolumeRAM*>(destination);
 
-    if (volumeSrc->getDimension() != volumeDst->getDimension()) {
-        volumeDst->setDimension(volumeSrc->getDimension());
+    if (volumeSrc->getDimensions() != volumeDst->getDimensions()) {
+        volumeDst->setDimensions(volumeSrc->getDimensions());
     }
 
     volumeSrc->download(volumeDst->getData());

@@ -52,7 +52,7 @@ public:
     virtual void show(); // Override ProcessorWidget
     virtual void hide(); // Override ProcessorWidget
     virtual void setPosition(glm::ivec2 pos); // Override ProcessorWidget
-    virtual void setDimension(ivec2 dimensions); // Override ProcessorWidget
+    virtual void setDimensions(ivec2 dimensions); // Override ProcessorWidget
 
     virtual void move(ivec2 pos); // Mirror QWidget::move
     

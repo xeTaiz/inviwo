@@ -56,10 +56,10 @@ public:
 
     void upload(const void* data);
 
-    const uvec2& getDimension() const { return dimensions_;}
+    const uvec2& getDimensions() const { return dimensions_;}
     int getWidth() const { return dimensions_.x; }
     int getHeight() const { return dimensions_.y; }
-    void resize(uvec2 dimension);
+    void resize(uvec2 dimensions);
 
 protected:
     void default2DTextureParameterFunction(Texture*);

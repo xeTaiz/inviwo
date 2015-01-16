@@ -51,8 +51,8 @@ public:
     virtual ~Volume();
     virtual std::string getDataInfo() const;
 
-    uvec3 getDimension() const;
-    void setDimension(const uvec3& dim);
+    uvec3 getDimensions() const;
+    void setDimensions(const uvec3& dim);
 
     void setOffset(const vec3& offset);
     vec3 getOffset() const;

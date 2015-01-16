@@ -119,7 +119,7 @@ bool LayerCLGL::copyAndResizeLayer(DataRepresentation* targetRep) const {
         glSync.addToAquireGLObjectList(target);
         glSync.addToAquireGLObjectList(source);
         glSync.aquireAllObjects();
-        LayerCLResizer::resize(source->get(), target->get(), target->getDimension());
+        LayerCLResizer::resize(source->get(), target->get(), target->getDimensions());
     } catch (cl::Error err) {
         LogError(getCLErrorString(err));
         return false;

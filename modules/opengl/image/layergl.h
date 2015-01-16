@@ -49,7 +49,7 @@ public:
     virtual ~LayerGL();
     virtual LayerGL* clone() const;
 
-    virtual void setDimension(uvec2 dimensions) { resize(dimensions); }
+    virtual void setDimensions(uvec2 dimensions) { resize(dimensions); }
 
     void bindTexture(GLenum texUnit) const;
     void unbindTexture() const;

@@ -45,7 +45,7 @@ DataRepresentation* VolumeDisk2RAMConverter::createFrom(const DataRepresentation
 
     if (volumeDisk) {
         switch (volumeDisk->getDataFormatId()) {
-#define DataFormatIdMacro(i) case DataFormatEnums::i: return new VolumeRAM_##i(static_cast<Data##i::type*>(const_cast<VolumeDisk*>(volumeDisk)->readData()), volumeDisk->getDimension());
+#define DataFormatIdMacro(i) case DataFormatEnums::i: return new VolumeRAM_##i(static_cast<Data##i::type*>(const_cast<VolumeDisk*>(volumeDisk)->readData()), volumeDisk->getDimensions());
 #include <inviwo/core/util/formatsdefinefunc.h>
 
             default:
@@ -59,8 +59,8 @@ void VolumeDisk2RAMConverter::update(const DataRepresentation* source, DataRepre
     const VolumeDisk* volumeSrc = static_cast<const VolumeDisk*>(source);
     VolumeRAM* volumeDst = static_cast<VolumeRAM*>(destination);
 
-    if (volumeSrc->getDimension() != volumeDst->getDimension())
-        volumeDst->setDimension(volumeSrc->getDimension());
+    if (volumeSrc->getDimensions() != volumeDst->getDimensions())
+        volumeDst->setDimensions(volumeSrc->getDimensions());
 
     volumeSrc->readDataInto(volumeDst->getData());
 }

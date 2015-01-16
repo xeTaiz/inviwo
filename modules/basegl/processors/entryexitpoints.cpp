@@ -117,12 +117,12 @@ void EntryExitPoints::process() {
 
     if (capNearClipping_.get()) {
         if (tmpEntryPoints_ == NULL ||
-            tmpEntryPoints_->getDimension() != entryPort_.getDimension() ||
+            tmpEntryPoints_->getDimensions() != entryPort_.getDimensions() ||
             tmpEntryPoints_->getImageType() != entryPort_.getData()->getImageType() ||
             tmpEntryPoints_->getDataFormat() != entryPort_.getData()->getDataFormat()) {
             delete tmpEntryPoints_;
             tmpEntryPoints_ =
-                new Image(entryPort_.getDimension(), entryPort_.getData()->getImageType(),
+                new Image(entryPort_.getDimensions(), entryPort_.getData()->getImageType(),
                           entryPort_.getData()->getDataFormat());
         }
 
@@ -147,9 +147,9 @@ void EntryExitPoints::process() {
         utilgl::bindTextures(exitPort_, exitColorUnit.getEnum(), exitDepthUnit.getEnum());
         capNearClippingPrg_->activate();
 
-        capNearClippingPrg_->setUniform("screenDim_", static_cast<vec2>(entryPort_.getDimension()));
+        capNearClippingPrg_->setUniform("screenDim_", static_cast<vec2>(entryPort_.getDimensions()));
         capNearClippingPrg_->setUniform(
-            "screenDimRCP_", vec2(1.0f, 1.0f) / static_cast<vec2>(entryPort_.getDimension()));
+            "screenDimRCP_", vec2(1.0f, 1.0f) / static_cast<vec2>(entryPort_.getDimensions()));
 
         utilgl::setShaderUniforms(capNearClippingPrg_, entryPort_, "outportParameters_");
 

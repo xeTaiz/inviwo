@@ -373,6 +373,7 @@ private:
         void updateMetaDataKeys(TxElement* node);
         void updateShadingMode(TxElement* node);
         void updateCameraToComposite(TxElement* node);
+        void updateDimensionTag(TxElement* node);
         void traverseNodes(TxElement* node, updateType update);
     };
 };

@@ -72,8 +72,8 @@ void FindEdges::process() {
     shader_->activate();
     shader_->setUniform("inport_", image.getUnitNumber());
     shader_->setUniform("alpha_", alpha_.get());
-    shader_->setUniform("dimension_",
-                        vec2(1.f / outport_.getDimension()[0], 1.f / outport_.getDimension()[1]));
+    shader_->setUniform("dimensions_",
+                        vec2(1.f / outport_.getDimensions()[0], 1.f / outport_.getDimensions()[1]));
     utilgl::singleDrawImagePlaneRect();
     shader_->deactivate();
     utilgl::deactivateCurrentTarget();

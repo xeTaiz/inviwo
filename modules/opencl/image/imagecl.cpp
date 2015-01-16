@@ -80,7 +80,7 @@ void ImageCL::update(bool editable) {
 
     if(layerCL_->getDataFormat() != getOwner()->getDataFormat()){
         owner->getColorLayer()->setDataFormat(layerCL_->getDataFormat());
-        owner->getColorLayer()->setDimension(layerCL_->getDimension());
+        owner->getColorLayer()->setDimensions(layerCL_->getDimensions());
     }
 }
 

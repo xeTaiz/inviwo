@@ -357,7 +357,7 @@ bool LightVolumeGL::lightSourceChanged() {
 
 bool LightVolumeGL::volumeChanged(bool lightColorChanged) {
     const Volume* input = inport_.getData();
-    glm::uvec3 inDim = input->getDimension();
+    glm::uvec3 inDim = input->getDimensions();
     glm::uvec3 outDim = uvec3(inDim.x/volumeSizeOption_.get(), inDim.y/volumeSizeOption_.get(), inDim.z/volumeSizeOption_.get());
 
     if (internalVolumesInvalid_ || (volumeDimOut_ != outDim)) {
@@ -391,7 +391,7 @@ bool LightVolumeGL::volumeChanged(bool lightColorChanged) {
                 propParams_[i].vol->getTexture()->initialize(NULL);
             }
             else {
-                propParams_[i].vol->setDimension(volumeDimOut_);
+                propParams_[i].vol->setDimensions(volumeDimOut_);
             }
         }
 
@@ -416,7 +416,7 @@ bool LightVolumeGL::volumeChanged(bool lightColorChanged) {
 
 void LightVolumeGL::volumeSizeOptionChanged() {
     if (inport_.hasData()) {
-        if ((inport_.getData()->getDimension()/uvec3(volumeSizeOption_.get())) != volumeDimOut_) {
+        if ((inport_.getData()->getDimensions()/uvec3(volumeSizeOption_.get())) != volumeDimOut_) {
             internalVolumesInvalid_ = true;
         }
     }

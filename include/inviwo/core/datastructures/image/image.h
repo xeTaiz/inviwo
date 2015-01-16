@@ -55,7 +55,7 @@ public:
     void deinitialize();
     void initialize(uvec2 dimensions, const DataFormatBase*, Layer* colorLayer = NULL);
 
-    uvec2 getDimension() const;
+    uvec2 getDimensions() const;
 
     size_t addColorLayer(Layer*);
 

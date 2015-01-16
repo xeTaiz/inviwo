@@ -62,13 +62,13 @@ const PropertyEditorWidgetDockStatus PropertyEditorWidgetDockStatus::DockedRight
 
 PropertyEditorWidgetMetaData::PropertyEditorWidgetMetaData()
     : position_(0,0)
-    , dimension_(256,256)
+    , dimensions_(256,256)
     , visibility_(false)
     , dockStatus_(PropertyEditorWidgetDockStatus::Floating.getString()) {}
 
 PropertyEditorWidgetMetaData::PropertyEditorWidgetMetaData(const PropertyEditorWidgetMetaData& rhs)
     : position_(rhs.position_)
-    , dimension_(rhs.dimension_)
+    , dimensions_(rhs.dimensions_)
     , visibility_(rhs.visibility_)
     , dockStatus_(PropertyEditorWidgetDockStatus::Floating.getString()) {}
 
@@ -76,7 +76,7 @@ PropertyEditorWidgetMetaData& PropertyEditorWidgetMetaData::operator=(
     const PropertyEditorWidgetMetaData& that) {
     if (this != &that) {
         position_ = that.position_;
-        dimension_ = that.dimension_;
+        dimensions_ = that.dimensions_;
         visibility_ = that.visibility_;
         dockStatus_ = that.dockStatus_;
     }
@@ -98,12 +98,12 @@ ivec2 PropertyEditorWidgetMetaData::getWidgetPosition() const {
     return position_;
 }
 
-void PropertyEditorWidgetMetaData::setDimension(const ivec2 &dim) {
-    dimension_ = dim;
+void PropertyEditorWidgetMetaData::setDimensions(const ivec2 &dim) {
+    dimensions_ = dim;
 }
 
-ivec2 PropertyEditorWidgetMetaData::getDimension() const {
-    return dimension_;
+ivec2 PropertyEditorWidgetMetaData::getDimensions() const {
+    return dimensions_;
 }
 
 void PropertyEditorWidgetMetaData::setVisibile(bool visibility) {
@@ -125,7 +125,7 @@ const PropertyEditorWidgetDockStatus PropertyEditorWidgetMetaData::getDocStatus(
 void PropertyEditorWidgetMetaData::serialize(IvwSerializer& s) const {
     s.serialize("type", getClassIdentifier(), true);
     s.serialize("position", position_);
-    s.serialize("dimension", dimension_);
+    s.serialize("dimensions", dimensions_);
     s.serialize("visibility", visibility_);
     s.serialize("dockstatus", dockStatus_);
 }
@@ -136,7 +136,7 @@ void PropertyEditorWidgetMetaData::deserialize(IvwDeserializer& d) {
     std::string dockStatus("");
     d.deserialize("type", className, true);
     d.deserialize("position", position_);
-    d.deserialize("dimension", dimension_);
+    d.deserialize("dimensions", dimensions_);
     d.deserialize("visibility", visibility_);
     d.deserialize("dockstatus", dockStatus);
 

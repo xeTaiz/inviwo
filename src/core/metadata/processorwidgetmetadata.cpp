@@ -37,21 +37,21 @@ const std::string ProcessorWidgetMetaData::CLASS_IDENTIFIER = "org.inviwo.Proces
 ProcessorWidgetMetaData::ProcessorWidgetMetaData()
     : MetaData()
     , position_(0,0)
-    , dimension_(256,256)
+    , dimensions_(256,256)
     , visibility_(true) {
 }
 
 ProcessorWidgetMetaData::ProcessorWidgetMetaData(const ProcessorWidgetMetaData& rhs)
     : MetaData()
     , position_(rhs.position_)
-    , dimension_(rhs.dimension_)
+    , dimensions_(rhs.dimensions_)
     , visibility_(rhs.visibility_) {
 }
 
 ProcessorWidgetMetaData& ProcessorWidgetMetaData::operator=(const ProcessorWidgetMetaData& that) {
     if (this != &that) {
         position_ = that.position_;
-        dimension_ = that.dimension_;
+        dimensions_ = that.dimensions_;
         visibility_ = that.visibility_;
     }
 
@@ -72,12 +72,12 @@ ivec2 ProcessorWidgetMetaData::getPosition() const {
     return position_;
 }
 
-void ProcessorWidgetMetaData::setDimension(const ivec2 &dim) {
-    dimension_ = dim;
+void ProcessorWidgetMetaData::setDimensions(const ivec2 &dim) {
+    dimensions_ = dim;
 }
 
-ivec2 ProcessorWidgetMetaData::getDimension() const {
-    return dimension_;
+ivec2 ProcessorWidgetMetaData::getDimensions() const {
+    return dimensions_;
 }
 
 void ProcessorWidgetMetaData::setVisibile(bool visibility) {
@@ -91,7 +91,7 @@ bool ProcessorWidgetMetaData::isVisible() const {
 void ProcessorWidgetMetaData::serialize(IvwSerializer& s) const {
     s.serialize("type", getClassIdentifier(), true);
     s.serialize("position", position_);
-    s.serialize("dimension", dimension_);
+    s.serialize("dimensions", dimensions_);
     s.serialize("visibility", visibility_);
 }
 
@@ -99,7 +99,7 @@ void ProcessorWidgetMetaData::deserialize(IvwDeserializer& d) {
     std::string className;
     d.deserialize("type", className, true);
     d.deserialize("position", position_);
-    d.deserialize("dimension", dimension_);
+    d.deserialize("dimensions", dimensions_);
     d.deserialize("visibility", visibility_);
 }
 
@@ -108,7 +108,7 @@ bool ProcessorWidgetMetaData::equal(const MetaData& rhs) const {
     if (tmp) {
         return tmp->position_ == position_
             && tmp->visibility_ == visibility_
-            && tmp->dimension_ == dimension_;
+            && tmp->dimensions_ == dimensions_;
     } else {
         return false;
     }

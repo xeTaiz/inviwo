@@ -45,7 +45,7 @@ VolumeGL::VolumeGL(uvec3 dimensions, const DataFormatBase* format, bool initiali
 }
 
 VolumeGL::VolumeGL(Texture3D* tex, const DataFormatBase* format)
-    : VolumeRepresentation(tex->getDimension(), format), volumeTexture_(tex) {
+    : VolumeRepresentation(tex->getDimensions(), format), volumeTexture_(tex) {
 }
 
 VolumeGL::VolumeGL(const VolumeGL& rhs) : VolumeRepresentation(rhs) {
@@ -78,7 +78,7 @@ void VolumeGL::bindTexture(GLenum texUnit) const {
 
 void VolumeGL::unbindTexture() const { volumeTexture_->unbind(); }
 
-void VolumeGL::setDimension(uvec3 dimensions) {
+void VolumeGL::setDimensions(uvec3 dimensions) {
     dimensions_ = dimensions;
     volumeTexture_->uploadAndResize(NULL, dimensions_);
 }

@@ -76,7 +76,7 @@ void CanvasGLFW::initializeGL() {
 #endif
     }
 
-    glWindow_ = glfwCreateWindow(getScreenDimension().x, getScreenDimension().y, windowTitle_.c_str(), NULL, sharedContext_);
+    glWindow_ = glfwCreateWindow(getScreenDimensions().x, getScreenDimensions().y, windowTitle_.c_str(), NULL, sharedContext_);
 
     if (!glWindow_) {
         glfwTerminate();
@@ -194,7 +194,7 @@ void CanvasGLFW::mouseButton(GLFWwindow* window, int button, int action, int mod
     double y;
     glfwGetCursorPos(window, &x, &y);
     MouseEvent* mouseEvent = new MouseEvent(ivec2(floor(x), floor(y)), thisCanvas->mouseButton_,
-        thisCanvas->mouseState_, thisCanvas->mouseModifiers_, thisCanvas->getScreenDimension());
+        thisCanvas->mouseState_, thisCanvas->mouseModifiers_, thisCanvas->getScreenDimensions());
 
     if (thisCanvas->mouseState_ == MouseEvent::MOUSE_STATE_PRESS) thisCanvas->mousePressEvent(mouseEvent);
     else if (thisCanvas->mouseState_ == MouseEvent::MOUSE_STATE_RELEASE) thisCanvas->mouseReleaseEvent(mouseEvent);
@@ -205,7 +205,7 @@ void CanvasGLFW::mouseButton(GLFWwindow* window, int button, int action, int mod
 void CanvasGLFW::mouseMotion(GLFWwindow* window, double x, double y) {
     CanvasGLFW* thisCanvas = getCanvasGLFW(window);
     MouseEvent* mouseEvent = new MouseEvent(ivec2(floor(x), floor(y)), thisCanvas->mouseButton_,
-        thisCanvas->mouseState_, thisCanvas->mouseModifiers_, thisCanvas->getScreenDimension());
+        thisCanvas->mouseState_, thisCanvas->mouseModifiers_, thisCanvas->getScreenDimensions());
 
     if (thisCanvas->mouseState_ == MouseEvent::MOUSE_STATE_PRESS) thisCanvas->mousePressEvent(mouseEvent);
     else if (thisCanvas->mouseState_ == MouseEvent::MOUSE_STATE_RELEASE) thisCanvas->mouseReleaseEvent(mouseEvent);
@@ -223,7 +223,7 @@ void CanvasGLFW::scroll(GLFWwindow* window, double xoffset, double yoffset) {
     glfwGetCursorPos(window, &x, &y);
     int delta = (yoffset<0.0 ? floor(yoffset) : ceil(yoffset));
     MouseEvent* mouseEvent = new MouseEvent(ivec2(floor(x), floor(y)), delta, thisCanvas->mouseButton_,
-        thisCanvas->mouseState_, MouseEvent::MOUSE_WHEEL_VERTICAL, thisCanvas->mouseModifiers_, thisCanvas->getScreenDimension());
+        thisCanvas->mouseState_, MouseEvent::MOUSE_WHEEL_VERTICAL, thisCanvas->mouseModifiers_, thisCanvas->getScreenDimensions());
 
     thisCanvas->mouseWheelEvent(mouseEvent);
 

@@ -112,7 +112,7 @@ void VolumeRAMSubSample::evaluate() {
         return;
     }
 
-    uvec3 dataDims = volume->getDimension();
+    uvec3 dataDims = volume->getDimensions();
     size_t sXY = static_cast<size_t>(dataDims.x*dataDims.y);
     size_t sX = static_cast<size_t>(dataDims.x);
 

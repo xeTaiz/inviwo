@@ -141,7 +141,7 @@ void ImageSourceSeries::process() {
         }
 
         //Original image dimension loaded from disk may differ from requested dimension.
-        outLayerDisk->resize(outImage->getDimension());
+        outLayerDisk->resize(outImage->getDimensions());
     }
 }
 

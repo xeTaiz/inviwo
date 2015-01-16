@@ -79,7 +79,7 @@ bool FreeImageWriter::writeDataToRepresentation(const DataRepresentation* src, D
     if (!source->getData())
         return true;
 
-    void* rawData = FreeImageUtils::rescaleLayerRAM(source, target->getDimension());
+    void* rawData = FreeImageUtils::rescaleLayerRAM(source, target->getDimensions());
 
     if (!rawData)
         return false;

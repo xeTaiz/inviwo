@@ -58,7 +58,7 @@ public:
     void* getData(size_t);
     const void* getData(size_t) const;
 
-    void setDimension(uvec3 dimensions);
+    void setDimensions(uvec3 dimensions);
 
     void setValueFromSingleDouble(const uvec3& pos, double val);
     void setValueFromVec2Double(const uvec3& pos, dvec2 val);
@@ -130,7 +130,7 @@ VolumeRAMPrecision<T>& VolumeRAMPrecision<T>::operator=(const VolumeRAMPrecision
     if (this != &that) {
         VolumeRAM::operator=(that);
         delete[] data_;
-        dimensions_ = that.getDimension();
+        dimensions_ = that.getDimensions();
         initialize();
         memcpy(data_, that.getData(), dimensions_.x*dimensions_.y*dimensions_.z*sizeof(T));
     }
@@ -189,7 +189,7 @@ const void* VolumeRAMPrecision<T>::getData(size_t pos) const{
 }
 
 template<typename T>
-void VolumeRAMPrecision<T>::setDimension(uvec3 dimensions) { 
+void VolumeRAMPrecision<T>::setDimensions(uvec3 dimensions) { 
     dimensions_ = dimensions; 
     deinitialize(); 
     initialize(); 
@@ -224,10 +224,10 @@ void VolumeRAMPrecision<T>::setValuesFromVolume(const VolumeRAM* src, const uvec
     const T* srcData = reinterpret_cast<const T*>(src->getData());
     T* dstData = static_cast<T*>(data_);
 
-    uvec3 dataDims = getDimension();
+    uvec3 dataDims = getDimensions();
     size_t initialStartPos = (dstOffset.z * (dataDims.x*dataDims.y))+(dstOffset.y * dataDims.x) + dstOffset.x;
 
-    uvec3 srcDims = src->getDimension();
+    uvec3 srcDims = src->getDimensions();
     size_t dataSize = subSize.x*getDataFormat()->getBytesAllocated();
 
     size_t volumePos;

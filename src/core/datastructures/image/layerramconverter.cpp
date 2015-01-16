@@ -54,7 +54,7 @@ DataRepresentation* LayerDisk2RAMConverter::createFrom(const DataRepresentation*
     void* data = layerDisk->readData();
 
     switch (layerDisk->getDataFormat()->getId()) {
-#define DataFormatIdMacro(i) case DataFormatEnums::i: return new LayerRAM_##i(static_cast<Data##i::type*>(data), layerDisk->getDimension(), layerDisk->getLayerType());
+#define DataFormatIdMacro(i) case DataFormatEnums::i: return new LayerRAM_##i(static_cast<Data##i::type*>(data), layerDisk->getDimensions(), layerDisk->getLayerType());
 #include <inviwo/core/util/formatsdefinefunc.h>
 
         default:
@@ -68,8 +68,8 @@ void LayerDisk2RAMConverter::update(const DataRepresentation* source, DataRepres
     const LayerDisk* layerSrc = static_cast<const LayerDisk*>(source);
     LayerRAM* layerDst = static_cast<LayerRAM*>(destination);
 
-    if (layerSrc->getDimension() != layerDst->getDimension())
-        layerDst->setDimension(layerSrc->getDimension());
+    if (layerSrc->getDimensions() != layerDst->getDimensions())
+        layerDst->setDimensions(layerSrc->getDimensions());
 
     layerSrc->readDataInto(layerDst->getData());
 }

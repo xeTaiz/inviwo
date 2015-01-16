@@ -796,7 +796,7 @@ Property* ProcessorNetwork::getProperty(std::vector<std::string> path) const {
     return NULL;
 }
 
-const int ProcessorNetwork::processorNetworkVersion_ = 7;
+const int ProcessorNetwork::processorNetworkVersion_ = 8;
 
 
 ProcessorNetwork::NetworkConverter::NetworkConverter(int from)
@@ -818,6 +818,8 @@ bool ProcessorNetwork::NetworkConverter::convert(TxElement* root) {
             traverseNodes(root, &ProcessorNetwork::NetworkConverter::updateMetaDataType);
         case 6:
             traverseNodes(root, &ProcessorNetwork::NetworkConverter::updateMetaDataKeys);
+        case 7:
+            traverseNodes(root, &ProcessorNetwork::NetworkConverter::updateDimensionTag);
         default:
             break;
     }
@@ -1065,6 +1067,15 @@ void ProcessorNetwork::NetworkConverter::updateMetaDataKeys(TxElement* node) {
         if (std::find(renamed, renamed + size, keyname) != renamed + size) {
             node->SetAttribute("key", "org.inviwo." + keyname);
         }
+    }
+}
+
+void ProcessorNetwork::NetworkConverter::updateDimensionTag(TxElement* node) {
+    std::string key;
+    node->GetValue(&key);
+
+    if (key == "dimension") {
+        node->SetValue("dimensions");
     }
 }
 

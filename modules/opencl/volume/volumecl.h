@@ -52,7 +52,7 @@ public:
 
     void initialize(const void* voxels);
 
-    virtual void setDimension(uvec3 dimensions) { dimensions_ = dimensions; deinitialize(); initialize(); }
+    virtual void setDimensions(uvec3 dimensions) { dimensions_ = dimensions; deinitialize(); initialize(); }
 
     void upload(const void* data);
     /**

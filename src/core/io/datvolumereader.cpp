@@ -44,7 +44,7 @@ DatVolumeReader::DatVolumeReader()
     , rawFile_("")
     , filePos_(0)
     , littleEndian_(true)
-    , dimension_(uvec3(0, 0, 0))
+    , dimensions_(uvec3(0, 0, 0))
     , format_(NULL) {
     addExtension(FileExtension("dat", "Inviwo dat file format"));
 }
@@ -54,7 +54,7 @@ DatVolumeReader::DatVolumeReader(const DatVolumeReader& rhs)
     , rawFile_(rhs.rawFile_)
     , filePos_(rhs.filePos_)
     , littleEndian_(rhs.littleEndian_)
-    , dimension_(rhs.dimension_)
+    , dimensions_(rhs.dimensions_)
     , format_(rhs.format_) {};
 
 DatVolumeReader& DatVolumeReader::operator=(const DatVolumeReader& that) {
@@ -62,7 +62,7 @@ DatVolumeReader& DatVolumeReader::operator=(const DatVolumeReader& that) {
         rawFile_ = that.rawFile_;
         filePos_ = that.filePos_;
         littleEndian_ = that.littleEndian_;
-        dimension_ = that.dimension_;
+        dimensions_ = that.dimensions_;
         format_ = that.format_;
         DataReaderType<Volume>::operator=(that);
     }
@@ -145,10 +145,10 @@ Volume* DatVolumeReader::readMetaData(std::string filePath) {
             }
         } else if (key == "sequences") {
             ss >> sequences;
-        } else if (key == "resolution" || key == "dimension") {
-            ss >> dimension_.x;
-            ss >> dimension_.y;
-            ss >> dimension_.z;
+        } else if (key == "resolution" || key == "dimensions") {
+            ss >> dimensions_.x;
+            ss >> dimensions_.y;
+            ss >> dimensions_.z;
         } else if (key == "spacing" || key == "slicethickness") {
             ss >> spacing.x;
             ss >> spacing.y;
@@ -208,7 +208,7 @@ Volume* DatVolumeReader::readMetaData(std::string filePath) {
 
     delete f;
 
-    if (dimension_ == uvec3(0))
+    if (dimensions_ == uvec3(0))
         throw DataReaderException("Error: Unable to find \"Resolution\" tag in .dat file: " +
                                   filePath);
     else if (format_ == NULL)
@@ -218,9 +218,9 @@ Volume* DatVolumeReader::readMetaData(std::string filePath) {
                                   filePath);
 
     if (spacing != vec3(0.0f)) {
-        basis[0][0] = dimension_.x * spacing.x;
-        basis[1][1] = dimension_.y * spacing.y;
-        basis[2][2] = dimension_.z * spacing.z;
+        basis[0][0] = dimensions_.x * spacing.x;
+        basis[1][1] = dimensions_.y * spacing.y;
+        basis[2][2] = dimensions_.z * spacing.z;
     }
 
     if (a != vec3(0.0f) && b != vec3(0.0f) && c != vec3(0.0f)) {
@@ -243,7 +243,7 @@ Volume* DatVolumeReader::readMetaData(std::string filePath) {
     volume->setBasis(basis);
     volume->setOffset(offset);
     volume->setWorldMatrix(wtm);
-    volume->setDimension(dimension_);
+    volume->setDimensions(dimensions_);
 
     volume->dataMap_.initWithFormat(format_);
     if (datarange != dvec2(0)) {
@@ -260,7 +260,7 @@ Volume* DatVolumeReader::readMetaData(std::string filePath) {
 
     volume->setDataFormat(format_);
 
-    size_t bytes = dimension_.x * dimension_.y * dimension_.z * (format_->getBytesAllocated());
+    size_t bytes = dimensions_.x * dimensions_.y * dimensions_.z * (format_->getBytesAllocated());
 
     if(sequences > 1){
         DataSequence<Volume>* volumeSequence = new DataSequence<Volume>(*volume);
@@ -270,7 +270,7 @@ Volume* DatVolumeReader::readMetaData(std::string filePath) {
 
         for(size_t t=0; t<sequences-1; ++t){
             filePos_ = t*bytes;
-            vd = new VolumeDisk(filePath, dimension_, format_);
+            vd = new VolumeDisk(filePath, dimensions_, format_);
             vd->setDataReader(new DatVolumeReader(*this));
             oneSeq = new Volume(*volume);
             oneSeq->addRepresentation(vd);
@@ -278,7 +278,7 @@ Volume* DatVolumeReader::readMetaData(std::string filePath) {
         }
 
         filePos_ = (sequences-1)*bytes;
-        vd = new VolumeDisk(filePath, dimension_, format_);
+        vd = new VolumeDisk(filePath, dimensions_, format_);
         vd->setDataReader(this);
         volume->addRepresentation(vd);
         volumeSequence->add(volume);
@@ -288,7 +288,7 @@ Volume* DatVolumeReader::readMetaData(std::string filePath) {
         return volumeSequence;
     }
     else{
-        VolumeDisk* vd = new VolumeDisk(filePath, dimension_, format_);
+        VolumeDisk* vd = new VolumeDisk(filePath, dimensions_, format_);
         vd->setDataReader(this);
         volume->addRepresentation(vd);
         std::string size = formatBytesToString(bytes);
@@ -301,7 +301,7 @@ void DatVolumeReader::readDataInto(void* destination) const {
     std::fstream fin(rawFile_.c_str(), std::ios::in | std::ios::binary);
 
     if (fin.good()) {
-        std::size_t size = dimension_.x * dimension_.y * dimension_.z * (format_->getBytesAllocated());
+        std::size_t size = dimensions_.x * dimensions_.y * dimensions_.z * (format_->getBytesAllocated());
         fin.seekg(filePos_);
         fin.read(static_cast<char*>(destination), size);
 
@@ -326,7 +326,7 @@ void DatVolumeReader::readDataInto(void* destination) const {
 }
 
 void* DatVolumeReader::readData() const {
-    std::size_t size = dimension_.x * dimension_.y * dimension_.z * (format_->getBytesAllocated());
+    std::size_t size = dimensions_.x * dimensions_.y * dimensions_.z * (format_->getBytesAllocated());
     char* data = new char[size];
 
     if (data) {

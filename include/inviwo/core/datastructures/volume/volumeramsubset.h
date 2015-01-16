@@ -76,7 +76,7 @@ void VolumeRAMSubSet::evaluate() {
         return;
     }
 
-    uvec3 dataDims = volume->getDimension();
+    uvec3 dataDims = volume->getDimensions();
 
     if (newOffset_.x > dataDims.x && newOffset_.y > dataDims.y && newOffset_.z > dataDims.z) {
         setOutput(NULL);

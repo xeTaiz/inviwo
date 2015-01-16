@@ -269,7 +269,7 @@ void setShaderUniforms(Shader* shader, const Image* image, const std::string sam
     shader->setUniform(samplerID + ".textureToIndex", ct.getTextureToIndexMatrix());
     shader->setUniform(samplerID + ".indexToTexture", ct.getIndexToTextureMatrix());
 
-    vec2 dimensions = vec2(image->getDimension());
+    vec2 dimensions = vec2(image->getDimensions());
     shader->setUniform(samplerID + ".dimensions", dimensions);
     shader->setUniform(samplerID + ".reciprocalDimensions", vec2(1.0f) / dimensions);
 }

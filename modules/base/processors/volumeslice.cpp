@@ -107,7 +107,7 @@ void VolumeSlice::shiftSlice(int shift) {
 void VolumeSlice::process() {
     const VolumeRAM* vol = inport_.getData()->getRepresentation<VolumeRAM>();
 
-    uvec3 dims = vol->getDimension();
+    uvec3 dims = vol->getDimensions();
 
     switch (sliceAlongAxis_.get()) {
         case CoordinateEnums::X:
@@ -135,7 +135,7 @@ void VolumeSlice::process() {
         static_cast<unsigned int>(sliceNumber_.get() - 1));
 
     Image* outImage =
-        new Image(sliceImage->getDimension(), COLOR_ONLY, sliceImage->getDataFormat());
+        new Image(sliceImage->getDimensions(), COLOR_ONLY, sliceImage->getDataFormat());
     outImage->getColorLayer()->addRepresentation(sliceImage);
 
     outport_.setData(outImage);

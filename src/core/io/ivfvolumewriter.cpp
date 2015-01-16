@@ -68,7 +68,7 @@ void IvfVolumeWriter::writeData(const Volume* volume, const std::string filePath
     s.serialize("Format", vr->getDataFormatString());
     s.serialize("BasisAndOffset", volume->getModelMatrix());
     s.serialize("WorldTransform", volume->getWorldMatrix());
-    s.serialize("Dimension", volume->getDimension());
+    s.serialize("Dimension", volume->getDimensions());
     s.serialize("DataRange", volume->dataMap_.dataRange);
     s.serialize("ValueRange", volume->dataMap_.valueRange);
     s.serialize("Unit", volume->dataMap_.valueUnit);
@@ -79,7 +79,7 @@ void IvfVolumeWriter::writeData(const Volume* volume, const std::string filePath
 
     if (fout.good()) {
         fout.write((char*)vr->getData(),
-                   vr->getDimension().x*vr->getDimension().x*vr->getDimension().x
+                   vr->getDimensions().x*vr->getDimensions().x*vr->getDimensions().x
                    * vr->getDataFormat()->getBytesStored());
     } else
         throw DataWriterException("Error: Could not write to raw file: " + rawPath);

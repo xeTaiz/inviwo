@@ -59,7 +59,7 @@ public:
      * @return (void)
      */
     void download(void* data) const;
-    virtual void setDimension(uvec2 dimensions);
+    virtual void setDimensions(uvec2 dimensions);
     virtual void resize(uvec2 dimensions);
     virtual bool copyAndResizeLayer(DataRepresentation* target) const;
     cl::ImageFormat getFormat() const { return layerFormat_;}

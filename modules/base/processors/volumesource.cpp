@@ -189,9 +189,9 @@ void VolumeSource::dataDeserialized(Volume* volume) {
     setStateAsDefault(overrideOffset_, volume->getOffset());
     
     std::stringstream ss;
-    ss << volume->getDimension().x << " x "
-       << volume->getDimension().y << " x "
-       << volume->getDimension().z;
+    ss << volume->getDimensions().x << " x "
+       << volume->getDimensions().y << " x "
+       << volume->getDimensions().z;
 
     DataSequence<Volume>* volumeSequence = dynamic_cast<DataSequence<Volume>*>(volume);
     if(volumeSequence){
@@ -246,11 +246,11 @@ void VolumeSource::dataLoaded(Volume* volume) {
     overrideC_.setCurrentStateAsDefault();
     overrideOffset_.setCurrentStateAsDefault();
     
-    // Display the format and dimension, read only.
+    // Display the format and dimensions, read only.
     std::stringstream ss;
-    ss << volume->getDimension().x << " x "
-       << volume->getDimension().y << " x "
-       << volume->getDimension().z;
+    ss << volume->getDimensions().x << " x "
+       << volume->getDimensions().y << " x "
+       << volume->getDimensions().z;
 
     DataSequence<Volume>* volumeSequence = dynamic_cast<DataSequence<Volume>*>(volume);
     if(volumeSequence){

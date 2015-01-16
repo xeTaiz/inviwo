@@ -328,7 +328,7 @@ bool NetworkEditor::addPortInspector(Outport* port, QPointF pos) {
             int size = InviwoApplication::getPtr()
                            ->getSettingsByType<SystemSettings>()
                            ->portInspectorSize_.get();
-            processorWidget->setDimension(ivec2(size,size));
+            processorWidget->setDimensions(ivec2(size,size));
             QWidget* widget = dynamic_cast<QWidget*>(processorWidget);
             if (widget) {
                 widget->setMinimumSize(size, size);

@@ -127,7 +127,7 @@ void CubeProxyGeometry::onVolumeChange() {
 
 
     // Update to the new dimensions.
-    dims_ = inport_.getData()->getDimension();
+    dims_ = inport_.getData()->getDimensions();
     
     disableInvalidation();
 

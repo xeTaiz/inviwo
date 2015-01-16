@@ -49,7 +49,7 @@ CanvasProcessorWidgetGLFW* CanvasProcessorWidgetGLFW::create() const {
 void CanvasProcessorWidgetGLFW::initialize() {
     CanvasProcessorWidget::initialize();
 
-    ivec2 dim = getDimension();
+    ivec2 dim = getDimensions();
     uvec2 dimU = uvec2(dim.x, dim.y);
 
     CanvasGLFW::setAlwaysOnTopByDefault(true);
@@ -102,8 +102,8 @@ void CanvasProcessorWidgetGLFW::hide() {
     CanvasProcessorWidgetGLFW::setVisible(false);
 }
 
-void CanvasProcessorWidgetGLFW::setDimension(ivec2 dim) {
-    CanvasProcessorWidget::setDimension(dim);
+void CanvasProcessorWidgetGLFW::setDimensions(ivec2 dim) {
+    CanvasProcessorWidget::setDimensions(dim);
     canvas_->setWindowSize(uvec2(dim.x, dim.y));
 }
 

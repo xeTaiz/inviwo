@@ -185,7 +185,7 @@ void CanvasGL::renderNoise() {
     if (!noiseShader_)
         return;
     activate();
-    glViewport(0, 0, getScreenDimension().x, getScreenDimension().y);
+    glViewport(0, 0, getScreenDimensions().x, getScreenDimensions().y);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     noiseShader_->activate();
     drawRect();
@@ -198,7 +198,7 @@ void CanvasGL::renderTexture(int unitNumber) {
     if (!shader_)
         return;
     activate();
-    glViewport(0, 0, getScreenDimension().x, getScreenDimension().y);
+    glViewport(0, 0, getScreenDimensions().x, getScreenDimensions().y);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

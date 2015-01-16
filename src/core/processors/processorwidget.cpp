@@ -73,8 +73,8 @@ void ProcessorWidget::hide() {
 Processor* ProcessorWidget::getProcessor() { return processor_; }
 void ProcessorWidget::setProcessor(Processor* processor) { processor_ = processor; }
 
-glm::ivec2 ProcessorWidget::getDimension() { return metaData_->getDimension(); }
-void ProcessorWidget::setDimension(glm::ivec2 dimension) { metaData_->setDimension(dimension); }
+glm::ivec2 ProcessorWidget::getDimensions() { return metaData_->getDimensions(); }
+void ProcessorWidget::setDimensions(glm::ivec2 dimensions) { metaData_->setDimensions(dimensions); }
 
 glm::ivec2 ProcessorWidget::getPosition() { return metaData_->getPosition(); }
 void ProcessorWidget::setPosition(glm::ivec2 pos) { metaData_->setPosition(pos); }

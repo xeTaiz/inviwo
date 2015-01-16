@@ -258,7 +258,7 @@ void MarchingTetrahedron::evaluate() {
 
     const T *src = reinterpret_cast<const T *>(volume->getData());
 
-    uvec3 dim = volume->getDimension();
+    uvec3 dim = volume->getDimensions();
     double x, y, z, dx, dy, dz;
     dx = 1.0f / (dim.x - 1);
     dy = 1.0f / (dim.y - 1);

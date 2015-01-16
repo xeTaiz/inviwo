@@ -308,7 +308,7 @@ void* FreeImageUtils::rescaleLayerRAM(const LayerRAM* srcLayerRam, uvec2 dst_dim
     FIBITMAP* bitmap = NULL;
     FREE_IMAGE_TYPE formatType = getFreeImageFormatFromDataFormat(srcLayerRam->getDataFormatId());
 
-    ivwAssert(srcLayerRam->getDimension()!=uvec2(0), "Trying to rescale layer with zero dimensions.");
+    ivwAssert(srcLayerRam->getDimensions()!=uvec2(0), "Trying to rescale layer with zero dimensions.");
 
     switch (srcLayerRam->getDataFormatId())
     {
@@ -316,7 +316,7 @@ void* FreeImageUtils::rescaleLayerRAM(const LayerRAM* srcLayerRam, uvec2 dst_dim
             LogErrorCustom("rescaleLayerRAM", "Invalid format");
             rawData = NULL;
             break;
-#define DataFormatIdMacro(i) case inviwo::DataFormatEnums::i: bitmap = handleBitmapCreations<Data##i::type>(static_cast<const Data##i::type*>(srcLayerRam->getData()), formatType, srcLayerRam->getDimension(), Data##i::bitsAllocated(), Data##i::components(), srcLayerRam->getDataFormat()); \
+#define DataFormatIdMacro(i) case inviwo::DataFormatEnums::i: bitmap = handleBitmapCreations<Data##i::type>(static_cast<const Data##i::type*>(srcLayerRam->getData()), formatType, srcLayerRam->getDimensions(), Data##i::bitsAllocated(), Data##i::components(), srcLayerRam->getDataFormat()); \
         rawData = fiBitmapToDataArrayAndRescale<Data##i::type>(NULL, bitmap, dst_dim, Data##i::bitsAllocated(), Data##i::components()); break;
 #include <inviwo/core/util/formatsdefinefunc.h>
 
@@ -412,7 +412,7 @@ FIBITMAP* FreeImageUtils::createBitmapFromData(const LayerRAM* inputLayer) {
     case inviwo::DataFormatEnums::NOT_SPECIALIZED:
             LogErrorCustom("createBitmapFromData", "Invalid format");
             return NULL;
-#define DataFormatIdMacro(i) case inviwo::DataFormatEnums::i: return handleBitmapCreations<Data##i::type>(static_cast<const Data##i::type*>(inputLayer->getData()), formatType, inputLayer->getDimension(), Data##i::bitsAllocated(), Data##i::components(), inputLayer->getDataFormat());
+#define DataFormatIdMacro(i) case inviwo::DataFormatEnums::i: return handleBitmapCreations<Data##i::type>(static_cast<const Data##i::type*>(inputLayer->getData()), formatType, inputLayer->getDimensions(), Data##i::bitsAllocated(), Data##i::components(), inputLayer->getDataFormat());
 #include <inviwo/core/util/formatsdefinefunc.h>
 
         default:

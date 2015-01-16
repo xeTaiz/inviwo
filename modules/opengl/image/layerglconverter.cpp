@@ -43,7 +43,7 @@ DataRepresentation* LayerRAM2GLConverter::createFrom(const DataRepresentation* s
 
     //This creates a texture from the defined input LayerRAM.
     if (layerRAM) {
-        LayerGL* layerGL = new LayerGL(layerRAM->getDimension(), layerRAM->getLayerType(), layerRAM->getDataFormat());
+        LayerGL* layerGL = new LayerGL(layerRAM->getDimensions(), layerRAM->getLayerType(), layerRAM->getDataFormat());
         layerGL->getTexture()->initialize(layerRAM->getData());
         return layerGL;
     }
@@ -54,8 +54,8 @@ void LayerRAM2GLConverter::update(const DataRepresentation* source, DataRepresen
     const LayerRAM* layerSrc = static_cast<const LayerRAM*>(source);
     LayerGL* layerDst = static_cast<LayerGL*>(destination);
 
-    if (layerSrc->getDimension() != layerDst->getDimension()) {
-        layerDst->resize(layerSrc->getDimension());
+    if (layerSrc->getDimensions() != layerDst->getDimensions()) {
+        layerDst->resize(layerSrc->getDimensions());
     }
 
     layerDst->getTexture()->upload(layerSrc->getData());
@@ -69,7 +69,7 @@ LayerGL2RAMConverter::~LayerGL2RAMConverter() {}
 
 DataRepresentation* LayerGL2RAMConverter::createFrom(const DataRepresentation* source) {
     const LayerGL* layerGL = static_cast<const LayerGL*>(source);
-    LayerRAM* layerRAM = createLayerRAM(layerGL->getDimension(), layerGL->getLayerType(), layerGL->getDataFormat());
+    LayerRAM* layerRAM = createLayerRAM(layerGL->getDimensions(), layerGL->getLayerType(), layerGL->getDataFormat());
 
     if (layerRAM) {
         //layerGL->getTexture()->downloadToPBO();
@@ -86,8 +86,8 @@ void LayerGL2RAMConverter::update(const DataRepresentation* source, DataRepresen
     const LayerGL* layerSrc = static_cast<const LayerGL*>(source);
     LayerRAM* layerDst = static_cast<LayerRAM*>(destination);
 
-    if (layerSrc->getDimension() != layerDst->getDimension()) {
-        layerDst->resize(layerSrc->getDimension());
+    if (layerSrc->getDimensions() != layerDst->getDimensions()) {
+        layerDst->resize(layerSrc->getDimensions());
     }
 
     //layerSrc->getTexture()->downloadToPBO();

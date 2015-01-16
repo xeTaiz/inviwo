@@ -54,7 +54,7 @@ public:
     void bindTexture(GLenum texUnit) const;
     void unbindTexture() const;
 
-    void setDimension(uvec3 dimensions);
+    void setDimensions(uvec3 dimensions);
 
     Texture3D* getTexture();
     const Texture3D* getTexture() const;

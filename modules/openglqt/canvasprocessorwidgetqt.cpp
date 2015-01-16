@@ -60,7 +60,7 @@ CanvasProcessorWidgetQt* CanvasProcessorWidgetQt::create() const {
 void CanvasProcessorWidgetQt::initialize() {
     CanvasProcessorWidget::initialize();
 
-    ivec2 dim = CanvasProcessorWidget::getDimension();
+    ivec2 dim = CanvasProcessorWidget::getDimensions();
     ivec2 pos = CanvasProcessorWidget::getPosition();
 
     setWindowTitle(QString::fromStdString(processor_->getIdentifier()));
@@ -90,7 +90,7 @@ void CanvasProcessorWidgetQt::initialize() {
     setLayout(gridLayout);
     
     setWindowFlags(Qt::Tool);
-    setDimension(dim);
+    setDimensions(dim);
 
     InviwoApplicationQt* app = dynamic_cast<InviwoApplicationQt*>(InviwoApplication::getPtr());
     if (app) {
@@ -143,7 +143,7 @@ void CanvasProcessorWidgetQt::setPosition(glm::ivec2 pos) {
     QWidget::move(pos.x, pos.y); // This will trigger a move event.
 }
 
-void CanvasProcessorWidgetQt::setDimension(ivec2 dimensions) {
+void CanvasProcessorWidgetQt::setDimensions(ivec2 dimensions) {
     QWidget::resize(dimensions.x, dimensions.y); // This will trigger a resize event.
 }
 
@@ -154,10 +154,10 @@ Canvas* CanvasProcessorWidgetQt::getCanvas() const {
 void CanvasProcessorWidgetQt::resizeEvent(QResizeEvent* event) {
     ivec2 dim(event->size().width(), event->size().height());
     if (event->spontaneous()) {
-        CanvasProcessorWidget::setDimension(dim);
+        CanvasProcessorWidget::setDimensions(dim);
         return;
     }
-    CanvasProcessorWidget::setDimension(dim);
+    CanvasProcessorWidget::setDimensions(dim);
     QWidget::resizeEvent(event);
 }
 

@@ -58,7 +58,7 @@ public:
     virtual void show();
     virtual void hide();
     virtual void setPosition(glm::ivec2 pos); 
-    virtual void setDimension(ivec2 dimensions);
+    virtual void setDimensions(ivec2 dimensions);
     virtual void setProcessor(Processor* processor);
 
     virtual Canvas* getCanvas() const;

@@ -51,7 +51,7 @@ public:
 
     virtual void performOperation(DataOperation*) const;
 
-    uvec2 getDimension() const;
+    uvec2 getDimensions() const;
 
     virtual bool copyAndResizeRepresentation(DataRepresentation*) const = 0;
 

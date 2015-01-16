@@ -126,7 +126,7 @@ void HeightFieldProcessor::heightfieldChanged() {
     //const DataFormatBase* format = img->getDataFormat();
 
     //str << "Heightfield Port Properties:"
-    //    << "\ndim: " << glm::to_string(img->getDimension())
+    //    << "\ndim: " << glm::to_string(img->getDimensions())
     //    << "\nType: " << img->getImageType()
     //    << "\nNum Color Layers: " << img->getNumberOfColorLayers()
     //    << std::endl << std::endl

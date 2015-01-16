@@ -83,14 +83,14 @@ void VolumeSubsample::process() {
             return;
         }
 
-        uvec3 dim = volume->getDimension();
+        uvec3 dim = volume->getDimensions();
         uvec3 offset = uvec3(0);
 
         // pass meta data on
         volume->copyMetaDataFrom(*inport_.getData());
 
         if (adjustBasisAndOffset_.get()) {
-            vec3 volOffset = inport_.getData()->getOffset() + vec3(offset) / vec3(inport_.getData()->getDimension());
+            vec3 volOffset = inport_.getData()->getOffset() + vec3(offset) / vec3(inport_.getData()->getDimensions());
             mat3 volBasis = inport_.getData()->getBasis();
 
             vec3 aVec(volBasis[0]);
@@ -103,7 +103,7 @@ void VolumeSubsample::process() {
 
             vec3 volLength(glm::length(aVec), glm::length(bVec), glm::length(cVec));
             // adjust volLength
-            volLength *= vec3(dim) / vec3(inport_.getData()->getDimension());
+            volLength *= vec3(dim) / vec3(inport_.getData()->getDimensions());
 
             float a = volLength.x;
             float b = volLength.y;

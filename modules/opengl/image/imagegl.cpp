@@ -131,7 +131,7 @@ void ImageGL::activateBuffer(bool overRideImageType) {
         glDepthMask(GL_TRUE);
     }
 
-    uvec2 dim = getDimension();
+    uvec2 dim = getDimensions();
     glViewport(0, 0, dim.x, dim.y);
 }
 
@@ -159,8 +159,8 @@ bool ImageGL::copyAndResizeRepresentation(DataRepresentation* targetRep) const {
     target->activateBuffer(true);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    float ratioSource = (float)source->getDimension().x / (float)source->getDimension().y;
-    float ratioTarget = (float)target->getDimension().x / (float)target->getDimension().y;
+    float ratioSource = (float)source->getDimensions().x / (float)source->getDimensions().y;
+    float ratioTarget = (float)target->getDimensions().x / (float)target->getDimensions().y;
     glm::mat4 scale;
 
     if (ratioTarget < ratioSource)

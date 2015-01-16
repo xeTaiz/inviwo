@@ -62,7 +62,7 @@ public:
 
     void initialize(Texture2D* texture);
 
-    virtual void setDimension(uvec2 dimensions) { dimensions_ = dimensions; deinitialize(); initialize(texture_); }
+    virtual void setDimensions(uvec2 dimensions) { dimensions_ = dimensions; deinitialize(); initialize(texture_); }
     virtual void resize(uvec2 dimensions);
     virtual bool copyAndResizeLayer(DataRepresentation* target) const;
 

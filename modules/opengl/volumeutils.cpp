@@ -65,7 +65,7 @@ void setShaderUniforms(Shader* shader, const Volume* volume, const std::string& 
         samplerID + ".textureSpaceGradientSpacing",
         gradientSpacing * mat3(ct.getWorldToTextureMatrix()));
 
-    vec3 dimF = static_cast<vec3>(volume->getDimension());
+    vec3 dimF = static_cast<vec3>(volume->getDimensions());
     shader->setUniform(samplerID + ".dimensions", dimF);
     shader->setUniform(samplerID + ".reciprocalDimensions", vec3(1.f) / dimF);
 

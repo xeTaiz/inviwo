@@ -80,8 +80,8 @@ void GrayscaleCLProcessor::process() {
 
     Image* outImage = outport_.getData();
 
-    //outImage->resize(inImage->getDimension());
-    uvec2 outportDim = outImage->getDimension();
+    //outImage->resize(inImage->getDimensions());
+    uvec2 outportDim = outImage->getDimensions();
     const Image* inImage = input_.getData();
     try {
         if (useGLSharing_.get()) {

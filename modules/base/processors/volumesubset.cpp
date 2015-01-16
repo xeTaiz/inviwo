@@ -70,8 +70,8 @@ void VolumeSubset::deinitialize() {
 }
 
 void VolumeSubset::process() {
-    if (dims_ != inport_.getData()->getDimension()) {
-        dims_ = inport_.getData()->getDimension();
+    if (dims_ != inport_.getData()->getDimensions()) {
+        dims_ = inport_.getData()->getDimensions();
         rangeX_.setRangeMax(static_cast<int>(dims_.x));
         rangeY_.setRangeMax(static_cast<int>(dims_.y));
         rangeZ_.setRangeMax(static_cast<int>(dims_.z));

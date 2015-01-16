@@ -302,7 +302,7 @@ void CanvasQt::mousePressEvent(QMouseEvent* e) {
 
     MouseEvent mouseEvent(ivec2(e->pos().x(), e->pos().y()),
                            EventConverterQt::getMouseButton(e), MouseEvent::MOUSE_STATE_PRESS,
-                           EventConverterQt::getModifier(e), getScreenDimension());
+                           EventConverterQt::getModifier(e), getScreenDimensions());
     e->accept();
     Canvas::mousePressEvent(&mouseEvent);
 }
@@ -317,7 +317,7 @@ void CanvasQt::mouseReleaseEvent(QMouseEvent* e) {
 
     MouseEvent mouseEvent(ivec2(e->pos().x(), e->pos().y()),
                           EventConverterQt::getMouseButton(e),MouseEvent::MOUSE_STATE_RELEASE,
-                          EventConverterQt::getModifier(e), getScreenDimension());
+                          EventConverterQt::getModifier(e), getScreenDimensions());
     e->accept();
     Canvas::mouseReleaseEvent(&mouseEvent);
 }
@@ -332,7 +332,7 @@ void CanvasQt::mouseMoveEvent(QMouseEvent* e) {
     if (e->buttons() == Qt::LeftButton || e->buttons() == Qt::RightButton || e->buttons() == Qt::MiddleButton) {
         MouseEvent mouseEvent(ivec2(e->pos().x(), e->pos().y()),
                               EventConverterQt::getMouseButton(e), MouseEvent::MOUSE_STATE_MOVE,
-                              EventConverterQt::getModifier(e), getScreenDimension());
+                              EventConverterQt::getModifier(e), getScreenDimensions());
         e->accept();
         Canvas::mouseMoveEvent(&mouseEvent);
     }
@@ -363,7 +363,7 @@ void CanvasQt::wheelEvent(QWheelEvent* e){
 
     MouseEvent mouseEvent(ivec2(e->pos().x(), e->pos().y()), numSteps,
         EventConverterQt::getMouseWheelButton(e), MouseEvent::MOUSE_STATE_WHEEL, orientation,
-        EventConverterQt::getModifier(e), getScreenDimension());
+        EventConverterQt::getModifier(e), getScreenDimensions());
     e->accept();
     Canvas::mouseWheelEvent(&mouseEvent);
 }
@@ -444,17 +444,17 @@ void CanvasQt::touchEvent(QTouchEvent* touch) {
         {
         case TouchEvent::TOUCH_STATE_STARTED:
             mouseEvent = new MouseEvent(pos, MouseEvent::MOUSE_BUTTON_LEFT, MouseEvent::MOUSE_STATE_PRESS, 
-                EventConverterQt::getModifier(touch), getScreenDimension());
+                EventConverterQt::getModifier(touch), getScreenDimensions());
             Canvas::mousePressEvent(mouseEvent);
             break;
         case TouchEvent::TOUCH_STATE_UPDATED:
             mouseEvent = new MouseEvent(pos, MouseEvent::MOUSE_BUTTON_LEFT, MouseEvent::MOUSE_STATE_MOVE, 
-                EventConverterQt::getModifier(touch), getScreenDimension());
+                EventConverterQt::getModifier(touch), getScreenDimensions());
             Canvas::mouseMoveEvent(mouseEvent);
             break;
         case TouchEvent::TOUCH_STATE_ENDED:
             mouseEvent = new MouseEvent(pos, MouseEvent::MOUSE_BUTTON_LEFT, MouseEvent::MOUSE_STATE_RELEASE, 
-                EventConverterQt::getModifier(touch), getScreenDimension());
+                EventConverterQt::getModifier(touch), getScreenDimensions());
             Canvas::mouseReleaseEvent(mouseEvent);
             break;
         default:
@@ -473,10 +473,10 @@ void CanvasQt::touchEvent(QTouchEvent* touch) {
 
         fpos /= static_cast<float>(touch->touchPoints().size());
 
-        screenPositionNormalized_ = vec2(glm::floor(fpos.x)/getScreenDimension().x, glm::floor(fpos.y)/getScreenDimension().y);
+        screenPositionNormalized_ = vec2(glm::floor(fpos.x)/getScreenDimensions().x, glm::floor(fpos.y)/getScreenDimensions().y);
     }
     else{
-        screenPositionNormalized_ = vec2(static_cast<float>(pos.x)/getScreenDimension().x, static_cast<float>(pos.y)/getScreenDimension().y);
+        screenPositionNormalized_ = vec2(static_cast<float>(pos.x)/getScreenDimensions().x, static_cast<float>(pos.y)/getScreenDimensions().y);
     }
 }
 
@@ -541,7 +541,7 @@ void CanvasQt::panTriggered(QPanGesture* gesture) {
     default:
         gestureMode_ = false;
     }
-    vec2 deltaPos = vec2((gesture->lastOffset().x()-gesture->offset().x())/getScreenDimension().x, (gesture->offset().y()-gesture->lastOffset().y())/getScreenDimension().y);
+    vec2 deltaPos = vec2((gesture->lastOffset().x()-gesture->offset().x())/getScreenDimensions().x, (gesture->offset().y()-gesture->lastOffset().y())/getScreenDimensions().y);
 
     if(deltaPos == vec2(0.f))
         return;

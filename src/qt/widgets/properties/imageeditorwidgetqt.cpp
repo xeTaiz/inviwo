@@ -594,7 +594,7 @@ bool ImageEditorWidgetQt::writeImageLabel() {
         std::stringstream ss;
         std::vector<ImgRect> rectList = imageLabelWidget_->view_->getRectList();
         QSize dim = imageLabelWidget_->backGroundImage_->size();
-        imageEditorProperty->setDimension(ivec2(dim.width(), dim.height()));
+        imageEditorProperty->setDimensions(ivec2(dim.width(), dim.height()));
         //if (rectList.size())
         imageEditorProperty->clearLabels();
 

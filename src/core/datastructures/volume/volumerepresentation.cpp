@@ -33,15 +33,15 @@
 
 namespace inviwo {
 
-VolumeRepresentation::VolumeRepresentation(uvec3 dimension)
+VolumeRepresentation::VolumeRepresentation(uvec3 dimensions)
     : DataRepresentation()
-      , dimensions_(dimension) 
+      , dimensions_(dimensions) 
 
 {}
 
-VolumeRepresentation::VolumeRepresentation(uvec3 dimension, const DataFormatBase* format)
+VolumeRepresentation::VolumeRepresentation(uvec3 dimensions, const DataFormatBase* format)
     : DataRepresentation(format)
-    , dimensions_(dimension) 
+    , dimensions_(dimensions) 
 {}
 
 VolumeRepresentation::VolumeRepresentation(const VolumeRepresentation& rhs)

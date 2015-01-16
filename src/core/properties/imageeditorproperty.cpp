@@ -83,7 +83,7 @@ ImageEditorProperty::ImageEditorProperty(std::string identifier, std::string dis
     , labels_()
 {}
 
-void ImageEditorProperty::setDimension(ivec2 imgSize) {
+void ImageEditorProperty::setDimensions(ivec2 imgSize) {
     dimensions_ = imgSize;
 }
 

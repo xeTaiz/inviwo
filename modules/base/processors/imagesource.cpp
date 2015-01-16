@@ -93,7 +93,7 @@ void ImageSource::load() {
             outImage->getRepresentation<ImageRAM>();
 
             outport_.setData(outImage);
-            imageDimension_.set(outLayer->getDimension());
+            imageDimension_.set(outLayer->getDimensions());
 
         } catch (DataReaderException const& e) {
             LogError("Could not load data: " << imageFileName_.get() << ", " << e.getMessage());

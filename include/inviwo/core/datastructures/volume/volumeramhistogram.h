@@ -113,7 +113,7 @@ void calculateVecHist(std::vector<NormalizedHistogram*>* histograms, const Volum
     }
 
     V* src = const_cast<V*>(reinterpret_cast<const V*>(volumeRAM->getData()));
-    const uvec3& dim = volumeRAM->getDimension();
+    const uvec3& dim = volumeRAM->getDimensions();
     const Volume* volume = reinterpret_cast<const Volume*>(volumeRAM->getOwner());
     dvec2 dataRange = volume->dataMap_.dataRange;
 
@@ -190,7 +190,7 @@ public:
 
         std::vector<double>* histData = histogram->getData();
         T* src = const_cast<T*>(reinterpret_cast<const T*>(volumeRAM->getData()));
-        const uvec3& dim = volumeRAM->getDimension();
+        const uvec3& dim = volumeRAM->getDimensions();
 
         const Volume* volume = reinterpret_cast<const Volume*>(volumeRAM->getOwner());
         dvec2 dataRange = volume->dataMap_.dataRange;

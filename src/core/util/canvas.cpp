@@ -136,7 +136,7 @@ void Canvas::resize(uvec2 canvasSize) {
     }
 }
 
-uvec2 Canvas::getScreenDimension() {
+uvec2 Canvas::getScreenDimensions() {
     return screenDimensions_;
 }
 
@@ -199,7 +199,7 @@ void Canvas::touchEvent(TouchEvent* e){
 
 uvec2 Canvas::mousePosToPixelCoordinates(ivec2 mpos) {
     ivec2 pos = mpos;
-    ivec2 dim(getScreenDimension());
+    ivec2 dim(getScreenDimensions());
     pos.x = std::max(pos.x - 1, 0);
     pos.x = std::min(pos.x, dim.x - 1);
     

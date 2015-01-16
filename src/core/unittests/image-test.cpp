@@ -68,7 +68,7 @@ TEST(ImageTests,ImageLoadWhite) {
     const LayerRAM* layer = img.getColorLayer()->getRepresentation<LayerRAM>();
     ASSERT_TRUE(layer!=0);
 
-    uvec2 dim = layer->getDimension();
+    uvec2 dim = layer->getDimensions();
     EXPECT_EQ(dim.x,2);
     EXPECT_EQ(dim.y,2);
 
@@ -115,7 +115,7 @@ TEST(ImageTests, ImageLoadRGB) {
     img.getColorLayer()->addRepresentation(disk);
     const LayerRAM* layer = img.getColorLayer()->getRepresentation<LayerRAM>();
     ASSERT_TRUE(layer!=0);
-    uvec2 dim = layer->getDimension();
+    uvec2 dim = layer->getDimensions();
     EXPECT_EQ(dim.x,2);
     EXPECT_EQ(dim.y,2);
     dvec4 a = layer->getValueAsVec4Double(uvec2(0,0));
@@ -162,7 +162,7 @@ TEST(ImageTests, ImageLoadRange) {
     img.getColorLayer()->addRepresentation(disk);
     const LayerRAM* layer = img.getColorLayer()->getRepresentation<LayerRAM>();
     ASSERT_TRUE(layer!=0);
-    uvec2 dim = layer->getDimension();
+    uvec2 dim = layer->getDimensions();
     EXPECT_EQ(dim.x,256);
     EXPECT_EQ(dim.y,1);
 
@@ -199,7 +199,7 @@ TEST(ImageTests, ImageResize) {
     img.getColorLayer()->addRepresentation(disk);
     const LayerRAM* layer = img.getColorLayer()->getRepresentation<LayerRAM>();
     ASSERT_TRUE(layer!=0);
-    uvec2 dim = layer->getDimension();
+    uvec2 dim = layer->getDimensions();
     EXPECT_EQ(dim.x,2);
     EXPECT_EQ(dim.y,2);
 
@@ -209,12 +209,12 @@ TEST(ImageTests, ImageResize) {
 
     const LayerRAM* layer2 = img.getColorLayer()->getRepresentation<LayerRAM>();
 
-    dim = layer->getDimension();
+    dim = layer->getDimensions();
 
     EXPECT_EQ(dim.x,10);
     EXPECT_EQ(dim.y,10);
     
-    dim = layer2->getDimension();
+    dim = layer2->getDimensions();
 
     EXPECT_EQ(dim.x,10);
     EXPECT_EQ(dim.y,10);

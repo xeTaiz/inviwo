@@ -44,7 +44,7 @@ Image::Image(uvec2 dimensions, ImageType type, const DataFormatBase* format,
 Image::Image(Layer* colorLayer, ImageType type, bool allowMissingLayers)
     : DataGroup(), allowMissingLayers_(allowMissingLayers), imageType_(type) {
     if (colorLayer) {
-        initialize(colorLayer->getDimension(), colorLayer->getDataFormat(), colorLayer);
+        initialize(colorLayer->getDimensions(), colorLayer->getDataFormat(), colorLayer);
     } else {
         initialize(uvec2(32, 32), DataVec4UINT8::get());
     }
@@ -141,8 +141,8 @@ void Image::initialize(uvec2 dimensions, const DataFormatBase* format, Layer* co
     }
 }
 
-uvec2 Image::getDimension() const {
-    return getColorLayer()->getDimension();
+uvec2 Image::getDimensions() const {
+    return getColorLayer()->getDimensions();
 }
 
 size_t Image::addColorLayer(Layer* layer) {
@@ -305,8 +305,8 @@ std::string Image::getDataInfo() const{
         << "<tr><td style='color:#bbb;padding-right:8px;'>Depth</td><td><nobr>" << (getDepthLayer() ? "Yes" : "No") << "</nobr></td></tr>\n"
         << "<tr><td style='color:#bbb;padding-right:8px;'>Picking</td><td><nobr>" << (getPickingLayer() ? "Yes" : "No") << "</nobr></td></tr>\n"
         << "<tr><td style='color:#bbb;padding-right:8px;'>Format</td><td><nobr>" << getDataFormat()->getString() << "</nobr></td></tr>\n"
-        << "<tr><td style='color:#bbb;padding-right:8px;'>Dimension</td><td><nobr>" << "(" << getDimension().x << ", "
-        << getDimension().y << ")" << "</nobr></td></tr>\n"
+        << "<tr><td style='color:#bbb;padding-right:8px;'>Dimension</td><td><nobr>" << "(" << getDimensions().x << ", "
+        << getDimensions().y << ")" << "</nobr></td></tr>\n"
         << "</tr></table>\n";
     return ss.str();
 }

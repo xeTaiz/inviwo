@@ -122,8 +122,8 @@ void Texture2D::upload(const void* data) {
     LGL_ERROR_SUPPRESS;
 }
 
-void Texture2D::resize(uvec2 dimension) {
-    dimensions_ = dimension;
+void Texture2D::resize(uvec2 dimensions) {
+    dimensions_ = dimensions;
     initialize(NULL);
 }
 

@@ -41,17 +41,17 @@ LayerRAM2CLConverter::LayerRAM2CLConverter()
 DataRepresentation* LayerRAM2CLConverter::createFrom(const DataRepresentation* source) {
     DataRepresentation* destination = 0;
     const LayerRAM* layerRAM = static_cast<const LayerRAM*>(source);
-    uvec2 dimension = layerRAM->getDimension();;
+    uvec2 dimensions = layerRAM->getDimensions();;
     const void* data = layerRAM->getData();
-    destination = new LayerCL(dimension, layerRAM->getLayerType(), layerRAM->getDataFormat(), data);
+    destination = new LayerCL(dimensions, layerRAM->getLayerType(), layerRAM->getDataFormat(), data);
     return destination;
 }
 void LayerRAM2CLConverter::update(const DataRepresentation* source, DataRepresentation* destination) {
     const LayerRAM* layerSrc = static_cast<const LayerRAM*>(source);
     LayerCL* layerDst = static_cast<LayerCL*>(destination);
 
-    if (layerSrc->getDimension() != layerDst->getDimension()) {
-        layerDst->resize(layerSrc->getDimension());
+    if (layerSrc->getDimensions() != layerDst->getDimensions()) {
+        layerDst->resize(layerSrc->getDimensions());
     }
 
     layerDst->upload(layerSrc->getData());
@@ -65,14 +65,14 @@ LayerCL2RAMConverter::LayerCL2RAMConverter()
 DataRepresentation* LayerCL2RAMConverter::createFrom(const DataRepresentation* source) {
     DataRepresentation* destination = 0;
     const LayerCL* layerCL = static_cast<const LayerCL*>(source);
-    uvec2 dimension = layerCL->getDimension();
-    destination = createLayerRAM(dimension, layerCL->getLayerType(), layerCL->getDataFormat());
+    uvec2 dimensions = layerCL->getDimensions();
+    destination = createLayerRAM(dimensions, layerCL->getLayerType(), layerCL->getDataFormat());
 
     if (destination) {
         LayerRAM* layerRAM = static_cast<LayerRAM*>(destination);
         layerCL->download(layerRAM->getData());
         //const cl::CommandQueue& queue = OpenCL::getInstance()->getQueue();
-        //queue.enqueueReadLayer(layerCL->getLayer(), true, glm::svec3(0), glm::svec3(dimension, 1), 0, 0, layerRAM->getData());
+        //queue.enqueueReadLayer(layerCL->getLayer(), true, glm::svec3(0), glm::svec3(dimensions, 1), 0, 0, layerRAM->getData());
     } else {
         LogError("Invalid conversion or not implemented");
     }
@@ -84,8 +84,8 @@ void LayerCL2RAMConverter::update(const DataRepresentation* source, DataRepresen
     const LayerCL* layerSrc = static_cast<const LayerCL*>(source);
     LayerRAM* layerDst = static_cast<LayerRAM*>(destination);
 
-    if (layerSrc->getDimension() != layerDst->getDimension()) {
-        layerDst->resize(layerSrc->getDimension());
+    if (layerSrc->getDimensions() != layerDst->getDimensions()) {
+        layerDst->resize(layerSrc->getDimensions());
     }
 
     layerSrc->download(layerDst->getData());

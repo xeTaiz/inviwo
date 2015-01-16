@@ -51,8 +51,8 @@ ImageRepresentation::~ImageRepresentation() {}
 
 void ImageRepresentation::performOperation(DataOperation*) const {}
 
-uvec2 ImageRepresentation::getDimension() const {
-    return getOwner()->getDimension();
+uvec2 ImageRepresentation::getDimensions() const {
+    return getOwner()->getDimensions();
 }
 
 Image* ImageRepresentation::getOwner() {

@@ -51,7 +51,7 @@ public:
     virtual void setVisible(bool visible);
     virtual void show();
     virtual void hide();
-    virtual void setDimension(ivec2);
+    virtual void setDimensions(ivec2);
 
     virtual Canvas* getCanvas() const;
 

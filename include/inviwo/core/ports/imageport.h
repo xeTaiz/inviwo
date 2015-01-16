@@ -60,7 +60,7 @@ public:
     virtual void connectTo(Outport* outport);
 
     void changeDataDimensions(ResizeEvent* resizeEvent);
-    uvec2 getDimension() const;
+    uvec2 getDimensions() const;
     const Image* getData() const;
     uvec3 getColorCode() const;
     void setOutportDeterminesSize(bool outportDeterminesSize);
@@ -109,15 +109,15 @@ public:
      * @param resizeEvent
      */
     void changeDataDimensions(ResizeEvent* resizeEvent);
-    uvec2 getDimension() const;
+    uvec2 getDimensions() const;
 
     /**
-     * Set the dimension of this port without propagating the size
+     * Set the dimensionsof this port without propagating the size
      * through the network. Will resize the image contained within the port.
      *
      * @param newDimension Dimension to be set
      */
-    void setDimension(const uvec2& newDimension);
+    void setDimensions(const uvec2& newDimension);
     uvec3 getColorCode() const;
     virtual std::string getClassIdentifier() const;
 

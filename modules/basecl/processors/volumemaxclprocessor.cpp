@@ -80,12 +80,12 @@ void VolumeMaxCLProcessor::process() {
     }
     const Volume* volume = inport_.getData();
     
-    uvec3 dim = volume->getDimension();
+    uvec3 dim = volume->getDimensions();
     uvec3 outDim = uvec3(glm::ceil(vec3(dim)/static_cast<float>(volumeRegionSize_.get())));
     //const DataFormatBase* volFormat = inport_.getData()->getDataFormat(); // Not used
 
 
-    if (!outport_.hasData() || outport_.getData()->getDimension() != outDim) {
+    if (!outport_.hasData() || outport_.getData()->getDimensions() != outDim) {
         Volume* volumeOut = new Volume(outDim, DataUINT8::get());
         //volumeOut = new Volume(outDim, DataUINT32::get());
         //volumeOut = new Volume(outDim, DataFLOAT32::get());

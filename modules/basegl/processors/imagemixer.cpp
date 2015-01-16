@@ -94,7 +94,7 @@ void ImageMixer::process() {
         //internalInvalid_ = false;
         const DataFormatBase* format = inport0_.getData()->getDataFormat();
 
-        Image *img = new Image(inport0_.getData()->getDimension(), COLOR_ONLY, format);
+        Image *img = new Image(inport0_.getData()->getDimensions(), COLOR_ONLY, format);
         img->copyMetaDataFrom(*inport0_.getData());
         outport_.setData(img);
     }

@@ -73,7 +73,7 @@ void VolumeRAMSlice::evaluate() {
         return;
     }
 
-    uvec3 dataDims = volume->getDimension();
+    uvec3 dataDims = volume->getDimensions();
     if (sliceAlongAxis_ == CoordinateEnums::X){ // Along z axis (ZY Plane)
         if (sliceNum_ >= dataDims.x){
             setOutput(NULL);

@@ -40,7 +40,7 @@ namespace inviwo {
 class IVW_CORE_API LayerRAM : public LayerRepresentation {
 
 public:
-    LayerRAM(uvec2 dimension = uvec2(256,256), LayerType type = COLOR_LAYER, const DataFormatBase* format = DataVec4UINT8::get());
+    LayerRAM(uvec2 dimensions= uvec2(256,256), LayerType type = COLOR_LAYER, const DataFormatBase* format = DataVec4UINT8::get());
     LayerRAM(const LayerRAM& rhs);
     LayerRAM& operator=(const LayerRAM& that);
     LayerRAM* clone() const = 0;
@@ -49,7 +49,7 @@ public:
     virtual void initialize() = 0;
     virtual void deinitialize() = 0;
 
-    virtual void setDimension(uvec2 dimensions);
+    virtual void setDimensions(uvec2 dimensions);
     virtual void resize(uvec2 dimensions) = 0;
     virtual bool copyAndResizeLayer(DataRepresentation*) const;
 
@@ -81,11 +81,11 @@ protected:
  * Factory for layers.
  * Creates an LayerRAM with data type specified by format.
  *
- * @param dimension of layer to create.
+ * @param dimensionsof layer to create.
  * @param format of layer to create.
  * @return NULL if no valid format was specified.
  */
-IVW_CORE_API LayerRAM* createLayerRAM(const uvec2& dimension, LayerType type, const DataFormatBase* format);
+IVW_CORE_API LayerRAM* createLayerRAM(const uvec2& dimensions, LayerType type, const DataFormatBase* format);
 
 } // namespace
 

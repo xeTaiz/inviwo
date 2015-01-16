@@ -99,13 +99,13 @@ void PickingContainer::setPickingSource(const Image* src) {
 }
 
 vec2 PickingContainer::pixelMoveVector(const uvec2& previous, const uvec2& current) {
-    return vec2((static_cast<float>(current.x)-static_cast<float>(previous.x))/static_cast<float>(src_->getDimension().x),
-                (static_cast<float>(current.y)-static_cast<float>(previous.y))/static_cast<float>(src_->getDimension().y));
+    return vec2((static_cast<float>(current.x)-static_cast<float>(previous.x))/static_cast<float>(src_->getDimensions().x),
+                (static_cast<float>(current.y)-static_cast<float>(previous.y))/static_cast<float>(src_->getDimensions().y));
 }
 
 vec2 PickingContainer::normalizedCoordinates(const uvec2& coord) {
-    return vec2(static_cast<float>(coord.x)/static_cast<float>(src_->getDimension().x),
-                static_cast<float>(coord.y)/static_cast<float>(src_->getDimension().y));
+    return vec2(static_cast<float>(coord.x)/static_cast<float>(src_->getDimensions().x),
+                static_cast<float>(coord.y)/static_cast<float>(src_->getDimensions().y));
 }
 
 } // namespace

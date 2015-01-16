@@ -119,8 +119,8 @@ void CanvasProcessor::deinitialize() {
 // Called by dimensions onChange.
 void CanvasProcessor::resizeCanvas() {
     InviwoApplication::getPtr()->getProcessorNetwork()->lock();
-    if (canvasWidget_ && canvasWidget_->getDimension() != dimensions_.get()) {
-        canvasWidget_->setDimension(dimensions_.get());
+    if (canvasWidget_ && canvasWidget_->getDimensions() != dimensions_.get()) {
+        canvasWidget_->setDimensions(dimensions_.get());
     }
     inputSize_.invalidate(VALID, &dimensions_);
     InviwoApplication::getPtr()->getProcessorNetwork()->unlock();
@@ -297,7 +297,7 @@ bool CanvasProcessor::isReady() const {
 }
 
 void CanvasProcessor::propagateResizeEvent(ResizeEvent* event) {
-    // avoid continues evaluation when port dimension changes
+    // avoid continues evaluation when port dimensionschanges
     InviwoApplication::getPtr()->getProcessorNetwork()->lock();
 
     dimensions_.set(event->size());

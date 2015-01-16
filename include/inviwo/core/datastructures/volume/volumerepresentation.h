@@ -43,18 +43,18 @@ class IVW_CORE_API VolumeRepresentation : public DataRepresentation {
     friend class Volume;
 
 public:
-    VolumeRepresentation(uvec3 dimension);
-    VolumeRepresentation(uvec3 dimension, const DataFormatBase* format);
+    VolumeRepresentation(uvec3 dimensions);
+    VolumeRepresentation(uvec3 dimensions, const DataFormatBase* format);
     VolumeRepresentation(const VolumeRepresentation& rhs);
     VolumeRepresentation& operator=(const VolumeRepresentation& that);
     virtual VolumeRepresentation* clone() const;
     virtual ~VolumeRepresentation();
 
     virtual void performOperation(DataOperation*) const {};
-    // Removes old data and reallocate for new dimension.
+    // Removes old data and reallocate for new dimensions.
     // Needs to be overloaded by child classes.
-    virtual void setDimension(uvec3 dimensions) { dimensions_ = dimensions;}
-    const uvec3& getDimension() const {return dimensions_;}
+    virtual void setDimensions(uvec3 dimensions) { dimensions_ = dimensions;}
+    const uvec3& getDimensions() const {return dimensions_;}
 
 protected:
     uvec3 dimensions_;

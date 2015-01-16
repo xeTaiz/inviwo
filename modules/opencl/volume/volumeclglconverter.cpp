@@ -52,15 +52,15 @@ VolumeCLGL2RAMConverter::VolumeCLGL2RAMConverter()
 DataRepresentation* VolumeCLGL2RAMConverter::createFrom(const DataRepresentation* source) {
     DataRepresentation* destination = 0;
     const VolumeCLGL* volumeCLGL = static_cast<const VolumeCLGL*>(source);
-    uvec3 dimension = volumeCLGL->getDimension();
-    destination = createVolumeRAM(dimension, volumeCLGL->getDataFormat());
+    uvec3 dimensions = volumeCLGL->getDimensions();
+    destination = createVolumeRAM(dimensions, volumeCLGL->getDataFormat());
     const Texture3D* texture = volumeCLGL->getTexture();
 
     if (destination) {
         VolumeRAM* volumeRAM = static_cast<VolumeRAM*>(destination);
         texture->download(volumeRAM->getData());
         //const cl::CommandQueue& queue = OpenCL::getPtr()->getQueue();
-        //queue.enqueueReadVolume(volumeCL->get(), true, glm::svec3(0), glm::svec3(dimension, 1), 0, 0, volumeRAM->getData());
+        //queue.enqueueReadVolume(volumeCL->get(), true, glm::svec3(0), glm::svec3(dimensions, 1), 0, 0, volumeRAM->getData());
     } else {
         LogError("Invalid conversion or not implemented");
     }
@@ -72,8 +72,8 @@ void VolumeCLGL2RAMConverter::update(const DataRepresentation* source, DataRepre
     const VolumeCLGL* volumeSrc = static_cast<const VolumeCLGL*>(source);
     VolumeRAM* volumeDst = static_cast<VolumeRAM*>(destination);
 
-    if (volumeSrc->getDimension() != volumeDst->getDimension()) {
-        volumeDst->setDimension(volumeSrc->getDimension());
+    if (volumeSrc->getDimensions() != volumeDst->getDimensions()) {
+        volumeDst->setDimensions(volumeSrc->getDimensions());
     }
 
     volumeSrc->getTexture()->download(volumeDst->getData());
@@ -86,7 +86,7 @@ void VolumeCLGL2RAMConverter::update(const DataRepresentation* source, DataRepre
 DataRepresentation* VolumeGL2CLGLConverter::createFrom(const DataRepresentation* source) {
     DataRepresentation* destination = 0;
     const VolumeGL* volumeGL = static_cast<const VolumeGL*>(source);
-    destination = new VolumeCLGL(volumeGL->getDimension(), volumeGL->getDataFormat(), const_cast<Texture3D*>(volumeGL->getTexture()));
+    destination = new VolumeCLGL(volumeGL->getDimensions(), volumeGL->getDataFormat(), const_cast<Texture3D*>(volumeGL->getTexture()));
     return destination;
 }
 
@@ -95,8 +95,8 @@ void VolumeGL2CLGLConverter::update(const DataRepresentation* source, DataRepres
     const VolumeGL* volumeSrc = static_cast<const VolumeGL*>(source);
     VolumeCLGL* volumeDst = static_cast<VolumeCLGL*>(destination);
 
-    if (volumeSrc->getDimension() != volumeDst->getDimension()) {
-        volumeDst->setDimension(volumeSrc->getDimension());
+    if (volumeSrc->getDimensions() != volumeDst->getDimensions()) {
+        volumeDst->setDimensions(volumeSrc->getDimensions());
     }
 }
 
@@ -107,13 +107,13 @@ DataRepresentation* VolumeCLGL2CLConverter::createFrom(const DataRepresentation*
 #endif
     DataRepresentation* destination = 0;
     const VolumeCLGL* volumeCLGL = static_cast<const VolumeCLGL*>(source);
-    uvec3 dimension = volumeCLGL->getDimension();;
-    destination = new VolumeCL(dimension, volumeCLGL->getDataFormat());
+    uvec3 dimensions = volumeCLGL->getDimensions();;
+    destination = new VolumeCL(dimensions, volumeCLGL->getDataFormat());
     {   SyncCLGL glSync;
         glSync.addToAquireGLObjectList(volumeCLGL);
         glSync.aquireAllObjects();
         OpenCL::getPtr()->getQueue().enqueueCopyImage(volumeCLGL->get(), static_cast<VolumeCL*>(destination)->get(), glm::svec3(0), glm::svec3(0),
-                glm::svec3(dimension));
+                glm::svec3(dimensions));
     }
     return destination;
 }
@@ -122,15 +122,15 @@ void VolumeCLGL2CLConverter::update(const DataRepresentation* source, DataRepres
     const VolumeCLGL* volumeSrc = static_cast<const VolumeCLGL*>(source);
     VolumeCL* volumeDst = static_cast<VolumeCL*>(destination);
 
-    if (volumeSrc->getDimension() != volumeDst->getDimension()) {
-        volumeDst->setDimension(volumeSrc->getDimension());
+    if (volumeSrc->getDimensions() != volumeDst->getDimensions()) {
+        volumeDst->setDimensions(volumeSrc->getDimensions());
     }
 
     {   SyncCLGL glSync;
         glSync.addToAquireGLObjectList(volumeSrc);
         glSync.aquireAllObjects();
         OpenCL::getPtr()->getQueue().enqueueCopyImage(volumeSrc->get(), volumeDst->get(), glm::svec3(0), glm::svec3(0),
-                glm::svec3(volumeSrc->getDimension()));
+                glm::svec3(volumeSrc->getDimensions()));
     }
 }
 

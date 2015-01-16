@@ -54,8 +54,8 @@ public:
 
     void resizeRepresentations(Layer* targetLayer, uvec2 targetDim);
 
-    uvec2 getDimension() const;
-    void setDimension(const uvec2& dim);
+    uvec2 getDimensions() const;
+    void setDimensions(const uvec2& dim);
 
     LayerType getLayerType() const;
 
@@ -77,7 +77,7 @@ template <typename T>
 T* Layer::getEditableRepresentation() {
     T* repr =  Data::getEditableRepresentation<T>();
     this->setDataFormat(repr->getDataFormat());
-    this->setDimension(repr->getDimension());
+    this->setDimensions(repr->getDimensions());
     return repr;
 }
 
@@ -85,7 +85,7 @@ template <typename T>
 const T* Layer::getRepresentation() const {
     const T* repr = Data::getRepresentation<T>();
     const_cast<Layer*>(this)->setDataFormat(repr->getDataFormat());
-    const_cast<Layer*>(this)->setDimension(repr->getDimension());
+    const_cast<Layer*>(this)->setDimensions(repr->getDimensions());
     return repr;
 }
 

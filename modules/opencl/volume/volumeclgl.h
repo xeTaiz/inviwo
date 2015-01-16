@@ -54,7 +54,7 @@ public:
 
 
     void initialize(Texture3D* texture);
-    virtual void setDimension(uvec3 dimensions);
+    virtual void setDimensions(uvec3 dimensions);
 
     virtual cl::Image3D& getEditable() { return *static_cast<cl::Image3D*>(clImage_); }
     virtual const cl::Image3D& get() const { return *const_cast<const cl::Image3D*>(static_cast<const cl::Image3D*>(clImage_)); }

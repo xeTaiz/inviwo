@@ -430,7 +430,7 @@ void TransferFunctionPropertyDialog::exportTransferFunction() {
             const Layer* layer = tf.getData();
             vec2 texSize(tf.getTextureSize(), 1);
             const vec4* readData = static_cast<const vec4*>(layer->getRepresentation<LayerRAM>()->getData());
-            Layer writeLayer(layer->getDimension(), DataVec4UINT8::get());
+            Layer writeLayer(layer->getDimensions(), DataVec4UINT8::get());
             glm::u8vec4* writeData = static_cast<glm::u8vec4*>(writeLayer.getEditableRepresentation<LayerRAM>()->getData());
             
             for (std::size_t i=0; i<texSize.x * texSize.y; ++i) {
@@ -466,7 +466,7 @@ void TransferFunctionPropertyDialog::showHistogram(int type) {
 }
 
 void TransferFunctionPropertyDialog::resizeEvent(QResizeEvent* event) {
-    setEditorDimension(ivec2(event->size().width(), event->size().height()));
+    setEditorDimensions(ivec2(event->size().width(), event->size().height()));
     QWidget::resizeEvent(event);
     updateTFPreview();
 }

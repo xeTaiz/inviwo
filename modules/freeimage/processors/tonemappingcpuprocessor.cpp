@@ -117,8 +117,8 @@ void ToneMappingCPUProcessor::process() {
         FIBITMAP* bitmap = FreeImageUtils::createBitmapFromData(inImageRam->getColorLayerRAM());
         FreeImage_ToneMapping(bitmap, tmo, first, second);
 
-        if(outport_.getData()->getDataFormat() != DataVec3UINT8::get() || outport_.getData()->getDimension() != inImageRam->getDimension()){
-            outport_.setData(new Image(outport_.getData()->getDimension(), COLOR_ONLY, DataVec3UINT8::get()));
+        if(outport_.getData()->getDataFormat() != DataVec3UINT8::get() || outport_.getData()->getDimensions() != inImageRam->getDimensions()){
+            outport_.setData(new Image(outport_.getData()->getDimensions(), COLOR_ONLY, DataVec3UINT8::get()));
         }
         
         ImageRAM* outImageRam = outport_.getData()->getEditableRepresentation<ImageRAM>();

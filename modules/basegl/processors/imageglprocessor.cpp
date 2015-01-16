@@ -69,7 +69,7 @@ void ImageGLProcessor::process() {
         internalInvalid_ = false;
         const DataFormatBase* format = inport_.getData()->getDataFormat();
 
-        Image *img = new Image(inport_.getData()->getDimension(), COLOR_ONLY, format);
+        Image *img = new Image(inport_.getData()->getDimensions(), COLOR_ONLY, format);
         img->copyMetaDataFrom(*inport_.getData());
         outport_.setData(img);
     }

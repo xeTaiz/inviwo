@@ -54,8 +54,8 @@ public:
 
     void setPosition(const ivec2& pos);
     ivec2 getPosition() const;
-    void setDimension(const ivec2& dim);
-    ivec2 getDimension() const;
+    void setDimensions(const ivec2& dim);
+    ivec2 getDimensions() const;
     void setVisibile(bool visibility);
     bool isVisible() const;
     
@@ -63,7 +63,7 @@ public:
 
 private:
     ivec2 position_;
-    ivec2 dimension_;
+    ivec2 dimensions_;
     bool visibility_;
 };
 

@@ -30,19 +30,19 @@
 
 uniform sampler2D inport_;
 uniform float alpha_;
-uniform vec2 dimension_;
+uniform vec2 dimensions_;
 
 void main() {
-    vec2 texCoordsM = vec2(gl_FragCoord.x, gl_FragCoord.y) * dimension_;
+    vec2 texCoordsM = vec2(gl_FragCoord.x, gl_FragCoord.y) * dimensions_;
     vec3 colorM     = texture(inport_, texCoordsM).rgb;
-    vec2 texCoordsR     = vec2(gl_FragCoord.x + 1.0 , gl_FragCoord.y)       * dimension_;
-    vec2 texCoordsL     = vec2(gl_FragCoord.x - 1.0 , gl_FragCoord.y)       * dimension_;
-    vec2 texCoordsU     = vec2(gl_FragCoord.x       , gl_FragCoord.y + 1.0) * dimension_;
-    vec2 texCoordsD     = vec2(gl_FragCoord.x       , gl_FragCoord.y - 1.0) * dimension_;
-    vec2 texCoordsUL    = vec2(gl_FragCoord.x + 1.0, gl_FragCoord.y - 1.0)  * dimension_;
-    vec2 texCoordsUR    = vec2(gl_FragCoord.x + 1.0, gl_FragCoord.y + 1.0)  * dimension_;
-    vec2 texCoordsDL    = vec2(gl_FragCoord.x - 1.0, gl_FragCoord.y - 1.0)  * dimension_;
-    vec2 texCoordsDR    = vec2(gl_FragCoord.x - 1.0, gl_FragCoord.y + 1.0)  * dimension_;
+    vec2 texCoordsR     = vec2(gl_FragCoord.x + 1.0 , gl_FragCoord.y)       * dimensions_;
+    vec2 texCoordsL     = vec2(gl_FragCoord.x - 1.0 , gl_FragCoord.y)       * dimensions_;
+    vec2 texCoordsU     = vec2(gl_FragCoord.x       , gl_FragCoord.y + 1.0) * dimensions_;
+    vec2 texCoordsD     = vec2(gl_FragCoord.x       , gl_FragCoord.y - 1.0) * dimensions_;
+    vec2 texCoordsUL    = vec2(gl_FragCoord.x + 1.0, gl_FragCoord.y - 1.0)  * dimensions_;
+    vec2 texCoordsUR    = vec2(gl_FragCoord.x + 1.0, gl_FragCoord.y + 1.0)  * dimensions_;
+    vec2 texCoordsDL    = vec2(gl_FragCoord.x - 1.0, gl_FragCoord.y - 1.0)  * dimensions_;
+    vec2 texCoordsDR    = vec2(gl_FragCoord.x - 1.0, gl_FragCoord.y + 1.0)  * dimensions_;
     vec3 colorR  = texture(inport_, texCoordsR).rgb;
     vec3 colorL  = texture(inport_, texCoordsL).rgb;
     vec3 colorU  = texture(inport_, texCoordsU).rgb;

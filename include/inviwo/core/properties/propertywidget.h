@@ -79,7 +79,7 @@ public:
     virtual void setEditorVisibility(bool visible);
     virtual void showEditor();
     virtual void hideEditor();
-    virtual void setEditorDimension(const ivec2& dimension);
+    virtual void setEditorDimensions(const ivec2& dimensions);
     virtual void moveEditor(const ivec2& pos);
     virtual void setDockStatus(PropertyEditorWidgetDockStatus dockStatus);
     // get functions
