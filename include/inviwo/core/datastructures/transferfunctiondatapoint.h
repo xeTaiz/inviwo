@@ -54,12 +54,13 @@ public:
     TransferFunctionDataPoint(const Point& point);
     TransferFunctionDataPoint(const float& pos = 0.0, const vec4& rgba = vec4(0));
     TransferFunctionDataPoint(const TransferFunctionDataPoint& rhs) = default;
+    TransferFunctionDataPoint(TransferFunctionDataPoint&& rhs) = default;
     TransferFunctionDataPoint& operator=(const TransferFunctionDataPoint& that);
     virtual ~TransferFunctionDataPoint() = default;
 
-    inline const float& getPos() const { return point_.pos; }
-    inline const vec4& getRGBA() const { return point_.color; }
-    inline const Point& getPoint() const { return point_; }
+    const float& getPos() const;
+    const vec4& getRGBA() const;
+    const Point& getPoint() const;
 
     void setPoint(const Point& point);
     void setPos(const float& pos);
@@ -77,20 +78,24 @@ private:
     Point point_;
 };
 
+inline const float& TransferFunctionDataPoint::getPos() const { return point_.pos; }
+inline const vec4& TransferFunctionDataPoint::getRGBA() const { return point_.color; }
+inline const TransferFunctionDataPoint::Point& TransferFunctionDataPoint::getPoint() const {
+    return point_;
+}
+
 IVW_CORE_API bool operator==(const TransferFunctionDataPoint::Point& lhs,
                              const TransferFunctionDataPoint::Point& rhs);
 IVW_CORE_API bool operator!=(const TransferFunctionDataPoint::Point& lhs,
                              const TransferFunctionDataPoint::Point& rhs);
 IVW_CORE_API bool operator<(const TransferFunctionDataPoint::Point& lhs,
-    const TransferFunctionDataPoint::Point& rhs);
+                            const TransferFunctionDataPoint::Point& rhs);
 IVW_CORE_API bool operator>(const TransferFunctionDataPoint::Point& lhs,
                             const TransferFunctionDataPoint::Point& rhs);
 IVW_CORE_API bool operator<=(const TransferFunctionDataPoint::Point& lhs,
                              const TransferFunctionDataPoint::Point& rhs);
 IVW_CORE_API bool operator>=(const TransferFunctionDataPoint::Point& lhs,
                              const TransferFunctionDataPoint::Point& rhs);
-
-
 
 IVW_CORE_API bool operator==(const TransferFunctionDataPoint& lhs,
                              const TransferFunctionDataPoint& rhs);
@@ -104,6 +109,6 @@ IVW_CORE_API bool operator<=(const TransferFunctionDataPoint& lhs,
                              const TransferFunctionDataPoint& rhs);
 IVW_CORE_API bool operator>=(const TransferFunctionDataPoint& lhs,
                              const TransferFunctionDataPoint& rhs);
-}  // namespace
+}  // namespace inviwo
 
 #endif  // IVW_TRANSFERFUNCTIONDATAPOINT_H
