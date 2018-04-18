@@ -31,7 +31,9 @@
 #include <inviwo/core/common/inviwoapplication.h>
 #include <inviwo/core/datastructures/transferfunction.h>
 #include <modules/qtwidgets/properties/transferfunctioneditorcontrolpoint.h>
+#include <modules/qtwidgets/properties/transferfunctioneditorprimitive.h>
 #include <modules/qtwidgets/properties/transferfunctioncontrolpointconnection.h>
+#include <modules/qtwidgets/inviwoqtutils.h>
 #include <inviwo/core/properties/transferfunctionproperty.h>
 #include <inviwo/core/network/networklock.h>
 
@@ -47,6 +49,7 @@
 #include <QPen>
 #include <QColorDialog>
 #include <warn/pop>
+
 
 namespace inviwo {
 
@@ -67,10 +70,7 @@ private:
 TransferFunctionEditor::TransferFunctionEditor(TransferFunctionProperty* tfProperty,
                                                QWidget* parent)
     : QGraphicsScene(parent)
-    , zoomRangeXMin_(0.0)
-    , zoomRangeXMax_(1.0)
-    , zoomRangeYMin_(0.0)
-    , zoomRangeYMax_(1.0)
+    , tfProperty_(tfProperty)
     , transferFunction_(&tfProperty->get())
     , dataMap_()
     , groups_()
@@ -78,7 +78,7 @@ TransferFunctionEditor::TransferFunctionEditor(TransferFunctionProperty* tfPrope
 
     setSceneRect(0.0, 0.0, 512.0, 512.0);
     mouseDrag_ = false;
-
+    
     // The default bsp tends to crash...
     setItemIndexMethod(QGraphicsScene::NoIndex);
 
@@ -88,13 +88,13 @@ TransferFunctionEditor::TransferFunctionEditor(TransferFunctionProperty* tfPrope
     colorDialog_->setOption(QColorDialog::NoButtons, true);
     colorDialog_->setWindowModality(Qt::NonModal);
     colorDialog_->setWindowTitle(QString::fromStdString(tfProperty->getDisplayName()));
-
+    
     auto updateTFPointColor = [&](QColor color) {
         const auto newRgb = vec3(color.redF(), color.greenF(), color.blueF());
 
         for (auto& elem : selectedItems()) {
-            if (auto tfcp = qgraphicsitem_cast<TransferFunctionEditorControlPoint*>(elem)) {
-                tfcp->getPoint()->setRGB(newRgb);
+            if (auto v = qgraphicsitem_cast<TransferFunctionEditorPrimitive*>(elem)) {
+                v->setColor(newRgb);
             }
         }
         emit colorChanged(color);
@@ -103,11 +103,10 @@ TransferFunctionEditor::TransferFunctionEditor(TransferFunctionProperty* tfPrope
 
     auto updateColor = [&]() {
         if (selectedItems().size() > 0) {
-            const auto tfPoint =
-                qgraphicsitem_cast<TransferFunctionEditorControlPoint*>(selectedItems().at(0));
-            if (tfPoint) {
-                const ivec4 colori{tfPoint->getPoint()->getRGBA() * 255.0f};
-                QColor c(colori.r, colori.g, colori.b, colori.a);
+            const auto tfPrimitive =
+                qgraphicsitem_cast<TransferFunctionEditorPrimitive*>(selectedItems().at(0));
+            if (tfPrimitive) {
+                QColor c(utilqt::toQColor(tfPrimitive->getColor()));
                 setColorDialogColor(c);
                 emit colorChanged(c);
             }
@@ -119,11 +118,6 @@ TransferFunctionEditor::TransferFunctionEditor(TransferFunctionProperty* tfPrope
 
         const auto portChange = [this, port]() {
             dataMap_ = port->hasData() ? port->getData()->dataMap_ : DataMapper{};
-            for (auto& item : items()) {
-                if (auto cp = qgraphicsitem_cast<TransferFunctionEditorControlPoint*>(item)) {
-                    cp->setDataMap(dataMap_);
-                }
-            }
         };
 
         port->onChange(portChange);
@@ -164,7 +158,7 @@ void TransferFunctionEditor::mousePressEvent(QGraphicsSceneMouseEvent* e) {
 
     TransferFunctionEditorControlPoint* controlPointGraphicsItem =
         getControlPointGraphicsItemAt(e->scenePos());
-    
+
     // Need to store these since they are deselected in mousePressEvent.
     selectedItemsAtPress_ = QGraphicsScene::selectedItems();
 
@@ -212,7 +206,7 @@ void TransferFunctionEditor::mouseReleaseEvent(QGraphicsSceneMouseEvent* e) {
                     addControlPoint(e->scenePos());
                     auto controlPointGraphicsItem = getControlPointGraphicsItemAt(e->scenePos());
                     if (controlPointGraphicsItem) {
-                        //controlPointGraphicsItem->setHovered(true);
+                        // controlPointGraphicsItem->setHovered(true);
                     }
                 }
                 e->accept();
@@ -503,7 +497,7 @@ TransferFunctionEditorControlPoint* TransferFunctionEditor::getControlPointGraph
 }
 
 void TransferFunctionEditor::onControlPointAdded(TransferFunctionDataPoint* p) {
-    auto newpoint = new TransferFunctionEditorControlPoint(p, this, dataMap_, controlPointSize_);
+    auto newpoint = new TransferFunctionEditorControlPoint(p, this, controlPointSize_);
     auto it = std::upper_bound(points_.begin(), points_.end(), newpoint, comparePtr{});
     it = points_.insert(it, newpoint);
     updateConnections();
@@ -572,27 +566,19 @@ void TransferFunctionEditor::setPointColor(const QColor& color) {
 
     const auto newRgb = vec3(color.redF(), color.greenF(), color.blueF());
     for (auto& elem : selectedItems()) {
-        if (auto tfcp = qgraphicsitem_cast<TransferFunctionEditorControlPoint*>(elem)) {
-            tfcp->getPoint()->setRGB(newRgb);
+        if (auto p = qgraphicsitem_cast<TransferFunctionEditorPrimitive*>(elem)) {
+            p->setColor(newRgb);
         }
     }
 }
 
-float TransferFunctionEditor::getZoomRangeXMin() const { return zoomRangeXMin_; }
+const DataMapper& TransferFunctionEditor::getDataMapper() const {
+    return dataMap_;
+}
 
-void TransferFunctionEditor::setZoomRangeXMin(float min) { zoomRangeXMin_ = min; }
-
-float TransferFunctionEditor::getZoomRangeXMax() const { return zoomRangeXMax_; }
-
-void TransferFunctionEditor::setZoomRangeXMax(float max) { zoomRangeXMax_ = max; }
-
-float TransferFunctionEditor::getZoomRangeYMin() const { return zoomRangeYMin_; }
-
-void TransferFunctionEditor::setZoomRangeYMin(float min) { zoomRangeYMin_ = min; }
-
-float TransferFunctionEditor::getZoomRangeYMax() const { return zoomRangeYMax_; }
-
-void TransferFunctionEditor::setZoomRangeYMax(float max) { zoomRangeYMax_ = max; }
+TransferFunctionProperty* TransferFunctionEditor::getTransferFunctionProperty() {
+    return tfProperty_;
+}
 
 void TransferFunctionEditor::setMoveMode(int i) { moveMode_ = i; }
 

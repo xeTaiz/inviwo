@@ -31,6 +31,7 @@
 #define IVW_TRANSFERFUNCTIONEDITOR_H
 
 #include <modules/qtwidgets/qtwidgetsmoduledefine.h>
+#include <modules/qtwidgets/properties/transferfunctioneditorprimitive.h>
 #include <inviwo/core/datastructures/datamapper.h>
 
 #include <warn/push>
@@ -62,15 +63,6 @@ public:
     TransferFunctionEditor(TransferFunctionProperty* tfProperty, QWidget* parent = nullptr);
     virtual ~TransferFunctionEditor();
 
-    float getZoomRangeXMin() const;
-    void setZoomRangeXMin(float min);
-    float getZoomRangeXMax() const;
-    void setZoomRangeXMax(float max);
-    float getZoomRangeYMin() const;
-    void setZoomRangeYMin(float min);
-
-    float getZoomRangeYMax() const;
-    void setZoomRangeYMax(float max);
     void updateConnections();
     int getMoveMode() const;
     void setMoveMode(int i);
@@ -93,6 +85,10 @@ public:
     void setControlPointSize(float val);
 
     void setPointColor(const QColor& color);
+
+    const DataMapper& getDataMapper() const;
+
+    TransferFunctionProperty* getTransferFunctionProperty();
 
 signals:
     void colorChanged(const QColor& color);
@@ -126,11 +122,7 @@ private:
 
     float controlPointSize_ = 15.f;  ///< Size of control points
 
-    float zoomRangeXMin_;
-    float zoomRangeXMax_;
-    float zoomRangeYMin_;
-    float zoomRangeYMax_;
-
+    TransferFunctionProperty* tfProperty_;
     TransferFunction* transferFunction_;  ///< Pointer to widget's member variable
 
     using PointVec = std::vector<TransferFunctionEditorControlPoint*>;
