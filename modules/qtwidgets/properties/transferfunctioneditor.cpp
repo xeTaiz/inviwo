@@ -31,6 +31,7 @@
 #include <inviwo/core/common/inviwoapplication.h>
 #include <inviwo/core/datastructures/transferfunction.h>
 #include <modules/qtwidgets/properties/transferfunctioneditorcontrolpoint.h>
+#include <modules/qtwidgets/properties/transferfunctioneditorisovalue.h>
 #include <modules/qtwidgets/properties/transferfunctioneditorprimitive.h>
 #include <modules/qtwidgets/properties/transferfunctioncontrolpointconnection.h>
 #include <modules/qtwidgets/inviwoqtutils.h>
@@ -137,6 +138,10 @@ TransferFunctionEditor::TransferFunctionEditor(TransferFunctionProperty* tfPrope
     for (int i = 0; i < 10; ++i) {
         groups_.push_back(std::vector<TransferFunctionEditorControlPoint*>());
     }
+
+    // add temporary isovalue primitive
+    this->addItem(new TransferFunctionEditorIsoValue(
+        new IsoValue(0.45f, vec4(0.3f, 0.7f, 1.0f, 0.7f)), this));
 }
 
 TransferFunctionEditor::~TransferFunctionEditor() {
