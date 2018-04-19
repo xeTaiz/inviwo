@@ -44,6 +44,7 @@
 #include <modules/python3/interface/pydatamapper.h>
 #include <modules/python3/interface/pybuffer.h>
 #include <modules/python3/interface/pymesh.h>
+#include <modules/python3/interface/pyisovalue.h>
 
 #include <inviwo/core/common/inviwomodule.h>
 #include <inviwo/core/util/settings/settings.h>
@@ -170,6 +171,7 @@ PYBIND11_MODULE(inviwopy, m) {
     exposeDataMapper(dataModule);
     exposeBuffer(dataModule);
     exposeMesh(dataModule);
+    exposeIsoValueData(dataModule);
 
     py::class_<Settings, PropertyOwner, std::unique_ptr<Settings, py::nodelete>>(m, "Settings");
 
