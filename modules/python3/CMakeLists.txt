@@ -83,29 +83,31 @@ ivw_add_unittest(${TEST_FILES})
 
 set(INTERFACE_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/inviwopy.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyglmtypes.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyvolume.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pydatamapper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pybuffer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pymesh.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pydatamapper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyglmtypes.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyisovalue.h
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyimage.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pymesh.h
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pynetwork.h
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyprocessors.h
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyproperties.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyvolume.h
 )
 #ivw_group("Header Files" ${INTERFACE_HEADER_FILES})
 
 set(INTERFACE_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/inviwopy.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pybuffer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pydatamapper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyglmtypes.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyimage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyvolume.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pydatamapper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pybuffer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyisovalue.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pymesh.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pynetwork.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyprocessors.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyproperties.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/interface/pyvolume.cpp
 )
 #ivw_group("Source Files" ${INTERFACE_SRC_FILES})
 

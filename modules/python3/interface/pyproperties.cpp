@@ -167,7 +167,7 @@ void exposeProperties(py::module &m) {
         .def("clear", [](TransferFunctionProperty &tp) { tp.get().clearPoints(); })
         .def("addPoint", [](TransferFunctionProperty &tp, vec2 pos,
                             vec3 color) { tp.get().addPoint(pos.x, vec4(color, pos.y)); })
-        .def("addPoint", [](TransferFunctionProperty &tp, float pos, vec4 color) {
+        .def("addPoint", [](TransferFunctionProperty &tp, float pos, const vec4 &color) {
             tp.get().addPoint(pos, color);
         });
 
