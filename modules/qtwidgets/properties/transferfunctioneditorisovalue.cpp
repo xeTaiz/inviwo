@@ -48,6 +48,10 @@ TransferFunctionEditorIsoValue::TransferFunctionEditorIsoValue(IsoValue* isovalu
     isoValue_->addObserver(this);
 }
 
+void TransferFunctionEditorIsoValue::set(float scalar, float alpha) {
+    isoValue_->set({scalar, vec4(vec3(isoValue_->getColor()), alpha)});
+}
+
 void TransferFunctionEditorIsoValue::setScalarValue(float scalar) {
     isoValue_->setIsoValue(scalar);
 }

@@ -44,6 +44,7 @@ public:
     TransferFunctionEditorIsoValue(IsoValue* isovalue, QGraphicsScene* scene, float size = 14.0f);
     virtual ~TransferFunctionEditorIsoValue() = default;
 
+    virtual void set(float scalar, float alpha) override;
     virtual void setScalarValue(float scalar) override;
     virtual float getScalarValue() const override;
 

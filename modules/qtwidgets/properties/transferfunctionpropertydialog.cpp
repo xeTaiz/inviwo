@@ -34,11 +34,15 @@
 #include <modules/qtwidgets/inviwofiledialog.h>
 #include <modules/qtwidgets/colorwheel.h>
 #include <modules/qtwidgets/rangesliderqt.h>
+#include <modules/qtwidgets/inviwoqtutils.h>
+#include <modules/qtwidgets/inviwowidgetsqt.h>
 
 #include <inviwo/core/util/filesystem.h>
 #include <inviwo/core/util/fileextension.h>
+#include <inviwo/core/util/colorconversion.h>
 #include <inviwo/core/io/datareaderexception.h>
 #include <inviwo/core/io/datawriter.h>
+#include <inviwo/core/datastructures/datamapper.h>
 
 #include <warn/push>
 #include <warn/ignore/all>
@@ -49,6 +53,10 @@
 #include <QComboBox>
 #include <QGradientStops>
 #include <QPixmap>
+#include <QGridLayout>
+#include <QDoubleValidator>
+#include <QLineEdit>
+#include <QLocale>
 #include <warn/pop>
 
 namespace inviwo {
@@ -68,10 +76,14 @@ TransferFunctionPropertyDialog::TransferFunctionPropertyDialog(TransferFunctionP
     tfEditor_ = util::make_unique<TransferFunctionEditor>(tfProperty_, this);
 
     connect(tfEditor_.get(), &TransferFunctionEditor::colorChanged, this,
-            [this](const QColor& color) {
+            [this](const vec4& color) {
                 colorWheel_->blockSignals(true);
-                colorWheel_->setColor(color);
+                colorWheel_->setColor(utilqt::toQColor(color));
                 colorWheel_->blockSignals(false);
+
+                primitiveColor_->blockSignals(true);
+                primitiveColor_->setText(utilqt::toQString(color::rgba2hex(color)));
+                primitiveColor_->blockSignals(false);
             });
 
     tfEditorView_ = new TransferFunctionEditorView(tfProperty_);
@@ -124,7 +136,12 @@ TransferFunctionPropertyDialog::TransferFunctionPropertyDialog(TransferFunctionP
 
     colorWheel_ = util::make_unique<ColorWheel>(QSize(150, 150));
     connect(colorWheel_.get(), &ColorWheel::colorChange, tfEditor_.get(),
-            &TransferFunctionEditor::setPointColor);
+            &TransferFunctionEditor::setPrimitiveQColor);
+    connect(colorWheel_.get(), &ColorWheel::colorChange, this, [this](const QColor& color) {
+        primitiveColor_->blockSignals(true);
+        primitiveColor_->setText(utilqt::toQString(color::rgba2hex(utilqt::tovec4(color))));
+        primitiveColor_->blockSignals(false);
+    });
 
     btnClearTF_ = new QPushButton("Reset");
     connect(btnClearTF_, &QPushButton::clicked, [this]() { tfEditor_->resetTransferFunction(); });
@@ -164,6 +181,83 @@ TransferFunctionPropertyDialog::TransferFunctionPropertyDialog(TransferFunctionP
     connect(pointMoveMode_, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
             this, &TransferFunctionPropertyDialog::changeMoveMode);
 
+    primitiveScalar_ = util::make_unique<QLineEdit>();
+    primitiveAlpha_ = util::make_unique<QLineEdit>();
+    primitiveColor_ = util::make_unique<QLineEdit>();
+
+    // TODO: set validator range for scalar? [0,1] for normalized TF, otherwise unlimited
+    primitiveScalarValidator_ = util::make_unique<QDoubleValidator>(0.0, 1.0, 10);
+    primitiveScalar_->setValidator(primitiveScalarValidator_.get());
+    primitiveAlpha_->setValidator(new QDoubleValidator(0.0, 1.0, 10));
+    primitiveColor_->setInputMask("\\#HHHHHHhh");
+
+    // ensure that the range of primitive scalar is matching value range of volume data
+    if (auto port = tfProperty_->getVolumeInport()) {
+        const auto portChange = [this, port]() {
+            auto range = port->hasData() ? port->getData()->dataMap_.valueRange : dvec2(0.0, 1.0);
+            primitiveScalarValidator_->setRange(range.x, range.y);
+        };
+
+        port->onChange(portChange);
+        port->onConnect(portChange);
+        port->onDisconnect(portChange);
+
+        if (port->hasData()) {
+            auto range = port->getData()->dataMap_.valueRange;
+            primitiveScalarValidator_->setRange(range.x, range.y);
+        }
+    }
+
+    connect(tfEditor_.get(), &TransferFunctionEditor::primitiveChanged, this,
+            [this](float scalar, const vec4& color) {
+                primitiveScalar_->blockSignals(true);
+                primitiveAlpha_->blockSignals(true);
+
+                dvec2 range(primitiveScalarValidator_->bottom(), primitiveScalarValidator_->top());
+                double value = scalar * (range.y - range.x) + range.x;
+
+                primitiveScalar_->setText(QLocale::system().toString(value));
+                primitiveAlpha_->setText(QLocale::system().toString(color.a));
+
+                primitiveScalar_->blockSignals(false);
+                primitiveAlpha_->blockSignals(false);
+            });
+    auto toggleEnabledState = [this]() {
+        const bool itemsSelected = !tfEditor_->selectedItems().empty();
+        primitiveScalar_->setEnabled(tfEditor_->selectedItems().size() == 1);
+        primitiveAlpha_->setEnabled(itemsSelected);
+        primitiveColor_->setEnabled(itemsSelected);
+    };
+    connect(tfEditor_.get(), &TransferFunctionEditor::selectionChanged, this, toggleEnabledState);
+
+    toggleEnabledState();
+
+    auto updatePrimitive = [this]() {
+        auto value = QLocale::system().toDouble(primitiveScalar_->text());
+        // renormalize value to [0,1]
+        dvec2 range(primitiveScalarValidator_->bottom(), primitiveScalarValidator_->top());
+        value = (value - range.x) / (range.y - range.x);
+
+        tfEditor_->setPrimitive(static_cast<float>(value), QLocale::system().toFloat(primitiveAlpha_->text()));
+    };
+    connect(primitiveScalar_.get(), &QLineEdit::editingFinished, this, updatePrimitive);
+    connect(primitiveAlpha_.get(), &QLineEdit::editingFinished, this, updatePrimitive);
+    connect(primitiveColor_.get(), &QLineEdit::editingFinished, this, [this]() {
+        try {
+            colorWheel_->setColor(
+                utilqt::toQColor(color::hex2rgba(utilqt::fromQString(primitiveColor_->text()))));
+        } catch (...) {
+        }
+    });
+
+    auto primitivePropLayout = new QGridLayout();
+    primitivePropLayout->addWidget(new QLabel("Scalar"), 1, 1);
+    primitivePropLayout->addWidget(primitiveScalar_.get(), 1, 2);
+    primitivePropLayout->addWidget(new QLabel("Alpha"), 2, 1);
+    primitivePropLayout->addWidget(primitiveAlpha_.get(), 2, 2);
+    primitivePropLayout->addWidget(new QLabel("Color"), 3, 1);
+    primitivePropLayout->addWidget(primitiveColor_.get(), 3, 2);
+
     QFrame* leftPanel = new QFrame(this);
     QGridLayout* leftLayout = new QGridLayout();
     leftLayout->setContentsMargins(0, 0, 0, 0);
@@ -183,6 +277,7 @@ TransferFunctionPropertyDialog::TransferFunctionPropertyDialog(TransferFunctionP
     rightLayout->addWidget(colorWheel_.get());
     rightLayout->addWidget(chkShowHistogram_);
     rightLayout->addWidget(pointMoveMode_);
+    rightLayout->addLayout(primitivePropLayout);
     rightLayout->addStretch(3);
     QHBoxLayout* rowLayout = new QHBoxLayout();
     rowLayout->addWidget(btnClearTF_);

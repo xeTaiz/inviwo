@@ -91,29 +91,29 @@ TransferFunctionEditor::TransferFunctionEditor(TransferFunctionProperty* tfPrope
     colorDialog_->setWindowTitle(QString::fromStdString(tfProperty->getDisplayName()));
     
     auto updateTFPointColor = [&](QColor color) {
-        const auto newRgb = vec3(color.redF(), color.greenF(), color.blueF());
-
+        const auto c = utilqt::tovec4(color);
         for (auto& elem : selectedItems()) {
             if (auto v = qgraphicsitem_cast<TransferFunctionEditorPrimitive*>(elem)) {
-                v->setColor(newRgb);
+                v->setColor(vec3(c));
             }
         }
-        emit colorChanged(color);
+        emit colorChanged(c);
     };
     connect(colorDialog_.get(), &QColorDialog::currentColorChanged, updateTFPointColor);
 
-    auto updateColor = [&]() {
+    auto updateSelection = [&]() {
         if (selectedItems().size() > 0) {
             const auto tfPrimitive =
                 qgraphicsitem_cast<TransferFunctionEditorPrimitive*>(selectedItems().at(0));
             if (tfPrimitive) {
                 QColor c(utilqt::toQColor(tfPrimitive->getColor()));
                 setColorDialogColor(c);
-                emit colorChanged(c);
+
+                emit primitiveChanged(tfPrimitive->getScalarValue(), tfPrimitive->getColor());
             }
         }
     };
-    connect(this, &QGraphicsScene::selectionChanged, updateColor);
+    connect(this, &QGraphicsScene::selectionChanged, updateSelection);
 
     if (auto port = tfProperty->getVolumeInport()) {
 
@@ -565,6 +565,7 @@ void TransferFunctionEditor::setControlPointSize(float val) {
     }
 }
 
+/*
 void TransferFunctionEditor::setPointColor(const QColor& color) {
     // update Color dialog to reflect the color changes
     setColorDialogColor(color);
@@ -573,6 +574,37 @@ void TransferFunctionEditor::setPointColor(const QColor& color) {
     for (auto& elem : selectedItems()) {
         if (auto p = qgraphicsitem_cast<TransferFunctionEditorPrimitive*>(elem)) {
             p->setColor(newRgb);
+        }
+    }
+}
+*/
+
+void TransferFunctionEditor::setPrimitiveColor(const vec4 &color) {
+    // update Color dialog to reflect the color changes
+    setColorDialogColor(utilqt::toQColor(color));
+
+    for (auto& elem : selectedItems()) {
+        if (auto p = qgraphicsitem_cast<TransferFunctionEditorPrimitive*>(elem)) {
+            p->setColor(vec3(color));
+        }
+    }
+}
+
+void TransferFunctionEditor::setPrimitiveQColor(const QColor& color) {
+    setPrimitiveColor(utilqt::tovec4(color));
+}
+
+void TransferFunctionEditor::setPrimitive(float value, float alpha) {
+    if (selectedItems().size() == 1) {
+        // allow manipulation of value only for a single TF primitive
+        if (auto p = qgraphicsitem_cast<TransferFunctionEditorPrimitive*>(selectedItems()[0])) {
+            p->set(value, alpha);
+        }
+    } else {
+        for (auto& elem : selectedItems()) {
+            if (auto p = qgraphicsitem_cast<TransferFunctionEditorPrimitive*>(elem)) {
+                p->setColor(vec4(vec3(p->getColor()), alpha));
+            }
         }
     }
 }

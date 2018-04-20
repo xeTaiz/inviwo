@@ -46,7 +46,8 @@ public:
     TransferFunctionEditorControlPoint(TransferFunctionDataPoint* dataPoint, QGraphicsScene* scene,
                                        float size = 14.0f);
     ~TransferFunctionEditorControlPoint() = default;
-
+    
+    virtual void set(float scalar, float alpha) override;
     virtual void setScalarValue(float scalar) override;
     virtual float getScalarValue() const override;
 

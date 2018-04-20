@@ -84,14 +84,20 @@ public:
      */
     void setControlPointSize(float val);
 
-    void setPointColor(const QColor& color);
+    //void setPointColor(const QColor& color);
+
+    void setPrimitiveColor(const vec4 &color);
+    void setPrimitiveQColor(const QColor& color);
+    void setPrimitive(float value, float alpha);
 
     const DataMapper& getDataMapper() const;
 
     TransferFunctionProperty* getTransferFunctionProperty();
 
 signals:
-    void colorChanged(const QColor& color);
+    //void colorChanged(const QColor& color);
+    void colorChanged(const vec4& color);
+    void primitiveChanged(float scalar, const vec4& color);
 
 public slots:
     void resetTransferFunction();

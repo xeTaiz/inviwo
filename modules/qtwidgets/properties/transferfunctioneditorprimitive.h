@@ -80,6 +80,8 @@ public:
     void setSize(float s);
     float getSize() const;
 
+    virtual void set(float scalar, float alpha) = 0;
+
     virtual void setScalarValue(float scalar) = 0;
     virtual float getScalarValue() const = 0;
 

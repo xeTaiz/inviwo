@@ -55,6 +55,8 @@ class QLabel;
 class QPixmap;
 class QResizeEvent;
 class QShowEvent;
+class QDoubleValidator;
+class QLineEdit;
 
 namespace inviwo {
 
@@ -118,6 +120,12 @@ private:
     RangeSliderQt* zoomVSlider_;
     RangeSliderQt* zoomHSlider_;
     RangeSliderQt* maskSlider_;
+
+    std::unique_ptr<QLineEdit> primitiveScalar_;
+    std::unique_ptr<QLineEdit> primitiveAlpha_;
+    std::unique_ptr<QLineEdit> primitiveColor_;
+
+    std::unique_ptr<QDoubleValidator> primitiveScalarValidator_;
 };
 
 }  // namespace inviwo

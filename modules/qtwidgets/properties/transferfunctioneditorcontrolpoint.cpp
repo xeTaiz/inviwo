@@ -49,6 +49,10 @@ TransferFunctionEditorControlPoint::TransferFunctionEditorControlPoint(
     dataPoint_->addObserver(this);
 }
 
+void TransferFunctionEditorControlPoint::set(float scalar, float alpha) {
+    dataPoint_->setPosA(scalar, alpha);
+}
+
 void TransferFunctionEditorControlPoint::setScalarValue(float scalar) {
     dataPoint_->setPos(scalar);
 }
