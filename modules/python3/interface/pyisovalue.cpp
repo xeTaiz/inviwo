@@ -46,17 +46,17 @@ namespace inviwo {
 
 void exposeIsoValueData(py::module &m) {
 
-    py::class_<IsoValueData>(m, "IsoValueData")
+    py::class_<TFPrimitiveData>(m, "TFPrimitiveData")
         .def(py::init())
         .def(py::init<float, vec4>())
         .def(py::init([](float iso, const std::string &color) {
-            return new IsoValueData{iso, color::hex2rgba(color)};
+            return new TFPrimitiveData{iso, color::hex2rgba(color)};
         }))
-        .def_readwrite("isovalue", &IsoValueData::isovalue)
-        .def_readwrite("color", &IsoValueData::color)
-        .def("__repr__", [](const IsoValueData &v) {
+        .def_readwrite("pos", &TFPrimitiveData::pos)
+        .def_readwrite("color", &TFPrimitiveData::color)
+        .def("__repr__", [](const TFPrimitiveData &p) {
             std::ostringstream oss;
-            oss << "Isovalue: [" << v.isovalue << ", " << color::rgba2hex(v.color) << "]";
+            oss << "TFPrimitiveData: [" << p.pos << ", " << color::rgba2hex(p.color) << "]";
             return oss.str();
         });
 
@@ -66,31 +66,27 @@ void exposeIsoValueData(py::module &m) {
         .def_property("zoomV", &IsoValueProperty::getZoomV, &IsoValueProperty::setZoomV)
         .def("save", [](IsoValueProperty *ivp, std::string filename) { ivp->get().save(filename); })
         .def("load", [](IsoValueProperty *ivp, std::string filename) { ivp->get().load(filename); })
-        .def("clear", [](IsoValueProperty &ivp) { ivp.get().clearIsoValues(); })
-        .def("addIsoValue", [](IsoValueProperty &ivp, float value,
-                               const vec4 &color) { ivp.get().addIsoValue(value, color); })
-        .def("addIsoValue",
-             [](IsoValueProperty &ivp, const vec2 &pos) { ivp.get().addIsoValue(pos); })
-        .def("addIsoValue",
-             [](IsoValueProperty &ivp, const IsoValueData &v) { ivp.get().addIsoValue(v); })
-        .def("addIsoValues",
-             [](IsoValueProperty &ivp, const std::vector<IsoValueData> &values) {
-                 ivp.get().addIsoValues(values);
+        .def("clear", [](IsoValueProperty &ivp) { ivp.get().clear(); })
+        .def("add",
+             [](IsoValueProperty &ivp, float value, const vec4 &color) {
+                 ivp.get().add(TFPrimitiveData({value, color}));
              })
-        .def("setIsoValues",
-             [](IsoValueProperty &ivp, const std::vector<IsoValueData> &values) {
-                 ivp.get().clearIsoValues();
-                 ivp.get().addIsoValues(values);
+        .def("add", [](IsoValueProperty &ivp, const vec2 &pos) { ivp.get().add(pos); })
+        .def("add", [](IsoValueProperty &ivp, const TFPrimitiveData &v) { ivp.get().add(v); })
+        .def("add", [](IsoValueProperty &ivp,
+                       const std::vector<TFPrimitiveData> &values) { ivp.get().add(values); })
+        .def("setValues",
+             [](IsoValueProperty &ivp, const std::vector<TFPrimitiveData> &values) {
+                 ivp.get().clear();
+                 ivp.get().add(values);
              })
-        .def("getIsoValues",
-             [](IsoValueProperty &ivp) -> std::vector<IsoValueData> {
-                 return ivp.get().getIsoValues();
-             })
+        .def("getValues",
+             [](IsoValueProperty &ivp) -> std::vector<TFPrimitiveData> { return ivp.get().get(); })
         .def("__repr__", [](const IsoValueProperty &ivp) {
             std::ostringstream oss;
-            oss << "[IsoValueProperty:  " << ivp.get().getNumIsoValues() << " isovalues";
-            for (auto &v : ivp.get().getSortedIsoValues()) {
-                oss << "\n    " << v.isovalue << ", " << color::rgba2hex(v.color);
+            oss << "[IsoValueProperty:  " << ivp.get().size() << " isovalues";
+            for (auto &p : ivp.get().getSorted()) {
+                oss << "\n    " << p.pos << ", " << color::rgba2hex(p.color);
             }
             oss << "]";
             return oss.str();
