@@ -42,12 +42,8 @@ The following applications are not required, but will enable additional features
 ## Using git {#git}
 
 Use git to clone the source code from [github]
-`git clone http://www.github.com/inviwo/inviwo.git`
+`git clone --recurse-submodules http://www.github.com/inviwo/inviwo.git`
 
-Since we using the submodule feature of git for some of our external dependencies you need to make 
-sure that submodules also has been cloned. Some applications, like [sourcetree], does this 
-automatically. To clone/update all submodules run: 
-`git submodule update --init`
 
 ## Downloading zip  {#sourcezip}
 
