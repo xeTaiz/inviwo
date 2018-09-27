@@ -1,0 +1,72 @@
+language: cpp
+sudo: required
+
+# caching of the build dir (which is large, so large timeout (3 minute default))
+# inspired from https://blog.esciencecenter.nl/travis-caching-and-incremental-builds-6518b89ee889
+cache:
+  timeout: 2000
+  directories:
+  - ../build  # the build directory
+
+git:
+  depth: 50
+
+notifications:
+  email: false
+  
+env:
+  global:
+    - HOMEBREW_NO_AUTO_UPDATE=1
+
+matrix:
+  include:
+  - env: BUILD_TYPE=Release BUILD_TARGET=package
+    os: osx
+    osx_image: xcode10
+
+install:
+  - cmake --version
+  - brew install ninja
+  - brew install coreutils # for timeout
+  - brew install findutils # for find
+  - brew install qt
+  - export PATH="/usr/local/opt/qt/bin:$PATH"
+
+before_script:
+  - find /usr/local/opt/python3/Frameworks/Python.framework/Versions -iname '*.app' | xargs rm -rf
+  - mkdir -p "${TRAVIS_BUILD_DIR}/../build"
+  - cd "${TRAVIS_BUILD_DIR}"
+  - |
+    if [[ -f ../build/mtimes.txt ]]
+    then
+      # restore modification times for the git repo
+      while read mtime file; do gtouch -c -m -t "${mtime}" ${file}; done < ../build/mtimes.txt
+     
+      # touch changed git files to trigger their rebuild
+      if [[ -f ../build/prev_commit.txt ]]
+      then
+        read prev_commit < ../build/prev_commit.txt 
+        changed_files=`git diff --name-only ${prev_commit} HEAD`
+        echo "Previously build based on commit ${prev_commit}."
+        echo "Changed files since then: ${changed_files}" 
+        if [[ -n ${changed_files} ]]
+        then
+          gtouch ${changed_files}
+        fi
+      fi
+      cd "${TRAVIS_BUILD_DIR}/../build"
+    else
+      cd "${TRAVIS_BUILD_DIR}/../build"
+      cmake -G Ninja -LA -DIVW_CMAKE_DEBUG=ON -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DIVW_PACKAGE_PROJECT=ON -DIVW_PACKAGE_INSTALLER=ON -DIVW_UNITTESTS=OFF -DIVW_UNITTESTS_RUN_ON_BUILD=OFF ../inviwo
+    fi
+  
+script:
+  - gtimeout 40m cmake --build . --target ${BUILD_TARGET}
+
+
+before_cache:
+  - cd "${TRAVIS_BUILD_DIR}"
+  # Save the modification time for all the files in the git repo
+  - gfind . -type f -fprintf ../build/mtimes.txt "%TY%Tm%Td%TH%TM %p\n"
+  # Save the current git commit so we can compare the next time
+  - git rev-parse HEAD > ../build/prev_commit.txt
