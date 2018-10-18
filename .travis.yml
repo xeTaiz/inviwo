@@ -19,7 +19,12 @@ env:
     - HOMEBREW_NO_AUTO_UPDATE=1
 
 matrix:
+  fast_finish: true
   include:
+  - env: BUILD_TYPE=Release BUILD_TARGET=package
+    os: osx
+    osx_image: xcode10
+  allow_failures:
   - env: BUILD_TYPE=Release BUILD_TARGET=package
     os: osx
     osx_image: xcode10
@@ -70,3 +75,19 @@ before_cache:
   - gfind . -type f -fprintf ../build/mtimes.txt "%TY%Tm%Td%TH%TM %p\n"
   # Save the current git commit so we can compare the next time
   - git rev-parse HEAD > ../build/prev_commit.txt
+
+
+before_deploy:
+  - export DMG_FILE_NAME=$(find $TRAVIS_BUILD_DIR/build -maxdepth 1 -iname 'Inviwo*.dmg')
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: "Ld1w6s5Dw/jyY7sIOBLlhRN5/bJ4P5BI4uQiTQ1ClNbH8+0U1qEs7R5IAS1La0RRW6X8UFIwbqV+oK1AJ/XWAtwepa9H1pGpLcdDSiHbqFK1O2inPGz7uFM+ttnKb0Gs/I3Dl+Ea2ufIk0QoVTOtcz5lYKPYvYPQXKeox7egECEGwtI0MqDyg2rI1TyGOQOb1fiLRt+ZzHSC1xdQMu8DaHn830mpv/jrYK0mU/jRUi1cPzZ0b3Al1ogg+Dn4XstPht5Fm6a32U4DsW39OAoMijRE4kVisfM//Q/RkpguGGRG70u5wzkMlZCLmjnMHbsqReV2hvQI6WOKCo0Sm0cyCqp7gc20Hn43Dw3WLZjQsdTdJwhMZKE8Ja+33CMxUjeaYsJfDfWTRgKpL3W2nFhIWrJOSEitO1cBJApZkZ4baDhqWTyuzoLASyrdfRS3vZc5i9ihq6mJhFQXH151fH60VDAFvFlDDzs83R2PaQ+5kAql0ni3Umik3Z4VoELFx6lPnKKNG1NZ/gqPopIJU4WaxGgH0qllgglOYKfOeIDfnYZOjXkzoRR/TAdaA2rJbb8+WzcROT5JgzDmB0qToqxbZOxKJcn+m1RzwZ/8XiEW9xXisMwzVKQmezvBAv9avHO+Y8DEGiTJYwezCpjglRiPXEs5MNllouTF7jxAiOEE0Zc="
+  file: "${DMG_FILE_NAME}"
+  overwrite: true # true to overwrite files in an existing release; default is false which will fail deployment if the release already exists on GitHub.
+  on:
+    repo: inviwo/inviwo
+    tags: true
+    condition: '"${TRAVIS_OS_NAME}" == osx'
