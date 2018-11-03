@@ -78,7 +78,7 @@ before_cache:
 
 
 before_deploy:
-  - export DMG_FILE_NAME=$(gfind $TRAVIS_BUILD_DIR/build -maxdepth 1 -iname 'Inviwo*.dmg')
+  - export DMG_FILE_NAME=$(gfind $TRAVIS_BUILD_DIR/../build -maxdepth 1 -iname 'Inviwo*.dmg')
   - echo "DMG ${DMG_FILE_NAME}"
 
 deploy:
