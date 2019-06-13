@@ -2,7 +2,7 @@
  *
  * Inviwo - Interactive Visualization Workshop
  *
- * Copyright (c) 2013-2019 Inviwo Foundation
+ * Copyright (c) 2019 Inviwo Foundation
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,28 +27,12 @@
  *
  *********************************************************************************/
 
-#include <inviwo/core/datastructures/volume/volumeramprecision.h>
+#include <inviwo/core/datastructures/buffer/bufferramprecision.h>
 
 namespace inviwo {
 
-struct VolumeRamCreationDispatcher {
-    using type = std::shared_ptr<VolumeRAM>;
-    template <typename Result, typename T>
-    std::shared_ptr<VolumeRAM> operator()(void* dataPtr, const size3_t& dimensions) {
-        using F = typename T::type;
-        return std::make_shared<VolumeRAMPrecision<F>>(static_cast<F*>(dataPtr), dimensions);
-    }
-};
-
-std::shared_ptr<VolumeRAM> createVolumeRAM(const size3_t& dimensions, const DataFormatBase* format,
-                                           void* dataPtr) {
-    VolumeRamCreationDispatcher disp;
-    return dispatching::dispatch<std::shared_ptr<VolumeRAM>, dispatching::filter::All>(
-        format->getId(), disp, dataPtr, dimensions);
-}
-
 #define DataFormatIdMacro(i) \
-    template class IVW_CORE_TMPL_INST VolumeRAMPrecision<typename Data##i::type>;
+    template class IVW_CORE_TMPL_INST BufferRAMPrecision<typename Data##i::type>;
 #include <inviwo/core/util/formatsdefinefunc.h>
 #undef DataFormatIdMacro
 

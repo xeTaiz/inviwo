@@ -202,6 +202,12 @@ Document Buffer<T, Target>::getInfo() const {
     return doc;
 }
 
+#define DataFormatIdMacro(i)                                                                    \
+    extern template class IVW_CORE_TMPL_EXP Buffer<typename Data##i::type, BufferTarget::Data>; \
+    extern template class IVW_CORE_TMPL_EXP Buffer<typename Data##i::type, BufferTarget::Index>;
+#include <inviwo/core/util/formatsdefinefunc.h>
+#undef DataFormatIdMacro
+
 }  // namespace inviwo
 
 #endif  // IVW_BUFFER_H

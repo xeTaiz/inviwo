@@ -292,6 +292,11 @@ void BufferRAMPrecision<T, Target>::clear() {
     data_.clear();
 }
 
+#define DataFormatIdMacro(i) \
+    extern template class IVW_CORE_TMPL_EXP BufferRAMPrecision<typename Data##i::type>;
+#include <inviwo/core/util/formatsdefinefunc.h>
+#undef DataFormatIdMacro
+
 }  // namespace inviwo
 
 #endif  // IVW_BUFFERRAMPRECISION_H

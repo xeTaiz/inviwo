@@ -291,6 +291,11 @@ void LayerRAMPrecision<T>::setFromNormalizedDVec4(const size2_t& pos, dvec4 val)
     data_[posToIndex(pos, dimensions_)] = util::glm_convert_normalized<T>(val);
 }
 
+#define DataFormatIdMacro(i) \
+    extern template class IVW_CORE_TMPL_EXP LayerRAMPrecision<typename Data##i::type>;
+#include <inviwo/core/util/formatsdefinefunc.h>
+#undef DataFormatIdMacro
+
 }  // namespace inviwo
 
 #endif  // IVW_LAYERRAMPRECISION_H

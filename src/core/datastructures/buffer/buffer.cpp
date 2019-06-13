@@ -68,4 +68,10 @@ size_t BufferBase::getSize() const {
     return size_;
 }
 
+#define DataFormatIdMacro(i)                                                              \
+    template class IVW_CORE_TMPL_INST Buffer<typename Data##i::type, BufferTarget::Data>; \
+    template class IVW_CORE_TMPL_INST Buffer<typename Data##i::type, BufferTarget::Index>;
+#include <inviwo/core/util/formatsdefinefunc.h>
+#undef DataFormatIdMacro
+
 }  // namespace inviwo

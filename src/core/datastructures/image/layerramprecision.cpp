@@ -49,4 +49,9 @@ std::shared_ptr<LayerRAM> createLayerRAM(const size2_t& dimensions, LayerType ty
         format->getId(), disp, dimensions, type, swizzleMask);
 }
 
+#define DataFormatIdMacro(i) \
+    template class IVW_CORE_TMPL_INST LayerRAMPrecision<typename Data##i::type>;
+#include <inviwo/core/util/formatsdefinefunc.h>
+#undef DataFormatIdMacro
+
 }  // namespace inviwo

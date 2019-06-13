@@ -375,6 +375,11 @@ bool VolumeRAMPrecision<T>::hasHistograms() const {
     return !histCont_.empty() && histCont_.isValid();
 }
 
+#define DataFormatIdMacro(i) \
+    extern template class IVW_CORE_TMPL_EXP VolumeRAMPrecision<typename Data##i::type>;
+#include <inviwo/core/util/formatsdefinefunc.h>
+#undef DataFormatIdMacro
+
 }  // namespace inviwo
 
 #endif  // IVW_VOLUMERAMPRECISION_H

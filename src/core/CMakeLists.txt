@@ -352,6 +352,7 @@ set(SOURCE_FILES
     common/version.cpp
     datastructures/buffer/buffer.cpp
     datastructures/buffer/bufferram.cpp
+    datastructures/buffer/bufferramprecision.cpp
     datastructures/buffer/bufferrepresentation.cpp
     datastructures/camera.cpp
     datastructures/camerafactoryobject.cpp
