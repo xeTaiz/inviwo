@@ -96,7 +96,7 @@ def main():
             formatted_code_raw, err_raw = p.communicate()
             try:
                 formatted_code = codecs.decode(formatted_code_raw, encoding="UTF-8")
-            except Exception, e:
+            except Exception as e:
                 sys.stdout.write("Problem checking format for: " + str(filename) + "\n")
                 sys.stdout.write("Failed to decode the source code using UTF-8\n")
                 sys.stdout.write("Error Message: \n")
