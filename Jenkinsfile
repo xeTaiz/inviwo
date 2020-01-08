@@ -16,8 +16,8 @@ node {
         util.buildStandard(
             state: this,
             modulePaths: [], 
-            onModules: ["DiscreteData", "HDF5", "OpenCL", "BaseCL", "WebBrowser", "Example"],  
-            offModules: ["ABufferGL"],
+            onModules: ["DiscreteData", "HDF5", "OpenCL", "BaseCL", "Example"],  
+            offModules: ["ABufferGL", "WebBrowser"],
             opts: [:]
         )
         util.warn(this)
