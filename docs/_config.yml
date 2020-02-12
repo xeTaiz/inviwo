@@ -20,7 +20,7 @@ facebook_username: inviwo
 use_math: true
 
 # Everything below here can be ignored, unless you want to change the theme entirely
-theme: minima
+theme: jekyll-theme-cayman
 plugins:
   - jekyll-feed
   - jekyll-gist
