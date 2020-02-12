@@ -8,11 +8,13 @@
 
 title: Inviwo
 description: Interactive Visualization Workshop
-github_username: xeTaiz
+github_username: inviwo
 
 # Email and twitter are optional:
 email:
 twitter_username: inviwo_org
+youtube_username: inviwo
+facebook_username: inviwo
 
 # Set this to true to get LaTeX math equation support
 use_math: true
