@@ -8,10 +8,9 @@
 
 title: Inviwo
 description: Interactive Visualization Workshop
-github_username: inviwo
 
-# Email and twitter are optional:
 email:
+github_username: inviwo
 twitter_username: inviwo_org
 youtube_username: inviwo
 facebook_username: inviwo
@@ -20,7 +19,7 @@ facebook_username: inviwo
 use_math: true
 
 # Everything below here can be ignored, unless you want to change the theme entirely
-theme: jekyll-theme-cayman
+theme: minima
 plugins:
   - jekyll-feed
   - jekyll-gist
